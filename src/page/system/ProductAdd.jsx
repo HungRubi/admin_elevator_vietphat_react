@@ -4,7 +4,7 @@ import icon from '../../util/icon';
 
 const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers } = icon
 
-const UserAdd = () => {
+const ProductAdd = () => {
     const unit = [
         {
             id: 'Meter(m)',
@@ -116,4 +116,4 @@ const UserAdd = () => {
     ) 
 }
 
-export default UserAdd
+export default ProductAdd

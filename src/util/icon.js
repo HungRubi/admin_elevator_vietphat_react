@@ -28,8 +28,11 @@ import { AiOutlineRight } from "react-icons/ai";
 import { MdOutlineDiscount } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { MdNumbers } from "react-icons/md";
+import { FaMapMarkerAlt } from "react-icons/fa";
+
 
 const icon = {
+    FaMapMarkerAlt,
     MdNumbers,
     AiOutlineDollarCircle,
     MdOutlineDiscount,

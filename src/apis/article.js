@@ -11,3 +11,15 @@ export const getArticle = async () => {
         console.log("Err call api: ", err);
     }
 }
+
+export const getArticleDetail = async (id) => {
+    try{
+        const response = await axios({
+            url: `/articles/${id}`,
+            method: 'get'
+        })
+        return response;
+    }catch(err){
+        console.log("Err call api: ", err);
+    }
+}

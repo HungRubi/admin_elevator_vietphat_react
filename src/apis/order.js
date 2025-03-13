@@ -11,3 +11,14 @@ export const getOrder = async () => {
         console.log("Err call api: ", err);
     }
 }
+export const getOrderAdd = async () => {
+    try{
+        const response = await axios({
+            url: '/orders/add',
+            method: 'get'
+        })
+        return response
+    }catch(err){
+        console.log("Err call api: ", err);
+    }
+}

@@ -23,3 +23,26 @@ export const getOrder = () => async(dispatch) => {
         })
     }
 }
+
+export const getOrderAdd = () => async(dispatch) => {
+    try{
+        const response = await apis.getOrderAdd();
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.GET_ADD_ORDER,
+                payload: response.data
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_ADD_ORDER,
+                payload: null
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.GET_ADD_ORDER,
+            payload: null,
+            err
+        })
+    }
+}

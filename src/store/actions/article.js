@@ -23,3 +23,26 @@ export const getArticle = () => async(dispatch) => {
         })
     }
 }
+
+export const getArticleDetail = (id) => async(dispatch) => {
+    try{
+        const response = await apis.getArticleDetail(id);
+        if(response.status === 200) {
+            dispatch({
+                type: actionTypes.GET_DETAIL_ARTICLE,
+                payload: response.data
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_DETAIL_ARTICLE,
+                payload: null
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.GET_DETAIL_ARTICLE,
+            payload: null,
+            err
+        })
+    }
+}

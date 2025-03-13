@@ -11,7 +11,14 @@ const Public = () => {
                 <div className="w-[240px] h-full">
                     <Navbar/>
                 </div>
-                <div className="h-full flex-1 bg-div min-w-[1500px] overflow-y-auto">
+                <div className="h-full flex-1 bg-div min-w-[1500px] overflow-y-auto 
+                    [&::-webkit-scrollbar]:w-2.5
+                    [&::-webkit-scrollbar-track]:rounded-full
+                    [&::-webkit-scrollbar-track]:bg-gray-100
+                    [&::-webkit-scrollbar-thumb]:rounded-full
+                    [&::-webkit-scrollbar-thumb]:bg-[#74717171]
+                    dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+                    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
                     <Outlet/>
                     <Footer/>
                 </div>

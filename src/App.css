@@ -55,3 +55,6 @@ button{
 .row-table:hover .option{
     display: flex;
 }
+.order_items:last-child{
+    border-bottom: none;
+}
