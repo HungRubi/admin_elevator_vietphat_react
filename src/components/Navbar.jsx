@@ -1,15 +1,27 @@
 import { NavLink } from "react-router-dom";
 import {menu} from '../util/menu';
 import icon from '../util/icon';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const { BsArrowBarLeft } = icon
 const active = 'w-full py-[7px] px-2.5 flex items-center justify-between text-color text-[16px] capitalize cursor-pointer rounded-[8px] bg-[#eff2f6]';
 const notActive = 'w-full py-[7px] px-2.5 flex items-center justify-between text-color text-[16px] capitalize cursor-pointer hover:bg-[#eff2f6] transition-all ease-linear duration-300 rounded-[8px]';
 const Navbar = () => {
     const [display, setDisplay] = useState("hidden");
-    function handleDisplay () {
-        setDisplay(pre => (pre === "hidden" ? "block" : "hidden"))
-    }
+    const handleClickOutside = (event) => {
+        if (!document.querySelector(".menuNav")?.contains(event.target)) {
+            setDisplay("hidden");
+        }
+    };
+    const handleDisplay = (event) => {
+        event.stopPropagation(); // Ngăn chặn sự kiện lan ra ngoài
+        setDisplay((prev) => (prev === "hidden" ? "block" : "hidden"));
+    };
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
     return (
         <nav className="w-full h-full border-r-custom relative overflow-hidden">
             <ul className="w-full">
@@ -22,10 +34,10 @@ const Navbar = () => {
                                 {item.icon}
                                 <span className=" leading-8">{item.text}</span>
                             </div>
-                            <span onClick={handleDisplay}>{item.icon2}</span>
                         </NavLink>
+                        <span onClick={handleDisplay} className=" absolute cursor-pointer top-[50%] right-3 transform translate-y-[-50%] w-10 h-10 flex items-center justify-center">{item.icon2}</span>
                         {item.Children && item.Children.length ? (
-                            <ul className={`absolute left-[25px] right-0 ${display}`}>
+                            <ul className={`absolute left-[25px] right-0 menuNav ${display}`}>
                                 {item.Children.map(chil => (
                                     <li key={chil.text} className="px-[15px] my-[5px] w-full">
                                     <NavLink 

@@ -142,12 +142,12 @@ const Order = () => {
                                     <td class="py-4 w-3/12 text-center">
                                         <span className='time_text'>{item.lastUpdate}</span>
                                         <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
-                                            <NavLink to={`/order/:id/edit`}>
+                                            <NavLink to={`/order/${item._id}/edit`}>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <MdAutoFixHigh className='text-[18px]'/>
                                                 </Button>
                                             </NavLink>
-                                            <NavLink to={`/order/:id/delete`}>
+                                            <NavLink to={`/order/${item._id}/delete`}>
                                                 <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
                                                     <RiDeleteBin6Line className='text-[18px]'/>
                                                 </Button>

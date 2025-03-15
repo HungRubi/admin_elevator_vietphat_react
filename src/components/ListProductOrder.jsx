@@ -1,7 +1,9 @@
 import ButtonQuantity from "./ButtonQuantity";
 import PropTypes from "prop-types";
 const ListProductOrder = ({data}) => {
-    
+    function format(params) {
+        return params.toLocaleString("vi-VN");
+    }
     return (
         <ul className="w-full">
             {data?.map((item) => (
@@ -29,16 +31,16 @@ const ListProductOrder = ({data}) => {
                             <span className="text-gray-500 text-sm leading-0">Quantity: </span> 
                             <ButtonQuantity className={"ml-4"}/>    
                         </div>
-                        <div className="flex items-center">
+                        <div className="flex items-center w-1/7">
                             <span className="text-gray-500 text-sm leading-0">Quantity: </span> 
                             <span className="font-medium ml-2 text-gray-700">{item.category}</span>    
                         </div>
                         <div className="flex justify-end items-center gap-2.5 leading-0 w-1/8">
                             <h6 className='line-through text-[17px] text-[#888]'>
-                                {item.price}đ
+                                {format(item.price)}đ
                             </h6>
                             <h6 className='text-[25px] text-[#2f904b] font-medium'>
-                                3.240.000đ
+                                {format(item.price)}đ
                             </h6>
                         </div>
                     </div>

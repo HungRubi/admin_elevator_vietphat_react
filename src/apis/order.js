@@ -22,3 +22,14 @@ export const getOrderAdd = async () => {
         console.log("Err call api: ", err);
     }
 }
+export const getOrderDetail = async (id) => {
+    try{
+        const response = await axios({
+            url: `/orders/${id}`,
+            method: 'get'
+        })
+        return response
+    }catch(err){
+        console.log("Err call api: ", err);
+    }
+}

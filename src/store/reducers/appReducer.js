@@ -14,6 +14,12 @@ const initState = {
     orderProduct: [],
     orderDiscount: [],
     orderUser: [],
+    orderEditProduct: [],
+    orderDetail: {},
+    discountOrder: {},
+    categoryProductDetail: {},
+    categoryDiscountDetail: {},
+    categoryBannerDetail: {},
 }
 
 const appReducer = (state = initState, action) => {
@@ -70,12 +76,19 @@ const appReducer = (state = initState, action) => {
             }
 
         case actionType.GET_ADD_ORDER:
-            console.log(action.payload?.data)
             return {
                 ...state,
                 orderProduct: action.payload?.data?.products || [],
                 orderDiscount: action.payload?.data?.discounts || [],
                 orderUser: action.payload?.data?.users || [],
+            }
+
+        case actionType.GET_ORDER_DETAIL:
+            return {
+                ...state,
+                orderEditProduct: action.payload?.data?.orderDetailsFormat || [],
+                orderDetail: action.payload?.data?.orders || {},
+                discountOrder: action.payload?.data?.discount || {},
             }
 
         case actionType.GET_CATEGORY_PRODUCT:
@@ -85,11 +98,23 @@ const appReducer = (state = initState, action) => {
                 totalPage: action.payload?.data?.totalPage || 1
             }
 
+        case actionType.GET_CATEGORY_PRODUCT_DETAIL:
+            return {
+                ...state,
+                categoryProductDetail: action.payload?.data?.categoryProduct || {},
+            }
+
         case actionType.GET_CATEGORY_DISCOUNT:
             return {
                 ...state,
                 categoryDiscount: action.payload?.data?.formatDiscount || [],
                 totalPage: action.payload?.data?.totalPage || 1
+            }
+
+        case actionType.GET_CATEGORY_DISCOUNT_DETAIL:
+            return {
+                ...state,
+                categoryDiscountDetail: action.payload?.data?.discount || {}
             }
 
         case actionType.GET_CATEGORY_BANNER:
@@ -98,6 +123,13 @@ const appReducer = (state = initState, action) => {
                 categoryBanner: action.payload?.data?.formatBanner || [],
                 totalPage: action.payload?.data?.totalPage || 1
             }
+
+        case actionType.GET_CATEGORY_DETAIL_BANNER:
+            return {
+                ...state,
+                categoryBannerDetail: action.payload?.data?.banner || {},
+            }
+    
 
         default:
             return state;

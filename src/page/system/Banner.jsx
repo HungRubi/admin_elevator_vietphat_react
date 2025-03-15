@@ -41,7 +41,7 @@ const Banner = () => {
                     <h2 className="text-[35px] font-[600]">Banner</h2>
                     <h5 className="text-[12px] text-[#6d6c6c]">List of Banner of your website</h5>
                     <div className="flex mt-5">
-                        <NavLink to={'/banner/add'}>
+                        <NavLink to={'/category/banner/add'}>
                             <Button className={"gap-2.5 !py-2 !border-none bg-blue-400 text-white hover:bg-blue-500"}>
                                 <IoMdAdd/>
                                 Add
@@ -111,12 +111,12 @@ const Banner = () => {
                                     <td class="py-4 w-2/12 text-center">
                                         <span className='time_text'>{item.lastUpdate}</span>
                                         <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
-                                            <NavLink>
+                                            <NavLink to={`/category/banner/${item._id}/edit`}>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <MdAutoFixHigh className='text-[18px]'/>
                                                 </Button>
                                             </NavLink>
-                                            <NavLink>
+                                            <NavLink to={`/category/banner/${item._id}/delete`}>
                                                 <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
                                                     <RiDeleteBin6Line className='text-[18px]'/>
                                                 </Button>

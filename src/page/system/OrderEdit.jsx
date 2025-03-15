@@ -5,15 +5,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import * as actions from '../../store/actions';
 
-const { MdChevronRight, MdOutlineDiscount, FaMapMarkerAlt, BsTag } = icon
+const { MdChevronRight, MdCall, FaMapMarkerAlt, BsTag, FiUserPlus } = icon
 
-const OrderAdd = () => {
-    const productSelected = [];
+const OrderEdit = () => {
+    const productSelected = [1];
     const dispatch = useDispatch();
-    const {orderUser, orderProduct, orderDiscount} = useSelector(state => state.app);
+    const {orderEditProduct, orderDetail, discountOrder} = useSelector(state => state.app);
+    const id = window.location.pathname.split('/').slice(-2,-1)[0];
     useEffect(() => {
-        dispatch(actions.getOrderAdd());
+        dispatch(actions.getOrderDetail(id));
     }, [])
+    const discountValue  = Number(discountOrder?.value_discount);
+    const discountType = discountOrder?.discount_type;
+    const minimumPurchase = Number(discountOrder?.minimum_purchase);
+    const totalPurchase = Number(orderDetail?.total_price);
+    const shippingMoney = (totalPurchase * 2) / 100
+    let purchase = 0;
+    let valueDiscount = 0;
+    if( totalPurchase > minimumPurchase){
+        if(discountType === "giảm theo phần trăm") {
+            valueDiscount = (totalPurchase * discountValue) / 100
+            purchase = totalPurchase - valueDiscount + shippingMoney;
+        }
+        else
+        {
+            valueDiscount = discountValue;
+            purchase = totalPurchase - valueDiscount + shippingMoney;
+        }
+    }
+    
     const payment = [
         {
             id: 'Thanh toán khi nhận hàng',
@@ -46,13 +66,6 @@ const OrderAdd = () => {
             text: 'Thất bại',
         },
     ]
-    const cbxDiscount = [];
-    for(let i = 0; i < orderDiscount.length; i++){
-        cbxDiscount.push({
-            id: orderDiscount[i]?.id,
-            text: orderDiscount[i]?.title,
-        });
-    }
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -66,12 +79,12 @@ const OrderAdd = () => {
                             Order
                         </NavLink>
                         <MdChevronRight/>
-                        <NavLink to={'/order/add'} className={"text-blue-600"}>
-                            Add order
+                        <NavLink to={'/order/:id/edit'} className={"text-blue-600"}>
+                            Edit order
                         </NavLink>
                     </div>
                     <h2 className="text-[35px] font-[600]">Order</h2>
-                    <h5 className="text-[12px] text-[#6d6c6c]">Add a new order of your company</h5>
+                    <h5 className="text-[12px] text-[#6d6c6c]">Edit a order of your company</h5>
                 </div>
             </div>
             <form className="w-full px-[30px] bg-white mt-8" method="POST">
@@ -81,23 +94,10 @@ const OrderAdd = () => {
                             Product Information
                         </h5>
                         <p className="text-[12px] text-[#888] line-clamp-2">
-                            List of products of your order
+                            List of products you have ordered
                         </p>
-                        <ModalList btn={"Add product"} data={orderProduct}/>
                     </div>
-                    {productSelected && productSelected.length > 0 ? 
-                        (<ListProductOrder quantityClass={"flex"}/>) 
-                            :
-                        (
-                            <div className="w-full flex items-center flex-col justify-center pb-10">
-                                <img src="/img/default/empty_product.png" alt="" className=" opacity-25 w-[70px]"/>
-                                <h5 className="font-medium text-gray-700 mt-2.5">No products</h5>
-                                <h5 className="text-gray-500">Add product to your order</h5>
-                                <ModalList btn={"Add product"} data={orderProduct}/>
-                            </div>
-                        )
-                    }
-                    
+                    <ListProductOrder data={orderEditProduct}/>
                     <div className="w-full border-t-custom flex pb-5 border-b-custom text-lg text-gray-700 gap-2.5">
                         <div className="w-4/6"></div>                        
                         <div className="w-2/6">
@@ -106,9 +106,9 @@ const OrderAdd = () => {
                                     <BsTag className="text-main"/>
                                     <h5>Your voucher</h5>
                                 </div>
-                                <div className="flex-1">
-                                    <Combobox data={cbxDiscount} name={"unit"} className={"w-full"}/>
-                                </div>
+                                <h5 className="mt-5 text-right flex-1 text-sm leading-0 font-medium">
+                                    {discountOrder?.title}
+                                </h5>
                             </div>
                             <div className="w-full border-t-custom mt-5 pt-5 text-right">
                                 <div className="w-full flex leading-10">
@@ -116,7 +116,7 @@ const OrderAdd = () => {
                                         Shipping:
                                     </div>
                                     <div className="w-1/2 text-right font-[600]">
-                                        {productSelected && productSelected.length > 0 ? "50.000đ" : "0"}
+                                        {productSelected && productSelected.length > 0 ? `${shippingMoney.toLocaleString("vi-VN")} đ` : "0"}
                                     </div>
                                 </div>
                                 <div className="w-full flex leading-10">
@@ -124,7 +124,8 @@ const OrderAdd = () => {
                                         Discount:
                                     </div>
                                     <div className="w-1/2 text-right font-[600]">
-                                        {productSelected && productSelected.length > 0 ? "- 50.000đ" : "0"}
+                                        {productSelected && productSelected.length > 0 ? `${valueDiscount.toLocaleString("vi-VN")}` : "0"}
+                                        <span className="text-sm"> ₫</span>
                                     </div>
                                 </div>
                                 <div className="w-full flex leading-10">
@@ -132,7 +133,8 @@ const OrderAdd = () => {
                                         Total:
                                     </div>
                                     <div className="w-1/2 text-right text-3xl font-medium text-main">
-                                        {productSelected && productSelected.length > 0 ? "3.600.000đ" : "0"}
+                                        <span className="text-xl">₫ </span>
+                                        {productSelected && productSelected.length > 0 ? `${purchase.toLocaleString("vi-VN")}` : "0"}
                                     </div>
                                 </div>
                             </div>
@@ -149,14 +151,21 @@ const OrderAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <SelectiObject label={"Fullname"} name={"shipping_address[name]"} data={orderUser}/>
-                        <InputGroup type={"phone"} label={"Phone"}
-                        icon={<MdOutlineDiscount className="text-[18px] text-gray-600"/>} 
+                        <InputGroup type={"text"} label={"Full Name"} 
+                        icon={<FiUserPlus className="text-[18px] text-gray-600"/>} 
+                        name={"shipping_address[name]"} placeholder={"0% to 100%"}
+                        value={orderDetail.shipping_address?.name}
+                        helper={"Please enter number from 0 to 100"}/>
+                        <InputGroup type={"phone"} label={"Phone"} 
+                        icon={<MdCall className="text-[18px] text-gray-600"/>} 
                         name={"shipping_address[phone]"} placeholder={"0% to 100%"}
+                        value={orderDetail.shipping_address?.phone}
                         helper={"Please enter number from 0 to 100"}/>
                         <InputGroup type={"address"} label={"Address"}
                         helper={"Please enter a numer greater than 0"}
-                        icon={<FaMapMarkerAlt className="text-[17px] text-gray-500"/>} name="shipping_address[address]"/>
+                        icon={<FaMapMarkerAlt className="text-[17px] text-gray-500"/>} 
+                        name="shipping_address[address]"
+                        value={orderDetail.shipping_address?.address}/>
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">
@@ -169,8 +178,8 @@ const OrderAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Combobox data={payment} label={"Payment"} name={"payment_method"}/>
-                        <Combobox data={status} label={"Status"} name={"status"}/>
+                        <Combobox data={payment} label={"Unit"} name={"payment_method"} selected={orderDetail?.payment_method}/>
+                        <Combobox data={status} label={"Category"} name={"status"} selected={orderDetail?.status}/>
                     </div>
                 </div>
                 <div className="w-full py-20 relative">
@@ -188,4 +197,4 @@ const OrderAdd = () => {
     ) 
 }
 
-export default OrderAdd
+export default OrderEdit

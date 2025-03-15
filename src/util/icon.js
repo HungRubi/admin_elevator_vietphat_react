@@ -29,9 +29,10 @@ import { MdOutlineDiscount } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { MdNumbers } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-
+import { MdCall } from "react-icons/md";
 
 const icon = {
+    MdCall,
     FaMapMarkerAlt,
     MdNumbers,
     AiOutlineDollarCircle,
