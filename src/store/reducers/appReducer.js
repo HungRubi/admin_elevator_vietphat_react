@@ -20,6 +20,8 @@ const initState = {
     categoryProductDetail: {},
     categoryDiscountDetail: {},
     categoryBannerDetail: {},
+    categoryProductAdd: [],
+    categoryProductUpdate: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -67,7 +69,11 @@ const appReducer = (state = initState, action) => {
                     ...state,
                     detailArticle: action.payload?.data?.article || {},
                 }
-
+        case actionType.RESET_MESSAGE:
+            return {
+                ...state,
+                message:null
+            }
         case actionType.GET_ORDER:
             return {
                 ...state,
@@ -103,6 +109,23 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 categoryProductDetail: action.payload?.data?.categoryProduct || {},
             }
+
+        case actionType.CREATE_CATEGORY_PRODUCT:
+            console.log(action.payload);
+            return {
+                ...state,
+                categoryProductAdd: [...state.categoryProductAdd, action.payload],
+                message: action.payload,
+            };
+
+        case actionType.UPDATE_CATEGORY_PRODUCT:
+            console.log(action.payload);
+            return {
+                ...state,
+                categoryProductUpdate: [...state.categoryProductUpdate, action.payload],
+                message: action.payload,
+            };
+            
 
         case actionType.GET_CATEGORY_DISCOUNT:
             return {

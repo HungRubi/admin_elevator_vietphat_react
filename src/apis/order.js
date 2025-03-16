@@ -14,7 +14,7 @@ export const getOrder = async () => {
 export const getOrderAdd = async () => {
     try{
         const response = await axios({
-            url: '/orders/add',
+            url: '/order/add',
             method: 'get'
         })
         return response
@@ -25,7 +25,7 @@ export const getOrderAdd = async () => {
 export const getOrderDetail = async (id) => {
     try{
         const response = await axios({
-            url: `/orders/${id}`,
+            url: `/order/${id}`,
             method: 'get'
         })
         return response

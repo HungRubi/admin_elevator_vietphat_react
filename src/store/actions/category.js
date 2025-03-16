@@ -24,6 +24,57 @@ export const getCategoryProduct = () => async (dispatch) => {
     }
 }
 
+export const createCategoryProduct = (data) => async (dispatch) => {
+    try {
+        const response = await apis.createCategoryProduct(data);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.CREATE_CATEGORY_PRODUCT,
+                payload: response.data.message,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.CREATE_CATEGORY_PRODUCT,
+                payload: response.message,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.CREATE_CATEGORY_PRODUCT,
+            payload: null,
+            err,
+        });
+    }
+};
+
+export const updateCategoryProduct = (data, id) => async (dispatch) => {
+    try {
+        const response = await apis.updateCategoryProduct(data, id);
+        console.log(response);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.UPDATE_CATEGORY_PRODUCT,
+                payload: response.data.message,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.UPDATE_CATEGORY_PRODUCT,
+                payload: response.message,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.UPDATE_CATEGORY_PRODUCT,
+            payload: null,
+            err,
+        });
+    }
+};
+
+export const resetMessage = () => ({
+    type: "RESET_MESSAGE",
+});
+
 export const getCategoryProductDetail = (id) => async (dispatch) => {
     try{
         const response = await apis.getCategoryProductDetail(id);

@@ -1,10 +1,46 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
-
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from '../../store/actions'
+import { toast } from "react-toastify";
 const { MdChevronRight } = icon
 
 const ProductCategoryAdd = () => {
+    const dispatch = useDispatch();
+    const [formData, setFormDate] = useState({
+        name: "",
+        description: ""
+    })
+    const navigate = useNavigate();
+    const {message} = useSelector(state => state.app);
+    useEffect(() => {
+        if(message === "Thành công"){
+            toast.success("Thêm loại sản phẩm thành công");
+            setTimeout(() => {
+                navigate("/category/product");
+                dispatch(actions.resetMessage());
+            }, 1500)
+        }
+        if(message === "Thất bại"){
+            toast.error("Thêm loại sản phẩm thất bại");
+            dispatch(actions.resetMessage());
+        }
+    }, [message, navigate,dispatch])
+    
+    
+    const handleChange = (e) => {
+        setFormDate({
+            ...formData,
+            [e.target.name]: e.target.value,
+        })
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.createCategoryProduct(formData));
+    }
+    
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -26,7 +62,7 @@ const ProductCategoryAdd = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Add a new Category Product of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form  className="w-full px-[30px] bg-white mt-8" method="POST" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-20">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -37,8 +73,10 @@ const ProductCategoryAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Title"} name={"title"}/>
-                        <Textearea row={5} label={"Description"} name={"description"}/>
+                        <Input label={"Name"} name={"name"} 
+                        onChange={handleChange} value={formData.name}/>
+                        <Textearea row={5} label={"Description"} name={"description"} 
+                        onChange={handleChange} children={formData.description}/>
                     </div>
                 </div>
                 <div className="w-full py-20 relative">

@@ -1,20 +1,43 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as actions from '../../store/actions'
 
 const { MdChevronRight } = icon
 
 const ProductCategoryEdit = () => {
     const dispatch = useDispatch();
-    const {categoryProductDetail} = useSelector(state => state.app);
+    const navigate = useNavigate();
+    const {categoryProductDetail, message} = useSelector(state => state.app);
     const id = window.location.pathname.split("/").slice(-2,-1)[0];
+    const [formData, setFormData] = useState({
+        name: categoryProductDetail?.name,
+        description: categoryProductDetail?.description
+    })
+
+    //Xử lý sự kiện nhập input
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        })
+    }
+    //Cập nhật lại value khi reload lại trang
+    useEffect(() => {
+        if (categoryProductDetail) {
+            setFormData({
+                name: categoryProductDetail.name || "",
+                description: categoryProductDetail.description || ""
+            });
+        }
+    }, [categoryProductDetail]);
+
+    //Render api
     useEffect(() => {
         dispatch(actions.getCategoryProductDetail(id));
     },[])
-    console.log(categoryProductDetail);
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -47,8 +70,11 @@ const ProductCategoryEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Title"} name={"title"} value={categoryProductDetail?.name}/>
-                        <Textearea row={5} label={"Description"} name={"description"} children={categoryProductDetail?.description}/>
+                        <Input label={"Name"} name={"name"} 
+                        value={formData.name} onChange={handleChange}/>
+                        <Textearea row={5} label={"Description"} 
+                        name={"description"} onChange={handleChange}
+                        children={formData.description} />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">

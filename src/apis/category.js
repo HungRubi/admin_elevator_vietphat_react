@@ -6,7 +6,6 @@ export const getCategoryProduct = async () => {
             url: '/category/product',
             method: 'get'
         })
-        console.log(response)
         return response
     }catch(err){
         console.log("Err call api: ", err)
@@ -16,7 +15,7 @@ export const getCategoryProduct = async () => {
 export const getCategoryProductDetail = async (id) => {
     try{
         const response = await axios({
-            url: `/category/product/${id}`,
+            url: `/category/product/${id}/edit`,
             method: 'get'
         })
         console.log(response)
@@ -25,6 +24,33 @@ export const getCategoryProductDetail = async (id) => {
         console.log("Err call api: ", err)
     }
 }
+
+export const createCategoryProduct = async (data) => {
+    try {
+        const response = await axios({
+            url: "/category/product/store",
+            method: "post",
+            data: data,
+        });
+        return response;
+    } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+    }
+};
+
+export const updateCategoryProduct = async (data, id) => {
+    try {
+        const response = await axios({
+            url: `/category/product/${id}`,
+            method: "put",
+            data: data,
+        });
+        return response;
+    } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+    }
+};
+
 
 export const getCategoryDiscount = async () => {
     try{
