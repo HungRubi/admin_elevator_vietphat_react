@@ -1,6 +1,14 @@
 import actionTypes from "./actionTypes";
 import * as apis from '../../apis/category';
 
+
+/** GLOBAL */
+export const resetMessage = () => ({
+    type: "RESET_MESSAGE",
+});
+
+
+/** === CATEGORY PRODUCT === */
 export const getCategoryProduct = () => async (dispatch) => {
     try{
         const response = await apis.getCategoryProduct();
@@ -47,6 +55,29 @@ export const createCategoryProduct = (data) => async (dispatch) => {
     }
 };
 
+export const getCategoryProductDetail = (id) => async (dispatch) => {
+    try{
+        const response = await apis.getCategoryProductDetail(id);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
+                payload: null,
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
+            payload: null,
+            err
+        })
+    }
+}
+
 export const updateCategoryProduct = (data, id) => async (dispatch) => {
     try {
         const response = await apis.updateCategoryProduct(data, id);
@@ -71,33 +102,32 @@ export const updateCategoryProduct = (data, id) => async (dispatch) => {
     }
 };
 
-export const resetMessage = () => ({
-    type: "RESET_MESSAGE",
-});
-
-export const getCategoryProductDetail = (id) => async (dispatch) => {
-    try{
-        const response = await apis.getCategoryProductDetail(id);
-        if(response.status === 200){
+export const deleteCategoryProduct = (id) => async (dispatch) => {
+    try {
+        const response = await apis.deleteCategoryProduct(id);
+        console.log(response);
+        if (response?.status === 200) {
             dispatch({
-                type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
-                payload: response.data,
-            })
-        }else{
+                type: actionTypes.DELETE_CATEGORY_PRODUCT,
+                payload: response.data.message,
+            });
+        } else {
             dispatch({
-                type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
-                payload: null,
-            })
+                type: actionTypes.DELETE_CATEGORY_PRODUCT,
+                payload: response.message,
+            });
         }
-    }catch(err){
+    } catch (err) {
         dispatch({
-            type: actionTypes.GET_CATEGORY_PRODUCT_DETAIL,
+            type: actionTypes.DELETE_CATEGORY_PRODUCT,
             payload: null,
-            err
-        })
+            err,
+        });
     }
-}
+};
 
+
+/** === CATEGORY DISCOUNT === */
 export const getCategoryDiscount = () => async (dispatch) => {
     try{
         const response = await apis.getCategoryDiscount();
@@ -144,6 +174,8 @@ export const getCategoryDiscountDetail = (id) => async (dispatch) => {
     }
 }
 
+
+/** === CATEGORY BANNER === */
 export const getCategoryBanner = () => async (dispatch) => {
     try{
         const response = await apis.getCategoryBanner();

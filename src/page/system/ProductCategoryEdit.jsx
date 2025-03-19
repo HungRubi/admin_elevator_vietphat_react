@@ -1,5 +1,5 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { Input, Button, Textearea } from '../../components'
+import { NavLink } from "react-router-dom";
+import { Input, Button, Textearea, ToastFormat } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -9,14 +9,13 @@ const { MdChevronRight } = icon
 
 const ProductCategoryEdit = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const {categoryProductDetail, message} = useSelector(state => state.app);
     const id = window.location.pathname.split("/").slice(-2,-1)[0];
     const [formData, setFormData] = useState({
         name: categoryProductDetail?.name,
         description: categoryProductDetail?.description
     })
-
+    console.log("Message Page: ", message)
     //Xử lý sự kiện nhập input
     const handleChange = (e) => {
         setFormData({
@@ -37,9 +36,18 @@ const ProductCategoryEdit = () => {
     //Render api
     useEffect(() => {
         dispatch(actions.getCategoryProductDetail(id));
-    },[])
+    },[id])
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.updateCategoryProduct(formData, id));
+        console.log(formData);
+        console.log(id);
+    }
     return (
         <div className="full pt-5">
+            <ToastFormat message={message} url={"/category/product"}
+            messSuccess={"Edit product category successfully"}
+            messError={"Update failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -59,7 +67,7 @@ const ProductCategoryEdit = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Edit a category product of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" method="POST" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-20">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">

@@ -22,10 +22,21 @@ const initState = {
     categoryBannerDetail: {},
     categoryProductAdd: [],
     categoryProductUpdate: [],
+    categoryProductDelete: [],
 }
 
 const appReducer = (state = initState, action) => {
     switch(action.type){
+
+        /** === GLOBAL === */
+        case actionType.RESET_MESSAGE:
+            return {
+                ...state,
+                message:null
+            }
+        
+
+        /** === PRODUCT === */
         case actionType.GET_PRODUCTS:
             return {
                 ...state,
@@ -42,6 +53,8 @@ const appReducer = (state = initState, action) => {
                 categoryProduct: action.payload?.data?.category
             }
         
+
+        /** === USER === */
         case actionType.GET_USER:
             return {
                 ...state,
@@ -57,6 +70,8 @@ const appReducer = (state = initState, action) => {
                 
             }
 
+
+        /** === ARTICLE === */
         case actionType.GET_ARTICLE:
             return {
                 ...state,
@@ -68,12 +83,10 @@ const appReducer = (state = initState, action) => {
                 return {
                     ...state,
                     detailArticle: action.payload?.data?.article || {},
-                }
-        case actionType.RESET_MESSAGE:
-            return {
-                ...state,
-                message:null
             }
+        
+
+        /** === ORDER === */
         case actionType.GET_ORDER:
             return {
                 ...state,
@@ -97,6 +110,8 @@ const appReducer = (state = initState, action) => {
                 discountOrder: action.payload?.data?.discount || {},
             }
 
+
+        /** === CATEGORY PRODUCT === */
         case actionType.GET_CATEGORY_PRODUCT:
             return {
                 ...state,
@@ -111,22 +126,29 @@ const appReducer = (state = initState, action) => {
             }
 
         case actionType.CREATE_CATEGORY_PRODUCT:
-            console.log(action.payload);
             return {
                 ...state,
                 categoryProductAdd: [...state.categoryProductAdd, action.payload],
                 message: action.payload,
-            };
+            }
 
         case actionType.UPDATE_CATEGORY_PRODUCT:
-            console.log(action.payload);
             return {
                 ...state,
                 categoryProductUpdate: [...state.categoryProductUpdate, action.payload],
                 message: action.payload,
             };
-            
+        
+        case actionType.DELETE_CATEGORY_PRODUCT:
+            return {
+                ...state,
+                categoryProductDelete: state.categoryProductDelete.filter(
+                    (item) => item._id !== action.payload 
+                ),
+                message: action.payload,
+            };
 
+        /** === CATEGORY DISCOUNT === */
         case actionType.GET_CATEGORY_DISCOUNT:
             return {
                 ...state,
@@ -140,6 +162,8 @@ const appReducer = (state = initState, action) => {
                 categoryDiscountDetail: action.payload?.data?.discount || {}
             }
 
+
+        /** === CATEGORY BANNER === */
         case actionType.GET_CATEGORY_BANNER:
             return {
                 ...state,

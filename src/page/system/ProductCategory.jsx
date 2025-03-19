@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar } from '../../components';
+import  { Search, Button, PageBar, ModalToast, ToastFormat } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,23 +6,39 @@ import * as actions from "../../store/actions";
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
+const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line } = icon;
 
 const ProductCategory = () => {
     const dispatch = useDispatch();
-    const { totalPage, categoryProduct } = useSelector(state => state.app);
+    const { totalPage, categoryProduct, message } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getCategoryProduct());
-    }, []);
+    }, [dispatch]);
 
     const [current, setCurrent] = useState(1);
-        const limit = 10;
-        const lastUserIndex = current * limit;
-        const firstUserIndex = lastUserIndex - limit;
-    
-        const currentProduct = categoryProduct.slice(firstUserIndex, lastUserIndex);
+    const limit = 10;
+    const lastUserIndex = current * limit;
+    const firstUserIndex = lastUserIndex - limit;
+
+    const currentProduct = categoryProduct.slice(firstUserIndex, lastUserIndex);
+
+    const [deleteId, setDeleteId] = useState(null);
+    const [isModal, setIsModal] = useState(false);
+
+    const handleDelete = async () => {
+        try{
+            dispatch(actions.deleteCategoryProduct(deleteId));
+            dispatch(actions.getCategoryProduct());
+            setIsModal(false);
+        }catch(err){
+            console.log(err)
+        }
+    }
     return (
         <div className="full py-5">
+            <ToastFormat message={message} url={"/category/product"} 
+            messSuccess={"You have successfully deleted a product category"}
+            messError={"Delete failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -68,40 +84,40 @@ const ProductCategory = () => {
                         </Button>
                     </div>
                 </div>
-                <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <div className="relative overflow-x-auto">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" className="px-2 py-3">
                                     <input type="checkbox" className='scale-120'/>
                                 </th>
-                                <th scope="col" class="px-4 py-3">
+                                <th scope="col" className="px-4 py-3">
                                     Product name
                                 </th>
                                 
-                                <th scope="col" class="px-4 py-3">
+                                <th scope="col" className="px-4 py-3">
                                     description
                                 </th>
-                                <th scope="col" class="py-3 text-center">
+                                <th scope="col" className="py-3 text-center">
                                     last update
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentProduct?.map((item) => (
-                                <tr key={item._id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
-                                    <td class="px-2 py-4 w-[15px]">
+                                <tr key={item._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
+                                    <td className="px-2 py-4 w-[15px]">
                                         <input type="checkbox" className='scale-120'/>
                                     </td>
-                                    <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-3/12">
+                                    <th scope="row" className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-3/12">
                                         {item.name}
                                     </th>
-                                    <td class="px-4 py-4 w-6/12">
+                                    <td className="px-4 py-4 w-6/12">
                                         <div className='w-full line-clamp-3 text-justify'>
                                             {item.description}
                                         </div>
                                     </td>
-                                    <td class="py-4 w-2/12 text-center">
+                                    <td className="py-4 w-2/12 text-center">
                                         <span className='time_text'>{item.lastUpdate}</span>
                                         <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
                                             <NavLink to={`/category/product/${item._id}/edit`}>
@@ -109,11 +125,16 @@ const ProductCategory = () => {
                                                     <MdAutoFixHigh className='text-[18px]'/>
                                                 </Button>
                                             </NavLink>
-                                            <NavLink to={`/category/product/${item._id}/delete`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
-                                                    <RiDeleteBin6Line className='text-[18px]'/>
-                                                </Button>
-                                            </NavLink>
+                                            <Button 
+                                                onClick={() => {
+                                                    setIsModal(true);
+                                                    setDeleteId(item._id)
+                                                }} 
+                                                className="!py-2 !px-2 hover:bg-red-500 hover:text-white"
+                                            >
+                                                <RiDeleteBin6Line className='text-[18px]'/>
+                                            </Button>
+
                                             <NavLink>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <PiDotsThreeBold className='text-[18px]'/>
@@ -128,6 +149,7 @@ const ProductCategory = () => {
                     <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
                 </div>
             </div>
+            {isModal && <ModalToast isOpen={isModal} setIsOpen={setIsModal} onDelete={handleDelete} />}
         </div>
     )
 }

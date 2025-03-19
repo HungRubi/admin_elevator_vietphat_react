@@ -1,10 +1,9 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { Input, Button, Textearea } from '../../components'
+import { NavLink } from "react-router-dom";
+import { Input, Button, Textearea, ToastFormat } from '../../components'
 import icon from '../../util/icon';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../store/actions'
-import { toast } from "react-toastify";
 const { MdChevronRight } = icon
 
 const ProductCategoryAdd = () => {
@@ -13,23 +12,7 @@ const ProductCategoryAdd = () => {
         name: "",
         description: ""
     })
-    const navigate = useNavigate();
     const {message} = useSelector(state => state.app);
-    useEffect(() => {
-        if(message === "Thành công"){
-            toast.success("Thêm loại sản phẩm thành công");
-            setTimeout(() => {
-                navigate("/category/product");
-                dispatch(actions.resetMessage());
-            }, 1500)
-        }
-        if(message === "Thất bại"){
-            toast.error("Thêm loại sản phẩm thất bại");
-            dispatch(actions.resetMessage());
-        }
-    }, [message, navigate,dispatch])
-    
-    
     const handleChange = (e) => {
         setFormDate({
             ...formData,
@@ -43,6 +26,9 @@ const ProductCategoryAdd = () => {
     
     return (
         <div className="full pt-5">
+            <ToastFormat message={message} url={"/category/product"}
+            messSuccess={"Product category added successfully!"}
+            messError={"Add failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
