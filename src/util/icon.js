@@ -30,8 +30,18 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { MdNumbers } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdCall } from "react-icons/md";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { BsPerson } from "react-icons/bs";
+import { BiVideo } from "react-icons/bi";
 
 const icon = {
+    BiVideo,
+    BsPerson,
+    FaArrowRightFromBracket,
+    FaFacebook,
+    FcGoogle,
     MdCall,
     FaMapMarkerAlt,
     MdNumbers,

@@ -24,4 +24,7 @@ export {default as ProductEdit} from './ProductEdit'
 export {default as OrderEdit} from './OrderEdit'
 export {default as ProductCategoryAdd} from './ProductCategoryAdd'
 export {default as ProductCategoryEdit} from './ProductCategoryEdit'
+export {default as Video} from './Video'
+export {default as VideoAdd} from './VideoAdd'
+export {default as VideoEdit} from './VideoEdit'
 

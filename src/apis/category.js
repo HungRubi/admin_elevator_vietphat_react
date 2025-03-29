@@ -2,10 +2,10 @@ import axios from "../axios";
 
 
 /** === CATEGORY PRODUCT === */
-export const getCategoryProduct = async () => {
+export const getCategoryProduct = async (searchTerm) => {
     try{
         const response = await axios({
-            url: '/category/product',
+            url: `/category/product?timkiem=${searchTerm}`,
             method: 'get'
         })
         return response
@@ -115,3 +115,55 @@ export const getCategoryBannerDetail = async (id) => {
         console.log("Err call api: ", err)
     }
 }
+
+/** === CATEGORY VIDEO === */
+
+export const getCategoryVideo = async (searchTerm) => {
+    try{
+        const response = await axios({
+            url: `/category/video?timkiem=${searchTerm}`,
+            method: 'get'
+        })
+        return response
+    }catch(err){
+        console.log("Err call api: ", err)
+    }
+}
+
+export const createCategoryVideo = async (data) => {
+    try {
+        const response = await axios({
+            url: "/category/video/store",
+            method: "post",
+            data: data,
+        });
+        return response;
+    } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+    }
+};
+
+export const getCategoryVideoDetail = async (id) => {
+    try{
+        const response = await axios({
+            url: `/category/video/${id}/edit`,
+            method: 'get'
+        })
+        return response
+    }catch(err){
+        console.log("Err call api: ", err)
+    }
+}
+
+export const updateCategoryVideo = async (data, id) => {
+    try {
+        const response = await axios({
+            url: `/category/video/${id}`,
+            method: "put",
+            data: data,
+        });
+        return response;
+    } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+    }
+};

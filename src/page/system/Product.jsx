@@ -13,14 +13,14 @@ const Product = () => {
     const { totalPage, products } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getProducts());
-    }, []);
-
+    }, [dispatch]);
+    const format = (money) => money?.toLocaleString('vi-VN');
     const [current, setCurrent] = useState(1);
-        const limit = 10;
-        const lastUserIndex = current * limit;
-        const firstUserIndex = lastUserIndex - limit;
-    
-        const currentProduct = products.slice(firstUserIndex, lastUserIndex);
+    const limit = 10;
+    const lastUserIndex = current * limit;
+    const firstUserIndex = lastUserIndex - limit;
+
+    const currentProduct = products.slice(firstUserIndex, lastUserIndex);
     return (
         <div className="full py-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -111,7 +111,7 @@ const Product = () => {
                                         {item.name}
                                     </th>
                                     <td class="px-4 py-4 w-2/17">
-                                        ₫ {item.price}
+                                        ₫ {format(item.price)}
                                     </td>
                                     <td class="px-4 py-4 w-2/17">
                                         Quantity: {item.stock}

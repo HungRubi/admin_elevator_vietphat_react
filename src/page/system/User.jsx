@@ -8,9 +8,6 @@ import { useState } from 'react';
 const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, RiDeleteBin6Line, IoMdAdd } = icon;
 
 const User = () => {
-    
-
-    
     const dispatch = useDispatch();
     const { user, totalPage } = useSelector(state => state.app);
     useEffect(() => {

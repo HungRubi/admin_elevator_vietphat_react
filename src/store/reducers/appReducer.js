@@ -23,6 +23,13 @@ const initState = {
     categoryProductAdd: [],
     categoryProductUpdate: [],
     categoryProductDelete: [],
+    categoryVideoAdd: [],
+    categoryVideo: [],
+    videoDetail: {},
+    categoryVideoUpdate: [],
+    currentUser: {},
+    message: null,
+    loginError: null,
 }
 
 const appReducer = (state = initState, action) => {
@@ -35,6 +42,20 @@ const appReducer = (state = initState, action) => {
                 message:null
             }
         
+        /** === LOGIN === */
+        case actionType.LOGIN:
+            return {
+                ...state,
+                currentUser: action.payload?.user || {},
+                message: action.payload?.message || null,
+                loginError: null
+            }
+        case actionType.LOGIN_FAIL:
+            return {
+                ...state,
+                message: null,
+                loginError: action.payload || null,
+            }
 
         /** === PRODUCT === */
         case actionType.GET_PRODUCTS:
@@ -115,8 +136,12 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_CATEGORY_PRODUCT:
             return {
                 ...state,
-                categoryProduct: action.payload?.data?.categoryProduct || [],
-                totalPage: action.payload?.data?.totalPage || 1
+                categoryProduct: action.payload?.data?.data?.categoryProduct,
+                searchProduct: action.payload?.searchType 
+                ? action.payload?.data?.data?.searchProduct || []  // Khi search, cập nhật searchProduct
+                : [],
+                totalPage: action.payload?.data?.totalPage || 1,
+                searchType: action.payload?.searchType || false,
             }
 
         case actionType.GET_CATEGORY_PRODUCT_DETAIL:
@@ -177,7 +202,36 @@ const appReducer = (state = initState, action) => {
                 categoryBannerDetail: action.payload?.data?.banner || {},
             }
     
+        /** === CATEGORY VIDEO */
+        case actionType.GET_CATEGORY_VIDEO:
+            return {
+                ...state,
+                categoryVideo: action.payload?.data?.data?.categoryVideo,
+                searchVideo: action.payload?.searchType 
+                ? action.payload?.data?.data?.searchVideo || []  // Khi search, cập nhật searchProduct
+                : [],
+                totalPage: action.payload?.data?.totalPage || 1,
+                searchType: action.payload?.searchType || false,
+            }
+        case actionType.CREATE_CATEGORY_VIDEO:
+            return {
+                ...state,
+                categoryVideoAdd: [...state.categoryVideoAdd, action.payload],
+                message: action.payload,
+            }
 
+        case actionType.GET_CATEGORY_VIDEO_DETAIL:
+            return {
+                ...state,
+                videoDetail: action.payload?.video || {},
+            }
+
+        case actionType.UPDATE_CATEGORY_VIDEO:
+            return {
+                ...state,
+                categoryVideoUpdate: [...state.categoryVideoUpdate, action.payload],
+                message: action.payload,
+            };
         default:
             return state;
     }

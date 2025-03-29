@@ -10,17 +10,19 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const ProductCategory = () => {
     const dispatch = useDispatch();
-    const { totalPage, categoryProduct, message } = useSelector(state => state.app);
+    const { totalPage, categoryProduct, message, searchProduct, searchType } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getCategoryProduct());
     }, [dispatch]);
-
+    const [searchTerm, setSearchTerm] = useState('');
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastUserIndex = current * limit;
     const firstUserIndex = lastUserIndex - limit;
 
-    const currentProduct = categoryProduct.slice(firstUserIndex, lastUserIndex);
+    const currentProduct = (categoryProduct && categoryProduct.length > 0) 
+    ? categoryProduct.slice(firstUserIndex, lastUserIndex) 
+    : [];
 
     const [deleteId, setDeleteId] = useState(null);
     const [isModal, setIsModal] = useState(false);
@@ -34,6 +36,12 @@ const ProductCategory = () => {
             console.log(err)
         }
     }
+    useEffect(() => {
+        dispatch(actions.getCategoryProduct(searchTerm)); 
+    }, [dispatch, searchTerm]);
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+    };
     return (
         <div className="full py-5">
             <ToastFormat message={message} url={"/category/product"} 
@@ -76,7 +84,7 @@ const ProductCategory = () => {
                     </div>
                     <div className="flex items-center justify-end w-1/2 gap-3">
                         <div className="w-1/2">
-                            <Search className={"!rounded-[5px]"}/>
+                            <Search className={"!rounded-[5px]"} onSearch={handleSearch}/>
                         </div>
                         <Button>All category</Button>
                         <Button className={"!px-3"}>
@@ -104,46 +112,55 @@ const ProductCategory = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentProduct?.map((item) => (
-                                <tr key={item._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
-                                    <td className="px-2 py-4 w-[15px]">
-                                        <input type="checkbox" className='scale-120'/>
-                                    </td>
-                                    <th scope="row" className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-3/12">
-                                        {item.name}
-                                    </th>
-                                    <td className="px-4 py-4 w-6/12">
-                                        <div className='w-full line-clamp-3 text-justify'>
-                                            {item.description}
-                                        </div>
-                                    </td>
-                                    <td className="py-4 w-2/12 text-center">
-                                        <span className='time_text'>{item.lastUpdate}</span>
-                                        <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
-                                            <NavLink to={`/category/product/${item._id}/edit`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                    <MdAutoFixHigh className='text-[18px]'/>
+                            {(searchType ? searchProduct : currentProduct)?.length > 0 ?
+                                (searchType ? searchProduct : currentProduct)?.map((item) => (
+                                    <tr key={item._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
+                                        <td className="px-2 py-4 w-[15px]">
+                                            <input type="checkbox" className='scale-120'/>
+                                        </td>
+                                        <th scope="row" className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white w-3/12">
+                                            {item.name}
+                                        </th>
+                                        <td className="px-4 py-4 w-6/12">
+                                            <div className='w-full line-clamp-3 text-justify'>
+                                                {item.description}
+                                            </div>
+                                        </td>
+                                        <td className="py-4 w-2/12 text-center">
+                                            <span className='time_text'>{item.lastUpdate}</span>
+                                            <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
+                                                <NavLink to={`/category/product/${item._id}/edit`}>
+                                                    <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                        <MdAutoFixHigh className='text-[18px]'/>
+                                                    </Button>
+                                                </NavLink>
+                                                <Button 
+                                                    onClick={() => {
+                                                        setIsModal(true);
+                                                        setDeleteId(item._id)
+                                                    }} 
+                                                    className="!py-2 !px-2 hover:bg-red-500 hover:text-white"
+                                                >
+                                                    <RiDeleteBin6Line className='text-[18px]'/>
                                                 </Button>
-                                            </NavLink>
-                                            <Button 
-                                                onClick={() => {
-                                                    setIsModal(true);
-                                                    setDeleteId(item._id)
-                                                }} 
-                                                className="!py-2 !px-2 hover:bg-red-500 hover:text-white"
-                                            >
-                                                <RiDeleteBin6Line className='text-[18px]'/>
-                                            </Button>
 
-                                            <NavLink>
-                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                    <PiDotsThreeBold className='text-[18px]'/>
-                                                </Button>
-                                            </NavLink>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                                                <NavLink>
+                                                    <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                        <PiDotsThreeBold className='text-[18px]'/>
+                                                    </Button>
+                                                </NavLink>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )): 
+                                (
+                                    <tr>
+                                        <td className="text-center py-4 w-full">
+                                            Không có sản phẩm nào được tìm thấy.
+                                        </td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
                     <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>

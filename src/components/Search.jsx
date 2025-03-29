@@ -1,21 +1,44 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import icon from '../util/icon';
-const {FiSearch} = icon;
 
-const Search = ({className, placeholder}) => {
+const { FiSearch } = icon;
+
+const Search = ({ className, placeholder, onSearch }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (onSearch) onSearch(searchTerm); // Gọi hàm onSearch từ component cha
+    };
+
     return (
-        <form action="" method="get" className='relative w-full'>
-            <input type="text" name='search' placeholder={placeholder || 'Enter name product'}
-            className={`w-full py-2.5 pl-8.5 pr-5 border-custom rounded-[20px] text-[15px] leading-0 ${className}`}/>
-            <button className='absolute left-1 top-[50%] -translate-y-1/2 flex items-center justify-center w-[30px]'>
+        <form onSubmit={handleSubmit} className='relative w-full'>
+            <input 
+                type="text" 
+                name='timkiem' 
+                placeholder={placeholder || 'Enter name product'}
+                value={searchTerm}
+                onChange={handleChange}
+                className={`w-full py-2.5 pl-8.5 pr-5 border-custom rounded-[20px] text-[15px] leading-0 ${className}`}
+            />
+            <button 
+                type="submit" 
+                className='absolute left-1 top-[50%] -translate-y-1/2 flex items-center justify-center w-[30px]'>
                 <FiSearch className='size-[24px] text-[#888]'/>
             </button>
         </form>
-    )
-}
+    );
+};
 
-Search.protoTypes = {
-    className: PropTypes.node.isRequired
-}
+Search.propTypes = {
+    className: PropTypes.string,
+    placeholder: PropTypes.string,
+    onSearch: PropTypes.func.isRequired,
+};
 
-export default Search
+export default Search;

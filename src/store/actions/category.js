@@ -9,13 +9,16 @@ export const resetMessage = () => ({
 
 
 /** === CATEGORY PRODUCT === */
-export const getCategoryProduct = () => async (dispatch) => {
+export const getCategoryProduct = (searchTerm = '') => async (dispatch) => {
     try{
-        const response = await apis.getCategoryProduct();
+        const response = await apis.getCategoryProduct(searchTerm);
         if(response.status === 200){
             dispatch({
                 type: actionTypes.GET_CATEGORY_PRODUCT,
-                payload: response.data,
+                payload: {
+                    data: response.data,
+                    searchType: !!searchTerm, // Nếu có từ khóa tìm kiếm thì searchType = true
+                },
             })
         }else{
             dispatch({
@@ -221,3 +224,96 @@ export const getCategoryBannerDetail = (id) => async (dispatch) => {
         })
     }
 }
+
+/** === CATEGORY VIDEO */
+export const getCategoryVideo = (searchTerm = '') => async (dispatch) => {
+    try{
+        const response = await apis.getCategoryVideo(searchTerm);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.GET_CATEGORY_VIDEO,
+                payload: {
+                    data: response.data,
+                    searchType: !!searchTerm,
+                },
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_CATEGORY_VIDEO,
+                payload: null,
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.GET_CATEGORY_VIDEO,
+            payload: null,
+            err
+        })
+    }
+}
+export const createCategoryVideo = (data) => async (dispatch) => {
+    try {
+        const response = await apis.createCategoryVideo(data);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.CREATE_CATEGORY_VIDEO,
+                payload: response.data.message,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.CREATE_CATEGORY_VIDEO,
+                payload: response.message,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.CREATE_CATEGORY_VIDEO,
+            payload: null,
+            err,
+        });
+    }
+};
+export const getCategoryVideoDetail = (id) => async (dispatch) => {
+    try{
+        const response = await apis.getCategoryVideoDetail(id);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.GET_CATEGORY_VIDEO_DETAIL,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_CATEGORY_VIDEO_DETAIL,
+                payload: null,
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.GET_CATEGORY_VIDEO_DETAIL,
+            payload: null,
+            err
+        })
+    }
+}
+export const updateCategoryVideo = (data, id) => async (dispatch) => {
+    try {
+        const response = await apis.updateCategoryVideo(data, id);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.UPDATE_CATEGORY_VIDEO,
+                payload: response.data.message,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.UPDATE_CATEGORY_VIDEO,
+                payload: response.message,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.UPDATE_CATEGORY_VIDEO,
+            payload: null,
+            err,
+        });
+    }
+};

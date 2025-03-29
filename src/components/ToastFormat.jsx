@@ -10,7 +10,7 @@ const ToastFormat = ({message, url, messSuccess, messError}) => {
     const dispatch = useDispatch();
     useEffect(() => {
         console.log(message)
-        if(message === "Thành công"){
+        if(message === "Thành công" || message === "Login successful"){
             toast.success(messSuccess);
             setTimeout(() => {
                 navigate(url);

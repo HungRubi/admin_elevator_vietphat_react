@@ -4,7 +4,7 @@ const {
     IoHomeOutline, LuUser, BsBox, BsBarChart, 
     IoSettingsOutline, FaSortDown,TbCategory, AiOutlineTool, 
     IoImageOutline, HiOutlineShoppingBag, BsTag,FaRegBell,
-    HiOutlineNewspaper
+    HiOutlineNewspaper, BiVideo
 } = icon;
 
 export const menu = [
@@ -63,6 +63,11 @@ export const menu = [
                 text: 'banner',
                 icon: <IoImageOutline className='text-[18px] text-color'/>,
                 path: 'category/banner',
+            },
+            {
+                text: 'Video',
+                icon: <BiVideo className='text-[19px] text-color'/>,
+                path: 'category/video',
             },
             {
                 text: 'notification',
