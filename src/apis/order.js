@@ -33,3 +33,17 @@ export const getOrderDetail = async (id) => {
         console.log("Err call api: ", err);
     }
 }
+
+export const updateOrder = async (data, id) => {
+    try{
+        const response = await axios({
+            url: `/order/admin/${id}`,
+            method: 'PUT',
+            data: data
+        })
+        console.log("response: ", response);
+        return response
+    }catch(error){
+        console.log("Err call api: ", error);
+    }
+}

@@ -30,6 +30,7 @@ const initState = {
     currentUser: {},
     message: null,
     loginError: null,
+    comment: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -41,7 +42,13 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message:null
             }
-        
+        /** === COMMENT === */
+        case actionType.GET_COMMENT: 
+            return {
+                ...state,
+                comment: action.payload?.comment
+            }    
+
         /** === LOGIN === */
         case actionType.LOGIN:
             return {
@@ -56,7 +63,7 @@ const appReducer = (state = initState, action) => {
                 message: null,
                 loginError: action.payload || null,
             }
-
+        
         /** === PRODUCT === */
         case actionType.GET_PRODUCTS:
             return {
@@ -131,6 +138,11 @@ const appReducer = (state = initState, action) => {
                 discountOrder: action.payload?.data?.discount || {},
             }
 
+        case actionType.UPDATE_ORDER: 
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
 
         /** === CATEGORY PRODUCT === */
         case actionType.GET_CATEGORY_PRODUCT:

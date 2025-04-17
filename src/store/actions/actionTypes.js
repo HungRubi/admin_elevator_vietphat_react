@@ -1,9 +1,15 @@
 const actionTypes = {
     RESET_MESSAGE: 'RESET_MESSAGE',
 
+    /** COMMENT */
+    GET_COMMENT: 'GET_COMMENT',
+
+
     /**  === AUTHEN === */
     LOGIN : 'LOGIN',
     LOGIN_FAIL: 'LOGIN_FAIL',
+
+
     /** === PRODUCT === */
     GET_PRODUCTS: "GET_PRODUCTS",
     GET_DETAIL_PRODUCTS: "GET_DETAIL_PRODUCTS",
@@ -23,6 +29,7 @@ const actionTypes = {
     GET_ORDER: 'GET_ORDER',
     GET_ADD_ORDER: 'GET_ADD_ORDER',
     GET_ORDER_DETAIL: 'GET_ORDER_DETAIL',
+    UPDATE_ORDER: 'UPDATE_ORDER',
 
 
     /** === CATEGORY PRODUCT === */

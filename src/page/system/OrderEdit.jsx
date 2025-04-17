@@ -1,25 +1,30 @@
-import { NavLink } from "react-router-dom";
-import { Combobox, Button, InputGroup, ListProductOrder, SelectiObject, ModalList } from '../../components'
+import { NavLink, useNavigate } from "react-router-dom";
+import { Combobox, Button, InputGroup, ListProductOrder, PageTitle } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as actions from '../../store/actions';
 
 const { MdChevronRight, MdCall, FaMapMarkerAlt, BsTag, FiUserPlus } = icon
 
 const OrderEdit = () => {
+    const navigate = useNavigate();
     const productSelected = [1];
     const dispatch = useDispatch();
-    const {orderEditProduct, orderDetail, discountOrder} = useSelector(state => state.app);
     const id = window.location.pathname.split('/').slice(-2,-1)[0];
     useEffect(() => {
         dispatch(actions.getOrderDetail(id));
-    }, [])
-    const discountValue  = Number(discountOrder?.value_discount);
-    const discountType = discountOrder?.discount_type;
-    const minimumPurchase = Number(discountOrder?.minimum_purchase);
-    const totalPurchase = Number(orderDetail?.total_price);
-    const shippingMoney = (totalPurchase * 2) / 100
+    }, [dispatch, id])
+    const {orderEditProduct, orderDetail, discountOrder} = useSelector(state => state.app);
+    const discountValue  = Number(discountOrder?.value_discount) || 0;
+    const discountType = discountOrder?.discount_type || '';
+    const minimumPurchase = Number(discountOrder?.minimum_purchase) || 0;
+    const totalPurchase = orderEditProduct.reduce((acc, item ) => {
+        return acc + (Number(item.price) * Number(item.quantity));
+    }, 0);
+    const shippingMoney = orderEditProduct.reduce((acc, item ) => {
+        return acc + item.shipping_cost
+    }, 0) 
     let purchase = 0;
     let valueDiscount = 0;
     if( totalPurchase > minimumPurchase){
@@ -30,7 +35,7 @@ const OrderEdit = () => {
         else
         {
             valueDiscount = discountValue;
-            purchase = totalPurchase - valueDiscount + shippingMoney;
+            purchase = totalPurchase - discountValue + shippingMoney;
         }
     }
     
@@ -66,8 +71,59 @@ const OrderEdit = () => {
             text: 'Thất bại',
         },
     ]
+    const [formData, setFormData] = useState({
+        shipping_address: {
+            name: '',
+            phone: '',
+            address: ''
+        },
+        payment_method: '',
+        status: '',
+    })
+
+    useEffect(() => {
+        if (orderDetail) {
+            setFormData({
+                shipping_address: {
+                    name: orderDetail?.shipping_address?.name || '',
+                    phone: orderDetail?.shipping_address?.phone || '',
+                    address: orderDetail?.shipping_address?.address || ''
+                },
+                payment_method: orderDetail?.payment_method || '',
+                status: orderDetail?.status || '',
+            })
+        }
+    }, [orderDetail])
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        const keys = name.split('.');
+
+        if (keys.length === 2) {
+            setFormData(prev => ({
+                ...prev,
+                [keys[0]]: {
+                    ...prev[keys[0]],
+                    [keys[1]]: value
+                }
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.updateOrder(id, formData));
+        navigate("/order");
+    }
+
     return (
         <div className="full pt-5">
+            <PageTitle title="Edit Order" />
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -87,7 +143,7 @@ const OrderEdit = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Edit a order of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
                 <div className="w-full border-b-custom py-10">
                     <div className="w-full mb-5 border-b-custom pb-5">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -151,21 +207,35 @@ const OrderEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <InputGroup type={"text"} label={"Full Name"} 
-                        icon={<FiUserPlus className="text-[18px] text-gray-600"/>} 
-                        name={"shipping_address[name]"} placeholder={"0% to 100%"}
-                        value={orderDetail.shipping_address?.name}
-                        helper={"Please enter number from 0 to 100"}/>
-                        <InputGroup type={"phone"} label={"Phone"} 
-                        icon={<MdCall className="text-[18px] text-gray-600"/>} 
-                        name={"shipping_address[phone]"} placeholder={"0% to 100%"}
-                        value={orderDetail.shipping_address?.phone}
-                        helper={"Please enter number from 0 to 100"}/>
-                        <InputGroup type={"address"} label={"Address"}
-                        helper={"Please enter a numer greater than 0"}
-                        icon={<FaMapMarkerAlt className="text-[17px] text-gray-500"/>} 
-                        name="shipping_address[address]"
-                        value={orderDetail.shipping_address?.address}/>
+                        <InputGroup 
+                            type={"text"} 
+                            label={"Full Name"} 
+                            icon={<FiUserPlus className="text-[18px] text-gray-600"/>} 
+                            name={"shipping_address.name"} 
+                            placeholder={"Enter full name"}
+                            value={formData.shipping_address.name}
+                            onChange={handleChange}
+                            helper={"Please enter customer's full name"}
+                        />
+                        <InputGroup 
+                            type={"phone"} 
+                            label={"Phone"} 
+                            icon={<MdCall className="text-[18px] text-gray-600"/>} 
+                            name={"shipping_address.phone"} 
+                            placeholder={"Enter phone number"}
+                            value={formData.shipping_address.phone}
+                            onChange={handleChange}
+                            helper={"Please enter customer's phone number"}
+                        />
+                        <InputGroup 
+                            type={"address"} 
+                            label={"Address"}
+                            helper={"Please enter customer's address"}
+                            icon={<FaMapMarkerAlt className="text-[17px] text-gray-500"/>} 
+                            name="shipping_address.address"
+                            value={formData.shipping_address.address}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">
@@ -178,13 +248,25 @@ const OrderEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Combobox data={payment} label={"Unit"} name={"payment_method"} selected={orderDetail?.payment_method}/>
-                        <Combobox data={status} label={"Category"} name={"status"} selected={orderDetail?.status}/>
+                        <Combobox 
+                            data={payment} 
+                            label={"Unit"} 
+                            name={"payment_method"} 
+                            selected={formData.payment_method}
+                            onChange={handleChange}
+                        />
+                        <Combobox 
+                            data={status} 
+                            label={"status"} 
+                            name={"status"} 
+                            selected={formData.status}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
-                        <NavLink to={"/user"}>
+                        <NavLink to={"/order"}>
                             Cancel
                         </NavLink>
                     </Button>

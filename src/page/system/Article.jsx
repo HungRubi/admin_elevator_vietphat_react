@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar } from '../../components';
+import  { Search, Button, PageBar, PageTitle } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +23,7 @@ const Article = () => {
     const currentArticle = article.slice(firstArticleIndex, lastArticleIndex);
     return (
         <div className="full pt-5">
+            <PageTitle title="Article" />
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

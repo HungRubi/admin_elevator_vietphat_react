@@ -10,7 +10,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const ProductCategory = () => {
     const dispatch = useDispatch();
-    const { totalPage, categoryProduct, message, searchProduct, searchType } = useSelector(state => state.app);
+    const { totalPage, categoryProduct, searchProduct, searchType } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getCategoryProduct());
     }, [dispatch]);
@@ -44,9 +44,6 @@ const ProductCategory = () => {
     };
     return (
         <div className="full py-5">
-            <ToastFormat message={message} url={"/category/product"} 
-            messSuccess={"You have successfully deleted a product category"}
-            messError={"Delete failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

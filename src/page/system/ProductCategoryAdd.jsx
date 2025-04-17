@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { Input, Button, Textearea, ToastFormat } from '../../components'
+import { Input, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as actions from '../../store/actions'
 const { MdChevronRight } = icon
 
@@ -12,7 +12,6 @@ const ProductCategoryAdd = () => {
         name: "",
         description: ""
     })
-    const {message} = useSelector(state => state.app);
     const handleChange = (e) => {
         setFormDate({
             ...formData,
@@ -26,9 +25,6 @@ const ProductCategoryAdd = () => {
     
     return (
         <div className="full pt-5">
-            <ToastFormat message={message} url={"/category/product"}
-            messSuccess={"Product category added successfully!"}
-            messError={"Add failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

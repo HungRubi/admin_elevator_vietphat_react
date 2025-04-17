@@ -23,24 +23,24 @@ const ListProductOrder = ({data}) => {
                                     {item.name}
                                 </h5>
                                 <h5 className="text-sm line-clamp-1 mt-2">
-                                    Đơn giá: {item.price}đ
+                                    Đơn giá: {format(item.price)}đ
                                 </h5>
                             </div>
                         </div>
                         <div className="flex items-center">
                             <span className="text-gray-500 text-sm leading-0">Quantity: </span> 
-                            <ButtonQuantity className={"ml-4"}/>    
+                            <span className={"ml-4"}>x{item.quantity || 1}</span>    
                         </div>
                         <div className="flex items-center w-1/7">
-                            <span className="text-gray-500 text-sm leading-0">Quantity: </span> 
-                            <span className="font-medium ml-2 text-gray-700">{item.category}</span>    
+                            <span className="text-gray-500 text-sm leading-0">Category: </span> 
+                            <span className="font-medium ml-2 text-gray-700">{item.category?.name || item.category}</span>    
                         </div>
                         <div className="flex justify-end items-center gap-2.5 leading-0 w-1/8">
                             <h6 className='line-through text-[17px] text-[#888]'>
                                 {format(item.price)}đ
                             </h6>
                             <h6 className='text-[25px] text-[#2f904b] font-medium'>
-                                {format(item.price)}đ
+                                {format((item.quantity || 1) * item.price)}đ
                             </h6>
                         </div>
                     </div>

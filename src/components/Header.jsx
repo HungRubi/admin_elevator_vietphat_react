@@ -50,9 +50,9 @@ const Header = () => {
                     {openMenu === "account" && (
                         <div className="absolute bg-white w-[250px] top-[140%] right-0 rounded-[3px] menu pb-2.5 menu_togglo ">
                             <div className="flex flex-col items-center pt-[15px] justify-center">
-                                <img src="/img/default/default.png" alt="" className='w-[40px] h-[40px] rounded-[50%] '/>
+                                <img src={currentUser?.avatar} alt="" className='w-[40px] h-[40px] rounded-[50%] '/>
                                 <h5 className="text-[15px] mt-2.5">
-                                    Nguyễn Huy Hùng
+                                    {currentUser?.name}
                                 </h5>
                                 <hr className='h-[1px] border-t border-t-[#cbd0dd] w-full my-3'/>
                             </div>

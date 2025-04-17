@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Input, Button, Textearea, ToastFormat } from '../../components'
+import { Input, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -9,21 +9,18 @@ const { MdChevronRight } = icon
 
 const ProductCategoryEdit = () => {
     const dispatch = useDispatch();
-    const {categoryProductDetail, message} = useSelector(state => state.app);
+    const {categoryProductDetail} = useSelector(state => state.app);
     const id = window.location.pathname.split("/").slice(-2,-1)[0];
     const [formData, setFormData] = useState({
         name: categoryProductDetail?.name,
         description: categoryProductDetail?.description
     })
-    console.log("Message Page: ", message)
-    //Xử lý sự kiện nhập input
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         })
     }
-    //Cập nhật lại value khi reload lại trang
     useEffect(() => {
         if (categoryProductDetail) {
             setFormData({
@@ -33,21 +30,15 @@ const ProductCategoryEdit = () => {
         }
     }, [categoryProductDetail]);
 
-    //Render api
     useEffect(() => {
         dispatch(actions.getCategoryProductDetail(id));
-    },[id])
+    },[id, dispatch])
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(actions.updateCategoryProduct(formData, id));
-        console.log(formData);
-        console.log(id);
     }
     return (
         <div className="full pt-5">
-            <ToastFormat message={message} url={"/category/product"}
-            messSuccess={"Edit product category successfully"}
-            messError={"Update failed. System is checking again. Please press F5 to reload the page."}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

@@ -69,3 +69,26 @@ export const getOrderDetail = (id) => async(dispatch) => {
         })
     }
 }
+
+export const updateOrder = (data, id) => async(dispatch) => {
+    try{
+        const response = await apis.updateOrder(id, data);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.UPDATE_ORDER,
+                payload: response.data
+            })
+        }else{
+            dispatch({
+                type: actionTypes.UPDATE_ORDER,
+                payload: null
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.UPDATE_ORDER,
+            payload: null,
+            err
+        })
+    }
+}

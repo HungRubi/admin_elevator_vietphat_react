@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Combobox, Button, InputGroup, ListProductOrder, SelectiObject, ModalList } from '../../components'
+import { Combobox, Button, InputGroup, ListProductOrder, SelectiObject, ModalList, PageTitle } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -55,6 +55,7 @@ const OrderAdd = () => {
     }
     return (
         <div className="full pt-5">
+            <PageTitle title="Add Order" />
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

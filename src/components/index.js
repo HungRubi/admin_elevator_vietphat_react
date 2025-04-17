@@ -16,6 +16,7 @@ export {default as SelectiObject} from './SelectiObject';
 export {default as ModalList} from './ModalList';
 export {default as ToastFormat} from './ToastFormat';
 export {default as ModalToast} from './ModalToast';
+export {default as PageTitle} from './PageTitle';
 
 
 

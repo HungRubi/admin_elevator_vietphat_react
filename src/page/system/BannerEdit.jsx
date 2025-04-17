@@ -56,12 +56,16 @@ const BannerEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Name"} name={"name"} value={categoryBannerDetail?.name}/>
+                        <Input 
+                            label={"Name"} name={"name"} 
+                            value={categoryBannerDetail?.name}
+                            
+                        />
                         <InputGroup label={"Thumbnail"} name={"thumbnail"}
-                        value={categoryBannerDetail?.thumbnail}
-                        icon={<IoImageOutline className="text-lg text-gray-600"/>}
-                        helper={"Please enter the thumbnail url link"}
-                        pattern={"^https?:\\/\\/[a-zA-Z0-9\\-._~:/?#[\\]@!$&'()*+,;=]+$"}/>
+                            value={categoryBannerDetail?.thumbnail}
+                            icon={<IoImageOutline className="text-lg text-gray-600"/>}
+                            helper={"Please enter the thumbnail url link"}
+                        />
                         <Combobox data={data} label={"Status"} selected={categoryBannerDetail?.status}/>
                     </div>  
                 </div>

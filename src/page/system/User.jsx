@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import  { CircleButton, Search, Button,PageBar } from '../../components';
+import  { CircleButton, Search, Button,PageBar, PageTitle } from '../../components';
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -22,6 +22,7 @@ const User = () => {
 
     return (
         <div className="full py-5">
+            <PageTitle title="User" />
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

@@ -1,26 +1,22 @@
-import  { Search, Button,CircleButton, PageBar } from '../../components';
+import  { Search, Button,CircleButton, PageBar, PageTitle } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../store/actions'
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
 
 const Order = () => {
-    const dispatch = useDispatch();
+    
     const { order, totalPage } = useSelector(state => state.app);
-    useEffect(() => {
-        dispatch(actions.getOrder())
-    }, [])
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastOrderIndex = current * limit;
     const firstOrderIndex = lastOrderIndex - limit;
-
     const currentOrder = order.slice(firstOrderIndex, lastOrderIndex);
     
     return (
         <div className="full py-5">
+            <PageTitle title="Order" />
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -113,7 +109,7 @@ const Order = () => {
                                             </h5>
                                         </div>
                                     </th>
-                                    <td class="px-4 py-4 w-2/14">
+                                    <td class="px-4 py-4 w-2/17">
                                         {item.order_code}
                                     </td>
                                     <td class="px-4 py-4 w-2/22">
@@ -128,7 +124,7 @@ const Order = () => {
                                     <td class="px-4 py-4 w-2/15">
                                         {item.discountName}
                                     </td>
-                                    <td class="px-4 py-4 w-2/20">
+                                    <td class="px-4 py-4 w-2/15">
                                         <Button className={item.status === "Thành công" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main" : "hidden"}>
                                             {item.status}
                                         </Button>
@@ -136,6 +132,9 @@ const Order = () => {
                                             {item.status}
                                         </Button>
                                         <Button className={item.status === "Thất bại" ? "!border-[#f74d4d8a] !py-[2px] bg-[#ff8585a6] text-[#c90c05]" : "hidden"}>
+                                            {item.status}
+                                        </Button>
+                                        <Button className={item.status === "Đang giao hàng" ? "!border-blue-500 !py-[2px] bg-blue-200 text-blue-600" : "hidden"}>
                                             {item.status}
                                         </Button>
                                     </td>

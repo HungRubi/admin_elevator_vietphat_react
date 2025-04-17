@@ -2,6 +2,10 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import * as actions from './store/actions';
 import {
   Article, 
   Dashboard, 
@@ -27,6 +31,14 @@ import {
   } from './page/system'
 
 function App() {
+  const dispatch = useDispatch();
+  const {message} = useSelector(state => state.app);
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+    }
+    dispatch(actions.resetMessage());
+  }, [message, dispatch]);
   return (
     <>
       <Routes>

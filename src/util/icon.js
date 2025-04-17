@@ -4,6 +4,7 @@ import { BsBox } from "react-icons/bs";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiOutlineNewspaper } from "react-icons/hi2";
 import { BsBarChart } from "react-icons/bs";
+import { FaRegStar } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaSortDown } from "react-icons/fa";
 import { TbCategory } from "react-icons/tb";
@@ -37,6 +38,7 @@ import { BsPerson } from "react-icons/bs";
 import { BiVideo } from "react-icons/bi";
 
 const icon = {
+    FaRegStar,
     BiVideo,
     BsPerson,
     FaArrowRightFromBracket,
