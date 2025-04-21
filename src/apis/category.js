@@ -58,7 +58,6 @@ export const deleteCategoryProduct = async (id) => {
             url: `/category/product/${id}`,
             method: "delete",
         });
-        console.log(response)
         return response;
     } catch (err) {
         console.error("Lỗi khi gọi API:", err);

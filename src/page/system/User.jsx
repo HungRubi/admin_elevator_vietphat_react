@@ -12,7 +12,7 @@ const User = () => {
     const { user, totalPage } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getUser())
-    }, [])
+    }, [dispatch])
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastUserIndex = current * limit;

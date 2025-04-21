@@ -1,21 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Combobox, Button } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import * as actions from '../../store/actions'
+import { useEffect, useState } from "react";
+import * as actions from '../../store/actions';
 
 const { MdChevronRight } = icon
 
 const UserEdit = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { detailUser } = useSelector(state => state.app);
-    console.log(detailUser?.name);
     const id = window.location.pathname.split('/').slice(-2, -1)[0];
 
     useEffect(() => {
         dispatch(actions.getUserDetail(id))
-    }, [])
+    }, [dispatch, id])
     const authour = [
         {
             id: 'admin',
@@ -30,6 +30,43 @@ const UserEdit = () => {
             text: 'Customer',
         },
     ]
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        birth: '',
+        account: '',
+        avatar: '',
+        password: '',
+        authour: '',
+    })
+    useEffect(() => {
+        if(detailUser){
+            setFormData({
+                name: detailUser?.name,
+                email: detailUser?.email,
+                phone: detailUser?.phone,
+                address: detailUser?.address,
+                birth: detailUser?.birthFormated,
+                account: detailUser?.account,
+                avatar: detailUser?.avatar,
+                password: detailUser?.password,
+                authour: detailUser?.authour,
+            })
+        }
+    }, [detailUser])
+    const hanleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.updateUser(id, formData));
+        navigate("/user");
+    }
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -52,7 +89,7 @@ const UserEdit = () => {
                 </div>
                 
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -63,11 +100,41 @@ const UserEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Fullname"} name={"name"} value={detailUser?.name}/>
-                        <Input label={"Email"} type={"email"} name={"email"}  value={detailUser?.email}/>
-                        <Input label={"Phone"} type={"phone"} name={"phone"} value={detailUser?.phone}/>
-                        <Input label={"Address"} type={"address"} name={"address"} value={detailUser?.address}/>
-                        <Input label={"Birth"} type={"date"} name={"birth"} value={detailUser?.birthFormated}/>
+                        <Input 
+                            label={"Fullname"} 
+                            type={"text"}
+                            name={"name"} 
+                            value={formData?.name}
+                            onChange={hanleChange}
+                        />
+                        <Input 
+                            label={"Email"} 
+                            type={"email"} 
+                            name={"email"}  
+                            onChange={hanleChange}
+                            value={formData?.email}
+                        />
+                        <Input 
+                            label={"Phone"} 
+                            type={"phone"} 
+                            name={"phone"} 
+                            value={formData?.phone}
+                            onChange={hanleChange}
+                        />
+                        <Input 
+                            label={"Address"} 
+                            type={"address"} 
+                            name={"address"} 
+                            onChange={hanleChange}
+                            value={formData?.address}
+                        />
+                        <Input 
+                            label={"Birth"} 
+                            type={"date"} 
+                            name={"birth"} 
+                            onChange={hanleChange}
+                            value={formData?.birth}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">
@@ -80,10 +147,31 @@ const UserEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Account"} name={"account"} value={detailUser?.account}/>
-                        <Input label={"Avatar"} placeholder={"Url image"} value={detailUser?.avatar}/>
-                        <Input label={"Password"} type={"password"} value={detailUser?.password}/>
-                        <Combobox data={authour} label={"Authour"} selected={detailUser?.authour} name={"authour"}/>
+                        <Input 
+                            label={"Account"} 
+                            name={"account"} 
+                            onChange={hanleChange}
+                            value={formData?.account}
+                        />
+                        <Input 
+                            label={"Avatar"} 
+                            placeholder={"Url image"} 
+                            onChange={hanleChange}
+                            value={formData?.avatar}
+                        />
+                        <Input 
+                            label={"Password"} 
+                            type={"password"} 
+                            onChange={hanleChange}
+                            value={formData?.password}
+                        />
+                        <Combobox 
+                            data={authour} 
+                            label={"Authour"} 
+                            onChange={hanleChange}
+                            selected={formData?.authour} 
+                            name={"authour"}
+                        />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">

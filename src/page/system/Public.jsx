@@ -21,7 +21,7 @@ const Public = () => {
                     <Header/>
                 </div>
                 <div className="w-full h-full flex pt-[70px] z-10">
-                    <div className="w-[240px] h-full">
+                    <div className="w-[240px] h-full flex-none">
                         <Navbar/>
                     </div>
                     <div className="h-full flex-1 bg-div min-w-[1500px] overflow-y-auto 

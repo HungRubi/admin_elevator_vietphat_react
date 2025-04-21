@@ -72,8 +72,19 @@ const VideoAdd = () => {
                     </div>
                     <div className="flex-1">
                         <Input label={"Name"} name={"name"} onChange={handleChange}/>
-                        <Textearea row={5} label={"Content"} name={"content"} onChange={handleChange}/>
-                        <Combobox data={status} label={"Status"} name={"status"} onChange={handleChange}/>
+                        <Textearea 
+                            row={5} 
+                            label={"Content"} 
+                            name={"content"} 
+                            onChange={handleChange}
+                        />
+                        <Combobox 
+                            data={status} 
+                            label={"Status"} 
+                            name={"status"} 
+                            onChange={handleChange}
+                            selected={formData.status}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">

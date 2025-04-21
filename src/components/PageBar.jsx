@@ -6,7 +6,7 @@ const {AiOutlineLeft, AiOutlineRight} = icons
 
 const PageBar = ({ currentPage, totalPage, onPageChange, className }) => {
     return (
-        <div className={`flex items-center justify-center my-10 ${className}`}>
+        <div className={`flex items-center justify-center my-7 ${className}`}>
             <Button type="button" className="bg-transparent !border-none" disabled={currentPage === 1}>
                 <div
                 onClick={() => onPageChange(currentPage - 1)} 

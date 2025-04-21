@@ -7,7 +7,6 @@ export const resetMessage = () => ({
     type: "RESET_MESSAGE",
 });
 
-
 /** === CATEGORY PRODUCT === */
 export const getCategoryProduct = (searchTerm = '') => async (dispatch) => {
     try{
@@ -17,7 +16,7 @@ export const getCategoryProduct = (searchTerm = '') => async (dispatch) => {
                 type: actionTypes.GET_CATEGORY_PRODUCT,
                 payload: {
                     data: response.data,
-                    searchType: !!searchTerm, // Nếu có từ khóa tìm kiếm thì searchType = true
+                    searchType: !!searchTerm, 
                 },
             })
         }else{

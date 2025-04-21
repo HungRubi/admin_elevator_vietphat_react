@@ -1,19 +1,71 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Combobox, Button, InputGroup, ListProductOrder, SelectiObject, ModalList, PageTitle } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as actions from '../../store/actions';
+import { formatMony } from '../../util/formatMony';
 
 const { MdChevronRight, MdOutlineDiscount, FaMapMarkerAlt, BsTag } = icon
 
 const OrderAdd = () => {
-    const productSelected = [];
+    const navigate = useNavigate()
     const dispatch = useDispatch();
-    const {orderUser, orderProduct, orderDiscount} = useSelector(state => state.app);
+    const {orderUser, orderProduct, orderDiscount, productsByOrder} = useSelector(state => state.app);
+
+    // States
+    const [shipping, setShipping] = useState(0);
+    const [total, setTotal] = useState(0);
+    const [dataProductOrder, setDataProductOrder] = useState([]);
+    const [info, setInfo] = useState({
+        id: '',
+        name: '',
+        phone: '',
+        address: '',
+        payment_method: '',
+        status: '',
+        discount: '',
+    });
+    const [discountInfo, setDiscountInfo] = useState({
+        id: '',
+        type: '',
+        value: '',
+        minimumPurchase: '',
+    });
+    // Effects
     useEffect(() => {
         dispatch(actions.getOrderAdd());
-    }, [])
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (Array.isArray(productsByOrder)) {
+            try {
+                const parsedArray = productsByOrder.map(item => {
+                    // Kiểm tra nếu item đã là object thì không cần parse
+                    if (typeof item === 'object') {
+                        return item;
+                    }
+                    // Nếu là string thì parse
+                    return JSON.parse(item);
+                });
+                setDataProductOrder(parsedArray);
+
+                if(parsedArray.length > 0) {
+                    const newShipping = parsedArray.reduce((acc, curr) => acc + curr.shipping_cost, 0);
+                    const newTotal = parsedArray.reduce((acc, curr) => acc + (curr.quantity || 1) * curr.price, 0);
+                    
+                    setShipping(newShipping);
+                    setTotal(newTotal);
+                }
+            } catch (err) {
+                console.error('❌ Lỗi khi parse từng phần tử:', err);
+            }
+        } else {
+            console.warn("❗ productsByOrder không phải là mảng");
+        }
+    }, [productsByOrder]);
+
+    // Constants
     const payment = [
         {
             id: 'Thanh toán khi nhận hàng',
@@ -27,7 +79,8 @@ const OrderAdd = () => {
             id: 'Atm nội địa',
             text: 'Atm nội địa',
         },
-    ]
+    ];
+
     const status = [
         {
             id: 'Thành công',
@@ -45,13 +98,98 @@ const OrderAdd = () => {
             id: 'Thất bại',
             text: 'Thất bại',
         },
-    ]
-    const cbxDiscount = [];
-    for(let i = 0; i < orderDiscount.length; i++){
-        cbxDiscount.push({
-            id: orderDiscount[i]?.id,
-            text: orderDiscount[i]?.title,
-        });
+    ];
+
+    const cbxDiscount = orderDiscount.map(item => ({
+        id: item?.id,
+        text: item?.title,
+    }));
+
+    // Handlers
+    const handleSelectedUser = (user) => {
+        setInfo(prev => ({
+            ...prev,
+            id: user.value,
+            name: user.name,
+            phone: user.phone,
+            address: user.address,
+        }));
+    };
+
+    const handleChangeInfo = (e) => {
+        const { name, value } = e.target;
+        
+        if (name === 'discount') {
+            // Trim whitespace and find discount
+            const selectedDiscount = orderDiscount.find(item => 
+                item.title.trim() === value.trim()
+            );
+            if (selectedDiscount) {
+                setDiscountInfo({
+                    id: selectedDiscount._id,
+                    type: selectedDiscount.discount_type,
+                    value: selectedDiscount.value_discount,
+                    minimumPurchase: selectedDiscount.minimum_purchase,
+                });
+            }
+        }
+
+        setInfo(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleQuantityChange = (productId, newQuantity, newPrice) => {
+        setDataProductOrder(prev => 
+            prev.map(item => 
+                item._id === productId 
+                    ? { ...item, quantity: newQuantity, totalPrice: newPrice }
+                    : item
+            )
+        );
+    };
+
+    // Calculate final price with discount
+    const calculateFinalPrice = () => {
+        let finalTotal = total;
+        if (discountInfo.type && discountInfo.value) {
+            if (discountInfo.type === 'giảm theo số tiền cố định') {
+                // Giảm giá theo số tiền cố định
+                finalTotal = total - discountInfo.value;
+            } else if (discountInfo.type === 'giảm giá phần trăm') {
+                // Giảm giá theo phần trăm
+                const discountAmount = (total * discountInfo.value) / 100;
+                finalTotal = total - discountAmount;
+            }
+        }
+        return finalTotal;
+    };
+
+    const finalPrice = calculateFinalPrice();
+    const discountAmount = total - finalPrice;
+    const data = {
+        user_id: info.id,
+        total_price: finalPrice + shipping,
+        shipping_address: {
+            name: info.name,
+            phone: info.phone,
+            address: info.address,
+        },
+        shipping_cost: shipping,
+        discount: discountInfo.id,
+        payment_method: info.payment_method,
+        status: info.status,
+        items: dataProductOrder.map(item => ({
+            product_id: item._id,
+            quantity: item.quantity,
+            price: item.price,
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.addOrder(data));
+        navigate('/order')
     }
     return (
         <div className="full pt-5">
@@ -75,7 +213,8 @@ const OrderAdd = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Add a new order of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
+                {/* Product Information Section */}
                 <div className="w-full border-b-custom py-10">
                     <div className="w-full mb-5 border-b-custom pb-5">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -84,11 +223,19 @@ const OrderAdd = () => {
                         <p className="text-[12px] text-[#888] line-clamp-2">
                             List of products of your order
                         </p>
-                        <ModalList btn={"Add product"} data={orderProduct}/>
+                        <ModalList 
+                            btn={"Add product"} 
+                            data={orderProduct}
+                            existingProducts={dataProductOrder}
+                        />
                     </div>
-                    {productSelected && productSelected.length > 0 ? 
-                        (<ListProductOrder quantityClass={"flex"}/>) 
-                            :
+                    {dataProductOrder && dataProductOrder.length > 0 ? 
+                        (<ListProductOrder 
+                            data={dataProductOrder} 
+                            quantityClass={"flex"}
+                            onQuantityChange={handleQuantityChange}
+                        />) 
+                        :
                         (
                             <div className="w-full flex items-center flex-col justify-center pb-10">
                                 <img src="/img/default/empty_product.png" alt="" className=" opacity-25 w-[70px]"/>
@@ -108,7 +255,13 @@ const OrderAdd = () => {
                                     <h5>Your voucher</h5>
                                 </div>
                                 <div className="flex-1">
-                                    <Combobox data={cbxDiscount} name={"unit"} className={"w-full"}/>
+                                    <Combobox 
+                                        data={cbxDiscount} 
+                                        name={"discount"} 
+                                        className={"w-full"}
+                                        selected={info.discount}
+                                        onChange={handleChangeInfo}
+                                    />
                                 </div>
                             </div>
                             <div className="w-full border-t-custom mt-5 pt-5 text-right">
@@ -117,7 +270,7 @@ const OrderAdd = () => {
                                         Shipping:
                                     </div>
                                     <div className="w-1/2 text-right font-[600]">
-                                        {productSelected && productSelected.length > 0 ? "50.000đ" : "0"}
+                                        {formatMony(shipping)} đ
                                     </div>
                                 </div>
                                 <div className="w-full flex leading-10">
@@ -125,7 +278,12 @@ const OrderAdd = () => {
                                         Discount:
                                     </div>
                                     <div className="w-1/2 text-right font-[600]">
-                                        {productSelected && productSelected.length > 0 ? "- 50.000đ" : "0"}
+                                        {formatMony(discountAmount)} đ
+                                        {discountInfo.type === 'percentage' && (
+                                            <span className="text-sm text-gray-500 ml-2">
+                                                ({discountInfo.value}%)
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="w-full flex leading-10">
@@ -133,13 +291,15 @@ const OrderAdd = () => {
                                         Total:
                                     </div>
                                     <div className="w-1/2 text-right text-3xl font-medium text-main">
-                                        {productSelected && productSelected.length > 0 ? "3.600.000đ" : "0"}
+                                        {formatMony(finalPrice + shipping)} đ
                                     </div>
                                 </div>
                             </div>
                         </div>                        
                     </div>
                 </div>
+
+                {/* Customer Information Section */}
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -150,16 +310,36 @@ const OrderAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <SelectiObject label={"Fullname"} name={"shipping_address[name]"} data={orderUser}/>
-                        <InputGroup type={"phone"} label={"Phone"}
-                        icon={<MdOutlineDiscount className="text-[18px] text-gray-600"/>} 
-                        name={"shipping_address[phone]"} placeholder={"0% to 100%"}
-                        helper={"Please enter number from 0 to 100"}/>
-                        <InputGroup type={"address"} label={"Address"}
-                        helper={"Please enter a numer greater than 0"}
-                        icon={<FaMapMarkerAlt className="text-[17px] text-gray-500"/>} name="shipping_address[address]"/>
+                        <SelectiObject 
+                            label={"Fullname"} 
+                            name={"shipping_address[name]"} 
+                            data={orderUser}
+                            onSelectedUser={handleSelectedUser}   
+                        />
+                        <InputGroup 
+                            type={"phone"} 
+                            label={"Phone"}
+                            icon={<MdOutlineDiscount className="text-[18px] text-gray-600"/>} 
+                            name={"phone"} 
+                            placeholder={"0% to 100%"}
+                            helper={"Please enter number from 0 to 100"}
+                            value={info.phone}
+                            onChange={handleChangeInfo}
+                        />
+                        <InputGroup 
+                            type={"address"} 
+                            label={"Address"}
+                            helper={"Please enter a numer greater than 0"}
+                            icon={<FaMapMarkerAlt 
+                            className="text-[17px] text-gray-500"/>} 
+                            name="address"
+                            value={info.address}
+                            onChange={handleChangeInfo}
+                        />
                     </div>
                 </div>
+
+                {/* Payment & Status Section */}
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -170,10 +350,24 @@ const OrderAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Combobox data={payment} label={"Payment"} name={"payment_method"}/>
-                        <Combobox data={status} label={"Status"} name={"status"}/>
+                        <Combobox 
+                            data={payment} 
+                            label={"Payment"} 
+                            name={"payment_method"}
+                            selected={info.payment_method}
+                            onChange={handleChangeInfo}
+                        />
+                        <Combobox 
+                            data={status} 
+                            label={"Status"} 
+                            name={"status"}
+                            selected={info.status}
+                            onChange={handleChangeInfo}
+                        />
                     </div>
                 </div>
+
+                {/* Action Buttons */}
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
                         <NavLink to={"/user"}>

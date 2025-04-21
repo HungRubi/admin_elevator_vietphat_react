@@ -24,11 +24,11 @@ const Search = ({ className, placeholder, onSearch }) => {
                 placeholder={placeholder || 'Enter name product'}
                 value={searchTerm}
                 onChange={handleChange}
-                className={`w-full py-2.5 pl-8.5 pr-5 border-custom rounded-[20px] text-[15px] leading-0 ${className}`}
+                className={`w-full py-2.5 pl-10 pr-5 border-custom rounded-[20px] text-[15px] leading-0 focus:!ring-blue-500 focus:!border-blue-500 ${className}`}
             />
             <button 
                 type="submit" 
-                className='absolute left-1 top-[50%] -translate-y-1/2 flex items-center justify-center w-[30px]'>
+                className='absolute left-1.5 top-[50%] -translate-y-1/2 flex items-center justify-center w-[30px]'>
                 <FiSearch className='size-[24px] text-[#888]'/>
             </button>
         </form>

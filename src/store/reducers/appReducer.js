@@ -1,3 +1,4 @@
+import { BiMessageError } from "react-icons/bi";
 import actionType from "../actions/actionTypes";
 
 const initState = {
@@ -31,6 +32,7 @@ const initState = {
     message: null,
     loginError: null,
     comment: [],
+    productsByOrder: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -71,7 +73,6 @@ const appReducer = (state = initState, action) => {
                 products: action.productData?.data?.products || [],
                 totalPage: action.productData?.data?.totalPage || 1,
                 currentPage: action.productData?.data?.currentPage || 1,
-                
             }
 
         case actionType.GET_DETAIL_PRODUCTS:
@@ -80,7 +81,19 @@ const appReducer = (state = initState, action) => {
                 detailProduct: action.payload?.data?.product || {},
                 categoryProduct: action.payload?.data?.category
             }
+
+        case actionType.ADD_PRODUCT_BY_ORDER:
+            return {
+                ...state,
+                productsByOrder: [...state.productsByOrder, ...action.payload],
+                message: "Thêm sản vào đơn hàng thành công",
+            }
         
+        case actionType.ADD_ORDER:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
 
         /** === USER === */
         case actionType.GET_USER:
@@ -96,6 +109,24 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 detailUser: action.payload?.data?.user || [],
                 
+            }
+
+        case actionType.UPDATE_USER:
+            return {
+                ...state,
+                message: "Cập nhật user thành công",
+            } 
+        
+        case actionType.CREATE_USER:
+            return {
+                ...state,
+                message: action.payload?.message,
+            }
+        
+        case actionType.CREATE_USER_ERROR:
+            return {
+                ...state,
+                message: action.payload?.message,
             }
 
 
@@ -118,8 +149,17 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_ORDER:
             return {
                 ...state,
-                order: action.payload?.data?.orderFormat || [],
-                totalPage: action.payload?.data?.totalPage || 1
+                order: action.payload?.searchType ? 
+                action.payload?.data?.data?.searchOrder :
+                action.payload?.data?.data?.orderFormat,
+                totalPage: action.payload?.data?.data?.totalPage || 1,
+                searchType: action.payload?.searchType || false,
+            }
+        case actionType.FILTER_ORDER:
+            return {
+                ...state,
+                order: action.payload?.orders,
+                totalPage: action.payload?.totalPage || 1
             }
 
         case actionType.GET_ADD_ORDER:
@@ -144,13 +184,19 @@ const appReducer = (state = initState, action) => {
                 message: action.payload?.message || null,
             }
 
+        case actionType.DELETE_ORDER:
+            return {
+                ...state,
+                message: action.payload?.message || null
+            }
+
         /** === CATEGORY PRODUCT === */
         case actionType.GET_CATEGORY_PRODUCT:
             return {
                 ...state,
                 categoryProduct: action.payload?.data?.data?.categoryProduct,
                 searchProduct: action.payload?.searchType 
-                ? action.payload?.data?.data?.searchProduct || []  // Khi search, cập nhật searchProduct
+                ? action.payload?.data?.data?.searchProduct || []  
                 : [],
                 totalPage: action.payload?.data?.totalPage || 1,
                 searchType: action.payload?.searchType || false,

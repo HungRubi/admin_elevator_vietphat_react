@@ -46,3 +46,17 @@ export const getProductsEdit = (id) => async (dispatch)  => {
         })
     }
 }
+
+export const addProductByOrder = (products) => async(dispatch) => {
+    try{
+        dispatch({
+            type: actionType.ADD_PRODUCT_BY_ORDER,
+            payload: products
+        })
+    }catch(error){
+        dispatch({
+            type: actionType.ADD_PRODUCT_BY_ORDER,
+            payload: error
+        })
+    }
+}
