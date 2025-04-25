@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { Input, Combobox, Button, Textearea, ToastFormat } from '../../components'
+import { NavLink, useNavigate } from "react-router-dom";
+import { Input, Combobox, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,6 +52,12 @@ const VideoEdit = () => {
             text: 'Hidden',
         },
     ]
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(message === "Cập nhật video thành công!"){
+            navigate("/category/video")
+        }
+    }, [message, navigate])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -73,9 +79,6 @@ const VideoEdit = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Add a new video of your company</h5>
                 </div>
             </div>
-            <ToastFormat message={message} url={"/category/video"}
-            messSuccess={"Video category added successfully!"}
-            messError={"Add failed. System is checking again. Please press F5 to reload the page."}/>
             <form className="w-full px-[30px] bg-white mt-8" method="POST" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">

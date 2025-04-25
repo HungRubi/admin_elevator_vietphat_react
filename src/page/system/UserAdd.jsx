@@ -20,7 +20,7 @@ const UserAdd = () => {
         account: '',
         avatar: '',
         password: '',
-        cofirm_password: '',
+        comfirm_password: '',
         authour: '',
     })
     const authour = [
@@ -166,9 +166,9 @@ const UserAdd = () => {
                         <Input 
                             label={"Comfirm Password"} 
                             type={"password"} 
-                            name={"cofirm_password"}
+                            name={"comfirm_password"}
                             onChange={hanleChange}
-                            value={formData.cofirm_password}
+                            value={formData.comfirm_password}
                         />
                         {message === 'Mật khẩu không trùng nhau' && (
                             <span className="block mt-1 text-sm text-red-500">

@@ -1,7 +1,6 @@
 import actionTypes from "./actionTypes";
 import * as apis from '../../apis/category';
 
-
 /** GLOBAL */
 export const resetMessage = () => ({
     type: "RESET_MESSAGE",
@@ -130,13 +129,16 @@ export const deleteCategoryProduct = (id) => async (dispatch) => {
 
 
 /** === CATEGORY DISCOUNT === */
-export const getCategoryDiscount = () => async (dispatch) => {
+export const getCategoryDiscount = (search='') => async (dispatch) => {
     try{
-        const response = await apis.getCategoryDiscount();
+        const response = await apis.getCategoryDiscount(search);
         if(response.status === 200){
             dispatch({
                 type: actionTypes.GET_CATEGORY_DISCOUNT,
-                payload: response.data,
+                payload: {
+                    data: response.data,
+                    search: !! search
+                }
             })
         }else{
             dispatch({
@@ -172,6 +174,76 @@ export const getCategoryDiscountDetail = (id) => async (dispatch) => {
             type: actionTypes.GET_CATEGORY_DISCOUNT_DETAIL,
             payload: null,
             err
+        })
+    }
+}
+
+export const createDiscount = (data) => async (dispatch) => {
+    try{
+        const response = await apis.createDiscount(data);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.CREATE_DISCOUNT,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.CREATE_DISCOUNT_ERR,
+                payload: response.data,
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.CREATE_DISCOUNT_ERR,
+            payload: err.response.data
+        })
+    }
+}
+
+export const updateDiscount = (data, id) => async (dispatch) => {
+    try{
+        const response = await apis.updateDiscount(data, id);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.UPDATE_DISCOUNT,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.UPDATE_DISCOUNT_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng thử lại sau"
+                },
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.UPDATE_DISCOUNT_ERR,
+            payload: err.response.data
+        })
+    }
+}
+
+export const filterDiscount = (query, value, query2, value2) => async (dispatch) => {
+    try{
+        const response = await apis.filterDiscount(query, value, query2, value2);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.FILTER_DISCOUNT,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.FILTER_DISCOUNT_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng thử lại sau"
+                },
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.FILTER_DISCOUNT_ERR,
+            payload: err.response.data
         })
     }
 }
@@ -219,6 +291,56 @@ export const getCategoryBannerDetail = (id) => async (dispatch) => {
         dispatch({
             type: actionTypes.GET_CATEGORY_DETAIL_BANNER,
             payload: null,
+            err
+        })
+    }
+}
+
+export const updateBanner = (id, data) => async (dispatch) => {
+    try{
+        const response = await apis.updateBanner(id, data);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.UPDATE_BANNER,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.UPDATE_BANNER_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng quay lại sau"
+                },
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.UPDATE_BANNER_ERR,
+            payload: err.response,
+            err
+        })
+    }
+}
+
+export const createBanner = (data) => async (dispatch) => {
+    try{
+        const response = await apis.createBanner(data);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.CREATE_BANNER,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.CREATE_BANNER_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng quay lại sau"
+                },
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.CREATE_BANNER_ERR,
+            payload: err.response,
             err
         })
     }

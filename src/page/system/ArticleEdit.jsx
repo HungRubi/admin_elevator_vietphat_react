@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Combobox, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as actions from '../../store/actions'
 
 const { MdChevronRight } = icon
@@ -20,12 +20,49 @@ const ArticleEdit = () => {
     ]
 
     const dispatch = useDispatch();
-    const { detailArticle } = useSelector(state => state.app);
+    const { detailArticle, message } = useSelector(state => state.app);
     const id = window.location.pathname.split('/').slice(-2, -1)[0];
     useEffect(() => {
         dispatch(actions.getArticleDetail(id));
-    }, [])
-
+    }, [dispatch, id])
+    const [formData, setFormData] = useState({
+        subject: '',
+        content: '',
+        status: '',
+        thumbnail: '',
+        thumbnail_1: '',
+        thumbnail_2: '',
+        thumbnail_3: '',
+    })
+    useEffect(() => {
+        if(detailArticle){
+            setFormData({
+                subject: detailArticle.subject,
+                content: detailArticle.content,
+                status: detailArticle.status,
+                thumbnail: detailArticle.thumbnail,
+                thumbnail_1: detailArticle.thumbnail_1,
+                thumbnail_2: detailArticle.thumbnail_2,
+                thumbnail_3: detailArticle.thumbnail_3,
+            })
+        }
+    }, [detailArticle])
+    const handleChange = (e, selected) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: selected ? selected.id : e.target.value,
+        })
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.updateArticle(id, formData))
+    }
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(message === 'Cập nhật bài viết thành công!'){
+            navigate("/article")
+        }
+    }, [message, navigate])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -39,7 +76,7 @@ const ArticleEdit = () => {
                             Article
                         </NavLink>
                         <MdChevronRight/>
-                        <NavLink to={`/article/$/edit`} className={"text-blue-600"}>
+                        <NavLink to={`/article/${detailArticle?._id}/edit`} className={"text-blue-600"}>
                             Edit article
                         </NavLink>
                     </div>
@@ -47,7 +84,7 @@ const ArticleEdit = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Edit a article of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -58,9 +95,26 @@ const ArticleEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Subject"} name={"subject"} value={detailArticle?.subject}/>
-                        <Textearea row={5} label={"Content"} name={"content"} children={detailArticle?.content}/>
-                        <Combobox data={status} label={"Status"} name={"status"} selected={detailArticle?.status}/>
+                        <Input 
+                            label={"Subject"} 
+                            name={"subject"}
+                            onChange={handleChange} 
+                            value={formData?.subject}
+                        />
+                        <Textearea 
+                            row={5} 
+                            label={"Content"} 
+                            onChange={handleChange} 
+                            name={"content"} 
+                            children={formData?.content}
+                        />
+                        <Combobox 
+                            data={status} 
+                            label={"Status"} 
+                            name={"status"} 
+                            onChange={handleChange}
+                            selected={formData?.status}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">
@@ -73,15 +127,39 @@ const ArticleEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Thumbnail main"} name={"thumbnail_main"} placeholder={"Url image"} value={detailArticle?.thumbnail}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_1"} placeholder={"Url image"} value={detailArticle?.thumbnail_1}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_2"} placeholder={"Url image"} value={detailArticle?.thumbnail_2}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_3"} placeholder={"Url image"} value={detailArticle?.thumbnail_3}/>
+                        <Input 
+                            label={"Thumbnail main"} 
+                            name={"thumbnail"} 
+                            placeholder={"Url image"} 
+                            onChange={handleChange}
+                            value={formData?.thumbnail}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_1"} 
+                            placeholder={"Url image"} 
+                            onChange={handleChange}
+                            value={formData?.thumbnail_1}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_2"} 
+                            placeholder={"Url image"} 
+                            onChange={handleChange}
+                            value={formData?.thumbnail_2}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_3"} 
+                            placeholder={"Url image"} 
+                            onChange={handleChange}
+                            value={formData?.thumbnail_3}
+                        />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
-                        <NavLink to={"/user"}>
+                        <NavLink to={"/article"}>
                             Cancel
                         </NavLink>
                     </Button>

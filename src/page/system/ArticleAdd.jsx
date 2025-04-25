@@ -1,10 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Combobox, Button, Textearea } from '../../components'
 import icon from '../../util/icon';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from '../../store/actions'
 
 const { MdChevronRight } = icon
 
 const ArticleAdd = () => {
+    const { message } = useSelector(state => state.app);
     const status = [
         {
             id: 'public',
@@ -15,6 +19,32 @@ const ArticleAdd = () => {
             text: 'Hidden',
         },
     ]
+    const [formData, setFormData] = useState({
+        subject: '',
+        content: '',
+        status: '',
+        thumbnail: '',
+        thumbnail_1: '',
+        thumbnail_3: '',
+        thumbnail_2: '',
+    })
+    const handleChange = (e, selected) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: selected ? selected.id : e.target.value
+        })
+    }
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(actions.createArticle(formData))
+    }
+    useEffect(() => {
+        if(message === "Thêm bài viết thành công"){
+            navigate("/article")
+        }
+    }, [message, navigate])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -36,7 +66,7 @@ const ArticleAdd = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Add a new article of your company</h5>
                 </div>
             </div>
-            <form className="w-full px-[30px] bg-white mt-8" method="POST">
+            <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -47,9 +77,26 @@ const ArticleAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Subject"} name={"subject"}/>
-                        <Textearea row={5} label={"Content"} name={"content"}/>
-                        <Combobox data={status} label={"Status"} name={"status"}/>
+                        <Input 
+                            label={"Subject"} 
+                            name={"subject"}
+                            onChange={handleChange}
+                            value={formData.subject}
+                        />
+                        <Textearea 
+                            row={5} 
+                            label={"Content"} 
+                            name={"content"}
+                            onChange={handleChange}
+                            children={formData.content}
+                        />
+                        <Combobox 
+                            data={status} 
+                            label={"Status"} 
+                            name={"status"}
+                            onChange={handleChange}
+                            selected={formData.status}
+                        />
                     </div>
                 </div>
                 <div className="w-full flex border-b-custom py-10">
@@ -62,15 +109,39 @@ const ArticleAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Thumbnail main"} name={"thumbnail_main"} placeholder={"Url image"}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_1"} placeholder={"Url image"}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_2"} placeholder={"Url image"}/>
-                        <Input label={"Thumbnail"} name={"thumbnail_3"} placeholder={"Url image"}/>
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail"} 
+                            placeholder={"Url image"}
+                            onChange={handleChange}
+                            value={formData.thumbnail}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_1"} 
+                            placeholder={"Url image"}
+                            onChange={handleChange}
+                            value={formData.thumbnail_1}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_2"} 
+                            placeholder={"Url image"}
+                            onChange={handleChange}
+                            value={formData.thumbnail_2}
+                        />
+                        <Input 
+                            label={"Thumbnail"} 
+                            name={"thumbnail_3"} 
+                            placeholder={"Url image"}
+                            onChange={handleChange}
+                            value={formData.thumbnail_3}
+                        />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
-                        <NavLink to={"/user"}>
+                        <NavLink to={"/article"}>
                             Cancel
                         </NavLink>
                     </Button>

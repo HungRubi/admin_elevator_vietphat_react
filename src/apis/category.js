@@ -64,11 +64,12 @@ export const deleteCategoryProduct = async (id) => {
     }
 };
 
+
 /** === CATEGORY DISCOUNT === */
-export const getCategoryDiscount = async () => {
+export const getCategoryDiscount = async (search='') => {
     try{
         const response = await axios({
-            url: '/category/discount',
+            url: `/category/discount?timkiem=${search}`,
             method: 'get'
         })
         return response
@@ -88,6 +89,63 @@ export const getCategoryDiscountDetail = async (id) => {
         console.log("Err call api: ", err)
     }
 }
+
+export const createDiscount = async (data) => {
+    try{
+        const response = await axios({
+            url: '/category/discount/store',
+            method: 'POST',
+            data: data
+        })
+        return response;
+    }catch(error){
+        if(error.response){
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
+export const updateDiscount = async (data, id) => {
+    try{
+        const response = await axios({
+            url: `/category/discount/${id}`,
+            method: 'PUT',
+            data: data
+        })
+        return response;
+    }catch(error){
+        if(error.response){
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
+export const filterDiscount = async (query, value, query2, value2) => {
+    try{
+        const response = await axios({
+            url: `/category/discount/filter?${query}=${value}&${query2}=${value2}`,
+            method: 'GET',
+        })
+        return response;
+    }catch(error){
+        if(error.response){
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
 
 
 /** === CATEGORY BANNER === */
@@ -112,6 +170,44 @@ export const getCategoryBannerDetail = async (id) => {
         return response
     }catch(err){
         console.log("Err call api: ", err)
+    }
+}
+
+export const updateBanner = async (id, data) => {
+    try{
+        const response = await axios({
+            url:`/category/banner/${id}`,
+            method: 'PUT',
+            data: data
+        })
+        return response
+    }catch(err){
+        if(err.response){
+            return err.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
+export const createBanner = async (data) => {
+    try{
+        const response = await axios({
+            url:`/category/banner/store`,
+            method: 'POST',
+            data: data
+        })
+        return response
+    }catch(err){
+        if(err.response){
+            return err.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
     }
 }
 

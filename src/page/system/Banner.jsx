@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar } from '../../components';
+import  { Search, Button, PageBar, Empty } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,6 +79,12 @@ const Banner = () => {
                                 <th scope="col" class="px-4 py-3">
                                     name
                                 </th>
+                                <th scope="col" class="px-4 py-3">
+                                    content
+                                </th>
+                                <th scope="col" class="px-4 py-3">
+                                    voucher
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     status
                                 </th>
@@ -88,23 +94,32 @@ const Banner = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentArticle.map((item) => (
+                            {categoryBanner && categoryBanner.length > 0 ? currentArticle.map((item) => (
                                 <tr key={item._id}
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
                                     <td class="px-2 py-4 w-[15px]">
                                         <input type="checkbox" className='scale-120'/>
                                     </td>
-                                    <td class="py-4 w-3/14 ">
+                                    <td class="py-4 w-2/15">
                                         <div className="w-full flex justify-center">
-                                            <img src={item.thumbnail} alt={item.subject} 
-                                            className='h-[70px] rounded-[5px] border-custom'/>
+                                            <img src={item.thumbnail_1} alt={item.subject} 
+                                            className='h-15 rounded-[5px] border-custom'/>
                                         </div>
                                     </td>
-                                    <th scope="row" class="px-4 py-4 font-medium text-gray-900 dark:text-white max-w-[300px] truncate">
-                                        {item.name}
+                                    <th scope="row" class="px-4 py-4 font-medium text-gray-900 dark:text-white w-2/18 capitalize">
+                                        <span className='line-clamp-1'>{item.name}</span>
                                     </th>
-                                    <td class="px-6 py-4 w-4/13">
-                                        <Button className={"capitalize !border-[#90d67f] !px-[25px] !py-[2px] bg-[#d9fbd0]"}>
+                                    <th scope="row" class="px-4 py-4 text-gray-900 dark:text-white w-3/10">
+                                        <span className='font-[400] line-clamp-1 text-justify'>{item.content}</span>
+                                    </th>
+                                    <th scope="row" class="px-4 py-4 text-gray-700 dark:text-white w-2/11">
+                                        <span className='font-[400] line-clamp-1'>{item.discount?.title}</span>
+                                    </th>
+                                    <td class="px-6 py-4 w-1/13">
+                                        <Button className={item.status === "public"? "capitalize !border-[#90d67f] !px-[25px] !py-[2px] bg-[#d9fbd0]" : "hidden"}>
+                                            {item.status}
+                                        </Button>
+                                        <Button className={item.status === "hidden"? "capitalize !border-red-500 !px-[25px] !py-[2px] bg-red-200 !text-red-600" : "hidden"}>
                                             {item.status}
                                         </Button>
                                     </td>
@@ -116,11 +131,9 @@ const Banner = () => {
                                                     <MdAutoFixHigh className='text-[18px]'/>
                                                 </Button>
                                             </NavLink>
-                                            <NavLink to={`/category/banner/${item._id}/delete`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
-                                                    <RiDeleteBin6Line className='text-[18px]'/>
-                                                </Button>
-                                            </NavLink>
+                                            <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
+                                                <RiDeleteBin6Line className='text-[18px]'/>
+                                            </Button>
                                             <NavLink>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <PiDotsThreeBold className='text-[18px]'/>
@@ -129,7 +142,12 @@ const Banner = () => {
                                         </div>
                                     </td>
                                 </tr>
-                            ))}
+                            )) : (
+                                <Empty 
+                                    title={"No banner found"}
+                                    subTitle={"Try adjusting your search or filter to find what you're looking for."}
+                                />
+                            )}
                         </tbody>
                     </table>
                     <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>

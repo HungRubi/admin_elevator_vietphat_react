@@ -266,7 +266,7 @@ const OrderEdit = () => {
                 </div>
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
-                        <NavLink to={"/order"}>
+                        <NavLink to={"/article"}>
                             Cancel
                         </NavLink>
                     </Button>

@@ -1,10 +1,10 @@
-import { NavLink } from "react-router-dom";
-import { Input, Combobox, Button, Textearea, ToastFormat } from '../../components'
+import { NavLink, useNavigate } from "react-router-dom";
+import { Input, Combobox, Button, Textearea, ToastFormat, InputGroup } from '../../components'
 import icon from '../../util/icon';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../store/actions'
-const { MdChevronRight } = icon
+const { MdChevronRight, IoImageOutline } = icon
 
 const VideoAdd = () => {
     const dispatch = useDispatch();
@@ -36,6 +36,12 @@ const VideoAdd = () => {
             text: 'Hidden',
         },
     ]
+    const navigate = useNavigate()
+    useEffect(() => {
+        if(message === "Thêm video thành công!"){
+            navigate("/category/video")
+        }
+    }, [navigate, message])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -57,9 +63,6 @@ const VideoAdd = () => {
                     <h5 className="text-[12px] text-[#6d6c6c]">Add a new video of your company</h5>
                 </div>
             </div>
-            <ToastFormat message={message} url={"/category/video"}
-            messSuccess={"Video category added successfully!"}
-            messError={"Add failed. System is checking again. Please press F5 to reload the page."}/>
             <form className="w-full px-[30px] bg-white mt-8" method="POST" onSubmit={handleSubmit}>
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
@@ -71,7 +74,11 @@ const VideoAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Name"} name={"name"} onChange={handleChange}/>
+                        <Input 
+                            label={"Name"} 
+                            name={"name"} 
+                            onChange={handleChange}
+                        />
                         <Textearea 
                             row={5} 
                             label={"Content"} 
@@ -97,8 +104,22 @@ const VideoAdd = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input label={"Thumbnail"} name={"thumbnail"} placeholder={"Url image"} onChange={handleChange}/>
-                        <Input label={"Video"} name={"video_url"} placeholder={"Url video"} onChange={handleChange}/>
+                        <InputGroup 
+                            label={"Thumbnail"} 
+                            onChange={handleChange}
+                            name={"thumbnail"}
+                            value={formData?.thumbnail}
+                            icon={<IoImageOutline className="text-lg text-gray-600"/>}
+                            helper={"Please enter the thumbnail url link"}
+                        />
+                        <InputGroup 
+                            label={"Video"} 
+                            onChange={handleChange}
+                            name={"video_url"}
+                            value={formData?.video_url}
+                            icon={<IoImageOutline className="text-lg text-gray-600"/>}
+                            helper={"Please enter the video url link"}
+                        />
                     </div>
                 </div>
                 <div className="w-full py-20 relative">

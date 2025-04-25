@@ -70,9 +70,10 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_PRODUCTS:
             return {
                 ...state,
-                products: action.productData?.data?.products || [],
-                totalPage: action.productData?.data?.totalPage || 1,
-                currentPage: action.productData?.data?.currentPage || 1,
+                products: action.payload?.search ?
+                action.payload?.data?.searchProduct : 
+                action.payload?.data?.productFormat,
+                totalPage: action.payload?.data?.totalPage || 1,
             }
 
         case actionType.GET_DETAIL_PRODUCTS:
@@ -95,13 +96,65 @@ const appReducer = (state = initState, action) => {
                 message: action.payload?.message || null,
             }
 
+        case actionType.CREATE_PRODUCT: 
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.CREATE_PRODUCT_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+        
+        case actionType.UPDATE_PRODUCT:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.UPDATE_PRODUCT_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.DELETE_PRODUCT:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.DELETE_PRODUCT_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.FILTER_PRODUCT:
+            return {
+                ...state,
+                products: action.payload?.productFormat || [],
+                totalPage: action.payload?.totalPage || 1
+            }
+
+        case actionType.FILTER_PRODUCT_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+
         /** === USER === */
         case actionType.GET_USER:
             return {
                 ...state,
-                user: action.payload?.data?.formatUser || [],
-                totalUser: action.payload?.data?.totalUser || 1,
-                totalPage: action.payload?.data?.totalPage || 1,
+                user: action.payload.search ? 
+                action.payload?.data?.data?.searchUser : 
+                action.payload?.data?.data?.formatUser,
+                totalUser: action.payload?.data?.data?.totalUser || 1,
+                totalPage: action.payload?.data?.data?.totalPage || 1,
             }
         
         case actionType.GET_DETAIL_USER:
@@ -129,13 +182,46 @@ const appReducer = (state = initState, action) => {
                 message: action.payload?.message,
             }
 
+        case actionType.FILTER_USER: 
+            return {
+                ...state,
+                user: action.payload?.formatUser,
+                totalPage: action.payload?.totalPage
+            }
+
+        case actionType.FILTER_USER_ERR: 
+        return {
+            ...state,
+            message: action.payload?.message || "Lỗi server xin thử lại sau",
+        }
+
+        case actionType.DELETE_USER:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.DELETE_USER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
 
         /** === ARTICLE === */
         case actionType.GET_ARTICLE:
             return {
                 ...state,
-                article: action.payload?.data?.articles || [],
+                article: action.payload?.search ? 
+                action.payload?.data?.searchArticle : 
+                action.payload?.data?.articleFormat,
                 totalPage: action.payload?.data?.totalPage || 1
+            }
+
+        case actionType.GET_ARTICLE_ERR:
+            return {
+                ...state,
+                message: action.payload?.message,
             }
         
         case actionType.GET_DETAIL_ARTICLE:
@@ -144,6 +230,54 @@ const appReducer = (state = initState, action) => {
                     detailArticle: action.payload?.data?.article || {},
             }
         
+        case actionType.UPDATE_ARTICLE: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.UPDATE_ARTICLE_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.FILTER_ARTICLE: 
+            return {
+                ...state,
+                article: action.payload?.formatArticle,
+                totalPage: action.payload?.totalPage,
+            }
+
+        case actionType.CREATE_ARTICLE: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.CREATE_ARTICLE_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.FILTER_ARTICLE_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.DELETE_ARTICLE:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.DELETE_ARTICLE_ERR:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
 
         /** === ORDER === */
         case actionType.GET_ORDER:
@@ -235,7 +369,9 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_CATEGORY_DISCOUNT:
             return {
                 ...state,
-                categoryDiscount: action.payload?.data?.formatDiscount || [],
+                categoryDiscount: action.payload?.search ? 
+                action.payload?.data?.data?.searchDiscount : 
+                action.payload?.data?.data?.formatDiscount,
                 totalPage: action.payload?.data?.totalPage || 1
             }
 
@@ -244,6 +380,43 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 categoryDiscountDetail: action.payload?.data?.discount || {}
             }
+
+        case actionType.CREATE_DISCOUNT: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.CREATE_DISCOUNT_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.UPDATE_DISCOUNT: 
+        return {
+            ...state,
+            message: action.payload?.message
+        }
+
+        case actionType.UPDATE_DISCOUNT_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.FILTER_DISCOUNT:
+            return  {
+                ...state,
+                categoryDiscount: action.payload?.formatDiscount,
+                totalPage: action.payload?.totalPage
+            } 
+            
+        case actionType.FILTER_DISCOUNT_ERR:
+            return  {
+                ...state,
+                message: action.payload?.message,
+            }  
 
 
         /** === CATEGORY BANNER === */
@@ -259,6 +432,31 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 categoryBannerDetail: action.payload?.data?.banner || {},
             }
+        
+        case actionType.UPDATE_BANNER:
+            return {
+                ...state,
+                message: action.payload?.message,
+            }
+
+        case actionType.UPDATE_BANNER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message,
+            }
+        
+        case actionType.CREATE_BANNER:
+            return {
+                ...state,
+                message: action.payload?.message,
+            }
+
+        case actionType.CREATE_BANNER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message,
+            }
+        
     
         /** === CATEGORY VIDEO */
         case actionType.GET_CATEGORY_VIDEO:
@@ -274,7 +472,6 @@ const appReducer = (state = initState, action) => {
         case actionType.CREATE_CATEGORY_VIDEO:
             return {
                 ...state,
-                categoryVideoAdd: [...state.categoryVideoAdd, action.payload],
                 message: action.payload,
             }
 
@@ -287,7 +484,6 @@ const appReducer = (state = initState, action) => {
         case actionType.UPDATE_CATEGORY_VIDEO:
             return {
                 ...state,
-                categoryVideoUpdate: [...state.categoryVideoUpdate, action.payload],
                 message: action.payload,
             };
         default:

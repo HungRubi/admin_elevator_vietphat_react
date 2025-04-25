@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar } from '../../components';
+import  { Search, Button, PageBar, Empty } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,10 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 const Video = () => {
     const dispatch = useDispatch();
     const {categoryVideo, totalPage, searchType, searchVideo} = useSelector(state => state.app);
-    
+    const filterVideo = [
+        {id: "public", text: "Public"},
+        {id: "hidden", text: "Hidden"},
+    ]
     const [searchTerm, setSearchTerm] = useState('');
     useEffect(() => {
         dispatch(actions.getCategoryVideo(searchTerm)); 
@@ -26,6 +29,20 @@ const Video = () => {
     const currentVideo = (categoryVideo && categoryVideo.length > 0) 
     ? categoryVideo.slice(firstArticleIndex, lastArticleIndex) 
     : [];
+    const [valueDate, setValueDate] = useState({
+        startDate: '',
+        endDate: ''
+    })
+    const onChangeDate = (e) => {
+        setValueDate({
+            ...valueDate,
+            [e.target.name]: e.target.value
+        })
+    }
+    const handleChange = (e) => {
+        const newValue = e.target.value;
+        console.log(newValue);
+    }
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -52,24 +69,46 @@ const Video = () => {
                 </div>
             </div>
             <div className="w-full bg-white border-t-custom px-[30px] mt-8">
-                <div className="w-full flex items-center justify-between py-8">
+                <div className="w-full flex items-center justify-between pt-8">
                     <div className="text-[19px] text-color leading-6">
                         <h5 className='font-[600]'>List of video</h5>
                         <span className='text-[12px] text-[#888]'>
                             List of video of your company
                         </span>
                     </div>
-                    <div className="flex items-center justify-end w-1/2 gap-3">
-                        <div className="w-1/2">
-                            <Search className={"!rounded-[5px]"} onSearch={handleSearch}/>
-                        </div>
-                        <Button>All video</Button>
-                        <Button className={"!px-3"}>
-                            <PiDotsThreeBold className='text-[20px]'/>
-                        </Button>
+                </div>
+                <div className="flex items-center gap-5 mt-5">
+                    <div className="flex flex-col">
+                        <input 
+                            type="date"
+                            onChange={onChangeDate} 
+                            name="startDate"
+                            className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <input 
+                            type="date" 
+                            onChange={onChangeDate}
+                            name="endDate"
+                            className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                        />
+                    </div>
+                    <select 
+                        className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
+                        aria-label="Default select example"
+                        onChange={handleChange} 
+                    >
+                        <option value="">--- Filter Product ---</option>
+                        {filterVideo?.map((item, index) => (
+                            <option key={index} value={item.id}>{item.text}</option>
+                        ))}
+                    </select>
+                    <div className="w-1/2">
+                        <Search className={"!rounded-lg"} onSearch={handleSearch} placeholder={"Enter title discount..."}/>
                     </div>
                 </div>
-                <div className="relative overflow-x-auto">
+                <div className="relative overflow-x-auto mt-8">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -83,7 +122,7 @@ const Video = () => {
                                 <th scope="col" className="px-4 py-3">
                                     content
                                 </th>
-                                <th scope="col" className="px-6 py-3">
+                                <th scope="col" className="px-15 py-3">
                                     status
                                 </th>
                                 <th scope="col" className="py-3 text-center">
@@ -109,18 +148,21 @@ const Video = () => {
                                         {item.name}
                                     </th>
                                     <td className="px-4 py-4 w-6/12">
-                                        <div className="w-full line-clamp-3 text-justify">
+                                        <div className="w-full line-clamp-1 text-justify">
                                             {item.content}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 w-2/14">
-                                        <Button className={"capitalize !border-[#90d67f] !py-[2px] bg-[#d9fbd0]"}>
+                                    <td className="px-15 py-4 w-2/14">
+                                        <Button className={item.status === "public" ? "capitalize !border-[#90d67f] !py-[2px] bg-[#d9fbd0]" : "hidden"}>
+                                            {item.status}
+                                        </Button>
+                                        <Button className={item.status === "hidden" ? "capitalize !border-red-500 !py-[2px] bg-red-200 !text-red-600" : "hidden"}>
                                             {item.status}
                                         </Button>
                                     </td>
                                     <td className="py-4 w-2/12 text-center">
-                                        <span className='time_text'>{item.updatedAt}</span>
-                                        <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
+                                        <span className='time_text'>{item.lastUpdate}</span>
+                                        <div className="option items-center justify-center gap-3 hidden w-[50px] m-auto">
                                             <NavLink to={`/category/video/${item._id}/edit`}>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <MdAutoFixHigh className='text-[18px]'/>
@@ -138,11 +180,10 @@ const Video = () => {
                                     </td>
                                 </tr>
                             )): (
-                                <tr>
-                                <td colSpan="4" className="text-center py-4">
-                                    Không có sản phẩm nào được tìm thấy.
-                                </td>
-                            </tr>
+                                <Empty 
+                                    title={"No video found"}
+                                    subTitle={"Try adjusting your search or filter to find what you're looking for."}
+                                />
                             )}
                         </tbody>
                     </table>

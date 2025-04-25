@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar, ModalToast, ToastFormat } from '../../components';
+import  { Search, Button, PageBar, ModalToast, ToastFormat, Empty } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -151,11 +151,10 @@ const ProductCategory = () => {
                                     </tr>
                                 )): 
                                 (
-                                    <tr>
-                                        <td className="text-center py-4 w-full">
-                                            Không có sản phẩm nào được tìm thấy.
-                                        </td>
-                                    </tr>
+                                    <Empty 
+                                        title={"No categories found"}
+                                        subTitle={"Try adjusting your search or filter to find what you're looking for."}
+                                    />
                                 )
                             }
                         </tbody>

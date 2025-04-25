@@ -1,4 +1,4 @@
-import  { Search, Button,CircleButton, PageBar, PageTitle, Combobox, Input, ModalToast } from '../../components';
+import  { Search, Button,CircleButton, PageBar, PageTitle, Combobox, Input, ModalToast, Empty } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -100,58 +100,51 @@ const Order = () => {
             </div>
             <div className="w-full bg-white border-t-custom px-[30px] mt-8">
                 <div className="w-full flex flex-col gap-6 py-8">
-                    <div className="text-[19px] text-color leading-6">
-                        <h5 className='font-[600]'>List of orders</h5>
-                        <span className='text-[12px] text-[#888]'>
-                            List of orders of your company
-                        </span>
-                    </div>
-                    <div className="flex flex-col gap-4">
-                        <div className="flex items-center gap-4">
-                            <div className="w-1/3">
-                                <Search 
-                                    className={"!rounded-[5px]"} 
-                                    placeholder="Enter order code..." 
-                                    onSearch={handleSearch}
-                                />
-                            </div>
-                            <div className="w-1/3">
-                                <select 
-                                    value={selected} 
-                                    onChange={handleChange}
-                                    className={`w-full border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} 
-                                    aria-label="Filter orders"
-                                >
-                                    <option value="">--- Filter Orders ---</option>
-                                    {filterType.map((item, index) => (
-                                        <option key={index} value={item.text}>{item.text}</option>
-                                    ))}
-                                </select>
-                            </div>
+                    <div className="flex items-center justify-between">
+                        <div className="text-[19px] text-color leading-6">
+                            <h5 className='font-[600]'>List of orders</h5>
+                            <span className='text-[12px] text-[#888]'>
+                                List of orders of your company
+                            </span>
                         </div>
-                        <div className="flex items-center gap-6">
-                            <div className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700 mb-1">
-                                    Start Date
-                                </label>
-                                <input 
-                                    type="date"
-                                    onChange={onChangeDate} 
-                                    name="startDate"
-                                    className={`w-[250px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700 mb-1">
-                                    End Date
-                                </label>
-                                <input 
-                                    type="date" 
-                                    onChange={onChangeDate}
-                                    name="endDate"
-                                    className={`w-[250px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                                />
-                            </div>
+                        
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="flex flex-col">
+                            <input 
+                                type="date"
+                                onChange={onChangeDate} 
+                                name="startDate"
+                                className={`w-[250px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <input 
+                                type="date" 
+                                onChange={onChangeDate}
+                                name="endDate"
+                                className={`w-[250px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                            />
+                        </div>
+                        <div className="w-1/3">
+                            <select 
+                                value={selected} 
+                                onChange={handleChange}
+                                className={`w-full border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} 
+                                aria-label="Filter orders"
+                            >
+                                <option value="">--- Filter Orders ---</option>
+                                {filterType.map((item, index) => (
+                                    <option key={index} value={item.text}>{item.text}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="w-1/2">
+                            <Search 
+                                className={"!rounded-lg"} 
+                                placeholder="Enter order code..." 
+                                onSearch={handleSearch}
+                            />
                         </div>
                     </div>
                 </div>
@@ -254,17 +247,7 @@ const Order = () => {
                                     </td>
                                 </tr>
                             )) : (
-                                <tr>
-                                    <td colSpan="9" className="px-6 py-4 text-center text-gray-500">
-                                        <div className="flex flex-col items-center justify-center py-8">
-                                            <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <p className="text-lg font-medium">No orders found</p>
-                                            <p className="text-sm text-gray-500">Try adjusting your search or filter to find what you're looking for.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <Empty title={"No orders found"} subTitle={"Try adjusting your search or filter to find what you're looking for."}/>
                             )}
                         </tbody>
                     </table>
