@@ -57,13 +57,13 @@ const User = () => {
     }, [dispatch, valueDate])
     const [isModal, setIsModal] = useState(false);
     const [itemId, setItemId] = useState();
-    const handleDelete = (id) => {
-        dispatch(actions.deleteUser(id))
+    const handleDelete = () => {
+        dispatch(actions.deleteUser(itemId));
+        dispatch(actions.getUser());
     }
     return (
         <div className="full pt-5">
             <PageTitle title="User" />
-            {isModal && <ModalToast isOpen={isModal} setIsOpen={setIsModal} onDelete={handleDelete(itemId)}/>}
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -229,6 +229,7 @@ const User = () => {
                     <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
                 </div>
             </div>
+            {isModal && <ModalToast isOpen={isModal} setIsOpen={setIsModal} onDelete={handleDelete}/>}
         </div>
     )
 }

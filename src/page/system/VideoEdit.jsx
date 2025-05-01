@@ -1,10 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Input, Combobox, Button, Textearea } from '../../components'
+import { Input, Combobox, Button, Textearea, InputGroup } from '../../components'
 import icon from '../../util/icon';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../store/actions'
-const { MdChevronRight } = icon
+const { MdChevronRight, IoImageOutline } = icon
 
 const VideoEdit = () => {
     const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const VideoEdit = () => {
                             onChange={handleChange}
                         />
                         <Textearea 
-                            row={5} label={"Content"} 
+                            row={10} label={"Content"} 
                             name={"content"} 
                             onChange={handleChange} 
                             children={formData.content}
@@ -121,19 +121,21 @@ const VideoEdit = () => {
                         </p>
                     </div>
                     <div className="flex-1">
-                        <Input 
+                        <InputGroup 
                             label={"Thumbnail"} 
-                            name={"thumbnail"} 
-                            placeholder={"Url image"} 
                             onChange={handleChange}
-                            value={formData.thumbnail}
+                            name={"thumbnail"}
+                            value={formData?.thumbnail}
+                            icon={<IoImageOutline className="text-lg text-gray-600"/>}
+                            helper={"Please enter the thumbnail url link"}
                         />
-                        <Input 
+                        <InputGroup 
                             label={"Video"} 
-                            name={"video_url"} 
-                            placeholder={"Url video"} 
                             onChange={handleChange}
-                            value={formData.video_url}
+                            name={"video_url"}
+                            value={formData?.video_url}
+                            icon={<IoImageOutline className="text-lg text-gray-600"/>}
+                            helper={"Please enter the video url link"}
                         />
                     </div>
                 </div>

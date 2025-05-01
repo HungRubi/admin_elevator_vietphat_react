@@ -41,8 +41,19 @@ const Video = () => {
     }
     const handleChange = (e) => {
         const newValue = e.target.value;
-        console.log(newValue);
+        if(newValue === "public"){
+            dispatch(actions.filterVideo("status", newValue))
+        }else if(newValue === "hidden"){
+            dispatch(actions.filterVideo("status", newValue))
+        }else{
+            dispatch(actions.getCategoryVideo()); 
+        }
     }
+    useEffect(() => {
+        if(valueDate.startDate && valueDate.endDate){
+            dispatch(actions.filterVideo("startDate", valueDate.startDate, "endDate", valueDate.endDate))
+        }
+    }, [valueDate.startDate, valueDate.endDate, dispatch])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">

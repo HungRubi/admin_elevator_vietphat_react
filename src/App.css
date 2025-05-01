@@ -16,7 +16,7 @@ button{
     color: #2f904b;
 }
 .text-color{
-    color: #393939d2;
+    color: #181717f3;
 }
 .border-b-custom{
     border-bottom: 1px solid var(--border-div);
@@ -47,7 +47,7 @@ button{
 }
 .sub_text{
     font-size: 12px;
-    color: #888;
+    color: #464444ce;
 }
 .row-table:hover .time_text{
     display: none;

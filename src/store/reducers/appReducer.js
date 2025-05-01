@@ -48,8 +48,24 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_COMMENT: 
             return {
                 ...state,
+                comment: action.payload?.search ? 
+                action.payload?.data?.searchComment : 
+                action.payload?.data?.comment,
+                totalPage: action.payload?.data?.totalPage 
+            }
+            
+        case actionType.FILTER_COMMENT:
+            return {
+                ...state,
                 comment: action.payload?.comment
-            }    
+            }
+
+        case actionType.FILTER_COMMENT_ERR:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
 
         /** === LOGIN === */
         case actionType.LOGIN:
@@ -423,7 +439,9 @@ const appReducer = (state = initState, action) => {
         case actionType.GET_CATEGORY_BANNER:
             return {
                 ...state,
-                categoryBanner: action.payload?.data?.formatBanner || [],
+                categoryBanner: action.payload?.search ? 
+                action.payload?.data?.data?.searchBanner : 
+                action.payload?.data?.data?.formatBanner,
                 totalPage: action.payload?.data?.totalPage || 1
             }
 
@@ -456,6 +474,19 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message: action.payload?.message,
             }
+
+        case actionType.FILTER_BANNER:
+            return {
+                ...state,
+                totalPage: action.payload?.totalPage,
+                categoryBanner: action.payload?.bannerFormat
+            }
+
+        case actionType.FILTER_BANNER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
         
     
         /** === CATEGORY VIDEO */
@@ -486,6 +517,19 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message: action.payload,
             };
+
+        case actionType.FILTER_VIDEO:
+            return {
+                ...state,
+                totalPage: action.payload?.totalPage,
+                categoryVideo: action.payload?.videoFormat
+            }
+
+        case actionType.FILTER_VIDEO_ERR:
+            return {
+                ...state,
+                message: action.payload?.message
+            }
         default:
             return state;
     }

@@ -14,13 +14,45 @@ const Banner = () => {
     useEffect(() => {
         dispatch(actions.getCategoryBanner())
     }, [])
-
+    const filterBanner = [
+        {id: "public", text: "Public"},
+        {id: "hidden", text: "Hidden"},
+    ]
     const [current, setCurrent] = useState(1);
     const limit = 7;
     const lastArticleIndex = current * limit;
     const firstArticleIndex = lastArticleIndex - limit;
 
     const currentArticle = categoryBanner.slice(firstArticleIndex, lastArticleIndex);
+
+    const handleSearch = (value) => {
+        dispatch(actions.getCategoryBanner(value))
+    } 
+    const [valueDate, setValueDate] = useState({
+        startDate: '',
+        endDate: ''
+    })
+    const onChangeDate = (e) => {
+        setValueDate({
+            ...valueDate,
+            [e.target.value]: e.target.name
+        })
+    }
+    const handleChange = (e) => {
+        const newValue = e.target.value;
+        if(newValue === "public") {
+            dispatch(actions.filterBanner("status", newValue))
+        }else if(newValue === "hidden") {
+            dispatch(actions.filterBanner("status", newValue))
+        }else{
+            dispatch(actions.getCategoryBanner())
+        }
+    }
+    useEffect(() => {
+        if(valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterBanner("startDate", valueDate.startDate, "endDate", valueDate.endDate))
+        }
+    }, [dispatch, valueDate.startDate, valueDate.endDate])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -51,24 +83,46 @@ const Banner = () => {
                 </div>
             </div>
             <div className="w-full bg-white border-t-custom px-[30px] mt-8">
-                <div className="w-full flex items-center justify-between py-8">
+                <div className="w-full flex items-center justify-between pt-8">
                     <div className="text-[19px] text-color leading-6">
                         <h5 className='font-[600]'>List of products</h5>
                         <span className='text-[12px] text-[#888]'>
                             List of products of your company
                         </span>
                     </div>
-                    <div className="flex items-center justify-end w-1/2 gap-3">
-                        <div className="w-1/2">
-                            <Search className={"!rounded-[5px]"}/>
-                        </div>
-                        <Button>All reviews</Button>
-                        <Button className={"!px-3"}>
-                            <PiDotsThreeBold className='text-[20px]'/>
-                        </Button>
+                </div>
+                <div className="flex items-center gap-5 mt-5">
+                    <div className="flex flex-col">
+                        <input 
+                            type="date"
+                            onChange={onChangeDate} 
+                            name="startDate"
+                            className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <input 
+                            type="date" 
+                            onChange={onChangeDate}
+                            name="endDate"
+                            className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                        />
+                    </div>
+                    <select 
+                        className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
+                        aria-label="Default select example"
+                        onChange={handleChange} 
+                    >
+                        <option value="">--- Filter Product ---</option>
+                        {filterBanner?.map((item, index) => (
+                            <option key={index} value={item.id}>{item.text}</option>
+                        ))}
+                    </select>
+                    <div className="w-1/2">
+                        <Search className={"!rounded-lg"} onSearch={handleSearch} placeholder={"Enter title discount..."}/>
                     </div>
                 </div>
-                <div class="relative overflow-x-auto">
+                <div class="relative overflow-x-auto mt-8">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -110,7 +164,7 @@ const Banner = () => {
                                         <span className='line-clamp-1'>{item.name}</span>
                                     </th>
                                     <th scope="row" class="px-4 py-4 text-gray-900 dark:text-white w-3/10">
-                                        <span className='font-[400] line-clamp-1 text-justify'>{item.content}</span>
+                                        <span className='font-[400] line-clamp-1 text-left'>{item.content}</span>
                                     </th>
                                     <th scope="row" class="px-4 py-4 text-gray-700 dark:text-white w-2/11">
                                         <span className='font-[400] line-clamp-1'>{item.discount?.title}</span>

@@ -46,7 +46,7 @@ const BannerAdd = () => {
         if(message === "Thêm banner thành công!"){
             navigate("/category/banner")
         }
-    }, [])
+    }, [message, navigate])
     return (
         <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">

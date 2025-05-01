@@ -2,15 +2,9 @@ import {Header,Footer,Navbar} from '../../components';
 import { Outlet } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 import {Login} from '../public';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import * as actions from '../../store/actions'
 
 const Public = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(actions.getOrder())
-    }, [dispatch])
+    
     return (
         <div className='w-full h-screen relative'>  
             <div className="w-full h-screen ">

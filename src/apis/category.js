@@ -149,10 +149,10 @@ export const filterDiscount = async (query, value, query2, value2) => {
 
 
 /** === CATEGORY BANNER === */
-export const getCategoryBanner = async () => {
+export const getCategoryBanner = async (search='') => {
     try{
         const response = await axios({
-            url: '/category/banner',
+            url: `/category/banner?timkiem=${search}`,
             method: 'get'
         })
         return response
@@ -211,6 +211,27 @@ export const createBanner = async (data) => {
     }
 }
 
+export const filterBanner = async (query, value, query2, value2) => {
+    try{
+        const response = await axios({
+            url:`/category/banner/filter?${query}=${value}&${query2}=${value2}`,
+            method: 'GET',
+        })
+        console.log(response)
+        return response
+    }catch(err){
+        if(err.response){
+            return err.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
+
+
 /** === CATEGORY VIDEO === */
 
 export const getCategoryVideo = async (searchTerm) => {
@@ -262,3 +283,22 @@ export const updateCategoryVideo = async (data, id) => {
         console.error("Lỗi khi gọi API:", err);
     }
 };
+
+export const filterVideo = async (query, value, query2, value2) => {
+    try{
+        const response = await axios({
+            url:`/category/video/filter?${query}=${value}&${query2}=${value2}`,
+            method: 'GET',
+        })
+        console.log(response)
+        return response
+    }catch(err){
+        if(err.response){
+            return err.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}

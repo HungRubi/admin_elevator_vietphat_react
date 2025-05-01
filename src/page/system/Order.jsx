@@ -22,6 +22,8 @@ const Order = () => {
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
             dispatch(actions.filterOrder("from_date", valueDate.startDate, "to_date", valueDate.endDate));
+        }else{
+            dispatch(actions.getOrder())
         }
     }, [valueDate, dispatch]);
     const [current, setCurrent] = useState(1);

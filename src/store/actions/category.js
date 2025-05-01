@@ -250,13 +250,16 @@ export const filterDiscount = (query, value, query2, value2) => async (dispatch)
 
 
 /** === CATEGORY BANNER === */
-export const getCategoryBanner = () => async (dispatch) => {
+export const getCategoryBanner = (search='') => async (dispatch) => {
     try{
-        const response = await apis.getCategoryBanner();
+        const response = await apis.getCategoryBanner(search);
         if(response.status === 200){
             dispatch({
                 type: actionTypes.GET_CATEGORY_BANNER,
-                payload: response.data,
+                payload: {
+                    data: response.data,
+                    search: !! search
+                },
             })
         }else{
             dispatch({
@@ -346,6 +349,34 @@ export const createBanner = (data) => async (dispatch) => {
     }
 }
 
+export const filterBanner = (query, value, query2, value2) => async (dispatch) => {
+    try {
+        const response = await apis.filterBanner(query, value, query2, value2);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.FILTER_BANNER,
+                payload: response.data,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.FILTER_BANNER_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng quay lại sau"
+                },
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.FILTER_BANNER_ERR,
+            payload: {
+                message: "Lỗi server vui lòng quay lại sau",
+                err
+            }
+        })
+    }
+};
+
+
 /** === CATEGORY VIDEO */
 export const getCategoryVideo = (searchTerm = '') => async (dispatch) => {
     try{
@@ -372,6 +403,7 @@ export const getCategoryVideo = (searchTerm = '') => async (dispatch) => {
         })
     }
 }
+
 export const createCategoryVideo = (data) => async (dispatch) => {
     try {
         const response = await apis.createCategoryVideo(data);
@@ -394,6 +426,7 @@ export const createCategoryVideo = (data) => async (dispatch) => {
         });
     }
 };
+
 export const getCategoryVideoDetail = (id) => async (dispatch) => {
     try{
         const response = await apis.getCategoryVideoDetail(id);
@@ -416,6 +449,7 @@ export const getCategoryVideoDetail = (id) => async (dispatch) => {
         })
     }
 }
+
 export const updateCategoryVideo = (data, id) => async (dispatch) => {
     try {
         const response = await apis.updateCategoryVideo(data, id);
@@ -436,5 +470,32 @@ export const updateCategoryVideo = (data, id) => async (dispatch) => {
             payload: null,
             err,
         });
+    }
+};
+
+export const filterVideo = (query, value, query2, value2) => async (dispatch) => {
+    try {
+        const response = await apis.filterVideo(query, value, query2, value2);
+        if (response?.status === 200) {
+            dispatch({
+                type: actionTypes.FILTER_VIDEO,
+                payload: response.data,
+            });
+        } else {
+            dispatch({
+                type: actionTypes.FILTER_VIDEO_ERR,
+                payload: {
+                    message: "Lỗi server vui lòng quay lại sau"
+                },
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.FILTER_VIDEO_ERR,
+            payload: {
+                message: "Lỗi server vui lòng quay lại sau",
+                err
+            }
+        })
     }
 };
