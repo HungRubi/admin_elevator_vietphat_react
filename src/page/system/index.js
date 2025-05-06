@@ -27,4 +27,5 @@ export {default as ProductCategoryEdit} from './ProductCategoryEdit'
 export {default as Video} from './Video'
 export {default as VideoAdd} from './VideoAdd'
 export {default as VideoEdit} from './VideoEdit'
+export {default as Supplier} from './Supplier'
 

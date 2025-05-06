@@ -36,8 +36,13 @@ import { FaFacebook } from "react-icons/fa";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { BsPerson } from "react-icons/bs";
 import { BiVideo } from "react-icons/bi";
+import { MdOutlineWarehouse } from "react-icons/md";
+import { MdBusiness } from "react-icons/md";
+
 
 const icon = {
+    MdBusiness,
+    MdOutlineWarehouse,
     FaRegStar,
     BiVideo,
     BsPerson,

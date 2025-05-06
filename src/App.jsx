@@ -27,7 +27,8 @@ import {
   BannerAdd, BannerEdit,
   Video,
   VideoAdd,
-  VideoEdit
+  VideoEdit,
+  Supplier
   } from './page/system'
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
           <Route path='category/discount/add' element={<DiscountCategoryAdd/>}/>
           <Route path='category/discount/:id/edit' element={<DiscountCategoryEdit/>}/>
           <Route path='category/banner' element={<Banner/>}/>
+          <Route path='category/supplier' element={<Supplier/>}/>
           <Route path='category/banner/add' element={<BannerAdd/>}/>
           <Route path='category/banner/:id/edit' element={<BannerEdit/>}/>
           <Route path='category/video' element={<Video/>}/>

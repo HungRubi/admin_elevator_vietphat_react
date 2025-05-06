@@ -1,10 +1,11 @@
+import { Children } from 'react';
 import icon from './icon';
 
 const {
     IoHomeOutline, LuUser, BsBox, BsBarChart, 
     IoSettingsOutline, FaSortDown,TbCategory, AiOutlineTool, 
     IoImageOutline, HiOutlineShoppingBag, BsTag,FaRegBell,
-    HiOutlineNewspaper, BiVideo
+    HiOutlineNewspaper, BiVideo, MdOutlineWarehouse,MdBusiness
 } = icon;
 
 export const menu = [
@@ -44,16 +45,27 @@ export const menu = [
         path: '/setting'
     },
     {
+        text: 'warehouse',
+        icon: <MdOutlineWarehouse className='text-[18px] text-color'/>,
+        path: '/warehouse',
+    },
+    {
         text: 'category',
         icon: <TbCategory className='text-[18px] text-color'/>,
         path: '/category/product',
         icon2: <FaSortDown className='text-[18px] text-color mb-1'/>,
         Children: [
             {
+                text: 'supplier',
+                icon: <MdBusiness className='text-[18px] text-color'/>,
+                path: '/category/supplier',
+            },
+            {
                 text: 'product',
                 icon: <AiOutlineTool className='text-[18px] text-color'/>,
                 path: '/category/product',
             },
+            
             {
                 text: 'discount',
                 icon: <BsTag className='text-[18px] text-color'/>,
