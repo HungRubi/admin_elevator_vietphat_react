@@ -28,7 +28,10 @@ import {
   Video,
   VideoAdd,
   VideoEdit,
-  Supplier
+  Supplier,
+  SupplierAdd,
+  SupplierEdit,
+  Receipt,
   } from './page/system'
 
 function App() {
@@ -66,7 +69,10 @@ function App() {
           <Route path='category/discount/add' element={<DiscountCategoryAdd/>}/>
           <Route path='category/discount/:id/edit' element={<DiscountCategoryEdit/>}/>
           <Route path='category/banner' element={<Banner/>}/>
+          <Route path='receipt' element={<Receipt/>}/>
           <Route path='category/supplier' element={<Supplier/>}/>
+          <Route path='category/supplier/:id/edit' element={<SupplierEdit/>}/>
+          <Route path='category/supplier/add' element={<SupplierAdd/>}/>
           <Route path='category/banner/add' element={<BannerAdd/>}/>
           <Route path='category/banner/:id/edit' element={<BannerEdit/>}/>
           <Route path='category/video' element={<Video/>}/>

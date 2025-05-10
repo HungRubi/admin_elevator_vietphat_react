@@ -5,7 +5,7 @@ const {
     IoHomeOutline, LuUser, BsBox, BsBarChart, 
     IoSettingsOutline, FaSortDown,TbCategory, AiOutlineTool, 
     IoImageOutline, HiOutlineShoppingBag, BsTag,FaRegBell,
-    HiOutlineNewspaper, BiVideo, MdOutlineWarehouse,MdBusiness
+    HiOutlineNewspaper, BiVideo, MdOutlineWarehouse,MdBusiness,LuReceiptText,
 } = icon;
 
 export const menu = [
@@ -25,6 +25,11 @@ export const menu = [
         path: '/product'
     },
     {
+        text: 'receipt',
+        icon: <LuReceiptText className='text-[18px] text-color'/>,
+        path: '/receipt',
+    },
+    {       
         text: 'order',
         icon: <HiOutlineShoppingBag className='text-[18px] text-color'/>,
         path: '/order'

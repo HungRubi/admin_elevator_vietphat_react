@@ -1,15 +1,38 @@
 import icons from '../../util/icon';
-import { Button, Search } from '../../components';
+import { Button, Empty, ModalToast, PageBar, Search } from '../../components';
 import { NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import * as actions from '../../store/actions'
+
 const {IoMdAdd, MdChevronRight, PiDotsThreeBold, MdAutoFixHigh, RiDeleteBin6Line } = icons
 
 const Supplier = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actions.getSuppliers())    
+    }, [])
+    const filterSupplier = []
+    const {totalPage, suppliers} = useSelector((state) => state.app);
+    const [currentPage, setCurrentPage] = useState(1)
+    const limit = 10;
+    const lastIndex = currentPage * limit;
+    const firstIndex = lastIndex - limit;
 
-    const filterSupplier = [
+    const currentSupplier = suppliers?.slice(firstIndex, lastIndex);
 
-    ]
+    const [isModal, setIsModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const handleDelete = () => {
+        dispatch(actions.deleteSupplier(deleteId));
+        setIsModal(false);
+    }
+    const handleSearch = (search) => {
+        dispatch(actions.getSuppliers(search));
+    }
     return (
         <div className="w-full pt-5">
+            <ModalToast isOpen={isModal} setIsOpen={setIsModal} onDelete={handleDelete}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -67,15 +90,14 @@ const Supplier = () => {
                         ))}
                     </select>
                     <div className="w-1/2">
-                        <Search className={"!rounded-lg"} placeholder={"Enter title discount..."}/>
+                        <Search className={"!rounded-lg"}  onSearch={handleSearch} placeholder={"Enter title discount..."}/>
                     </div>
                 </div>
-            </div>
-            <div className="relative overflow-x-auto mt-8">
+                <div className="relative overflow-x-auto mt-8">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" className="px-2 py-3">
+                            <th scope="col" className="px-4 py-3">
                                 <input type="checkbox" className='scale-120'/>
                             </th>
                             <th scope="col" className="px-4 py-3">
@@ -96,45 +118,56 @@ const Supplier = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
-                            <td className="px-2 py-4 w-[45px]">
-                                <div className="w-full flex justify-center items-center">
-                                    <input type="checkbox" className='scale-120'/>
-                                </div>
-                            </td>
-                            <th scope="row" className="px-4 py-4 font-medium text-gray-900 dark:text-white truncate">
-                                nhà cung cấp 1
-                            </th>
-                            <td className="px-4 py-4">
-                                03486346345
-                            </td>
-                            <td className="px-4 py-4">
-                                email
-                            </td>
-                            <td className="px-4 py-4">
-                                address
-                            </td>
-                            <td className="py-4 w-2/12 text-center">
-                                <span className='time_text'></span>
-                                <div className="option items-center justify-center gap-3 hidden w-[50px] m-auto">
-                                    <NavLink to={`/category/supplier//edit`}>
-                                        <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                            <MdAutoFixHigh className='text-[18px]'/>
+                        {currentSupplier && currentSupplier.length > 0 ? currentSupplier.map((item) => (
+                            <tr key={item._id}
+                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
+                                <td className="px-4 py-4 w-5 h-20">
+                                        <input type="checkbox" className='scale-120'/>
+                                </td>
+                                <th className="px-4 py-4 font-medium text-gray-900 dark:text-white truncate w-2/12">
+                                    {item.name}
+                                </th>
+                                <td className="px-4 py-4 w-2/13">
+                                    {item.phone}
+                                </td>
+                                <td className="px-4 py-4 w-2/13">
+                                    {item.email}
+                                </td>
+                                <td className="px-4 py-4 w-4/12">
+                                    {item.address}
+                                </td>
+                                <td className="py-4 text-center">
+                                    <span className='time_text'>{item.formatDate}</span>
+                                    <div className="option items-center justify-center gap-3 hidden w-[50px] m-auto">
+                                        <NavLink to={`/category/supplier/${item._id}/edit`}>
+                                            <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                <MdAutoFixHigh className='text-[18px]'/>
+                                            </Button>
+                                        </NavLink>
+                                        <Button 
+                                        className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}
+                                        onClick={() => {
+                                            setIsModal(true);
+                                            setDeleteId(item._id);
+                                        }}>
+                                            <RiDeleteBin6Line className='text-[18px]'/>
                                         </Button>
-                                    </NavLink>
-                                    <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
-                                        <RiDeleteBin6Line className='text-[18px]'/>
-                                    </Button>
-                                    <NavLink>
                                         <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                             <PiDotsThreeBold className='text-[18px]'/>
                                         </Button>
-                                    </NavLink>
-                                </div>
-                            </td>
-                        </tr>
+                                    </div>
+                                </td>
+                            </tr>
+                        )) : (
+                            <Empty 
+                                title={"Not found supplier"}
+                                subTitle={"Try adjusting your search or filter to find what you're looking for."}
+                            />
+                        )}
                     </tbody>
                 </table>
+                    <PageBar currentPage={currentPage} totalPage={totalPage} onPageChange={setCurrentPage}/>
+            </div>
             </div>
         </div>
     )

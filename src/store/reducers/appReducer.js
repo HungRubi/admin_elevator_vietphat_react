@@ -33,6 +33,7 @@ const initState = {
     loginError: null,
     comment: [],
     productsByOrder: [],
+    suppliers: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -44,6 +45,76 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message:null
             }
+
+        /** === SUPPLIER === */
+
+        case actionType.GET_SUPPLIER:
+            console.log(action.payload)
+            return {
+                ...state,
+                suppliers: action.payload?.search ? 
+                action.payload?.data?.searchSupplier : 
+                action.payload?.data?.supplier,
+                totalPage: action.payload?.data?.totalPage || 1,
+            }
+        
+        case actionType.GET_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.ADD_SUPPLIER:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.ADD_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        
+        case actionType.GET_DETAIL_SUPPLIER:
+            return {
+                ...state,
+                detailSupplier: action.payload?.supplier || {},
+            }
+
+        case actionType.GET_DETAIL_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.UPDATE_SUPPLIER:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.UPDATE_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.DELETE_SUPPLIER:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+                suppliers: action.payload?.suppliers || [],
+            }
+
+        case actionType.DELETE_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+
         /** === COMMENT === */
         case actionType.GET_COMMENT: 
             return {

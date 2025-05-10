@@ -4,6 +4,7 @@ import { BsBox } from "react-icons/bs";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiOutlineNewspaper } from "react-icons/hi2";
 import { BsBarChart } from "react-icons/bs";
+import { MdOutlineMail } from "react-icons/md";
 import { FaRegStar } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaSortDown } from "react-icons/fa";
@@ -38,9 +39,12 @@ import { BsPerson } from "react-icons/bs";
 import { BiVideo } from "react-icons/bi";
 import { MdOutlineWarehouse } from "react-icons/md";
 import { MdBusiness } from "react-icons/md";
+import { LuReceiptText } from "react-icons/lu";
 
 
 const icon = {
+    MdOutlineMail,
+    LuReceiptText,
     MdBusiness,
     MdOutlineWarehouse,
     FaRegStar,
