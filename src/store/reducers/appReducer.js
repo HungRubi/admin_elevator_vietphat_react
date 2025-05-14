@@ -49,7 +49,6 @@ const appReducer = (state = initState, action) => {
         /** === SUPPLIER === */
 
         case actionType.GET_SUPPLIER:
-            console.log(action.payload)
             return {
                 ...state,
                 suppliers: action.payload?.search ? 

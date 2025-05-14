@@ -19,6 +19,7 @@ export {default as ModalToast} from './ModalToast';
 export {default as PageTitle} from './PageTitle';
 export {default as Empty} from './Empty';
 export {default as MonthlyChart} from './MonthlyChart';
+export {default as ListProductBySupplier} from './ListProductBySupplier';
 
 
 

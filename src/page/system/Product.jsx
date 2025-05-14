@@ -135,7 +135,7 @@ const Product = () => {
                                     price
                                 </th>
                                 <th scope="col" className="px-4 py-3">
-                                    stock
+                                    supplier
                                 </th>
                                 <th scope="col" className="px-4 py-3">
                                     category
@@ -170,7 +170,7 @@ const Product = () => {
                                         ₫ {format(item.price)}
                                     </td>
                                     <td className="px-4 py-4 w-2/17">
-                                        Quantity: {item.stock}
+                                        {item.supplier?.name}
                                     </td>
                                     <td className="px-4 py-4 w-2/14">
                                         <Button className={item.category.name === "Linh kiện điện" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main capitalize" : "hidden"}>

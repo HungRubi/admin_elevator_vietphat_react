@@ -9,9 +9,10 @@ const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers } = 
 
 const ProductAdd = () => {
     const dispatch = useDispatch();
-    const {categoryProduct, message} = useSelector(state => state.app)
+    const {categoryProduct, message, suppliers} = useSelector(state => state.app)
     useEffect(() => {
-        dispatch(actions.getCategoryProduct())
+        dispatch(actions.getCategoryProduct());
+        dispatch(actions.getSuppliers());
     }, [dispatch])
     const unit = [
         {
@@ -36,7 +37,7 @@ const ProductAdd = () => {
         unit: '',
         category: '',
         minimum: '',
-        stock: '',
+        supplier: '',
         thumbnail_main: '',
         thumbnail_1: '',
         thumbnail_2: '',
@@ -162,15 +163,12 @@ const ProductAdd = () => {
                             onChange={handleChange}
                             selected={formData.category}
                         />
-                        <InputGroup 
-                            type={"number"} 
-                            label={"Quantity Of Stock"} 
-                            icon={<MdNumbers className="text-[18px] text-gray-500"/>} 
-                            name="stock" 
-                            helper={"Please enter a numer greater than 0"}
-                            placeholder={"> 0"}
+                        <Combobox
+                            data={suppliers}
+                            label={"Supplier"}
+                            name={"supplier"}
                             onChange={handleChange}
-                            value={formData.stock}
+                            selected={formData.supplier}
                         />
                         <InputGroup 
                             type={"number"} 

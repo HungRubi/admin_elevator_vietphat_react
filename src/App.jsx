@@ -32,6 +32,7 @@ import {
   SupplierAdd,
   SupplierEdit,
   Receipt,
+  ReceiptAdd,
   } from './page/system'
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path='category/discount/:id/edit' element={<DiscountCategoryEdit/>}/>
           <Route path='category/banner' element={<Banner/>}/>
           <Route path='receipt' element={<Receipt/>}/>
+          <Route path='receipt/add' element={<ReceiptAdd/>}/>
           <Route path='category/supplier' element={<Supplier/>}/>
           <Route path='category/supplier/:id/edit' element={<SupplierEdit/>}/>
           <Route path='category/supplier/add' element={<SupplierAdd/>}/>
