@@ -189,7 +189,7 @@ const Warehouse = () => {
                             
                         </tbody>
                     </table>
-                    <PageBar current={current} total={totalPage} onPageChange={setCurrent} />
+                    <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent} />
                 </div>
             </div>
         </div>
