@@ -1,32 +1,59 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { PageTitle, InputGroup, Button, ListProductBySupplier, ListProductOrder } from "../../components";
-import icons from '../../util/icon';
-const { MdChevronRight, BsTag, FiUserPlus, MdCall, FaMapMarkerAlt } = icons;
-import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import * as actions from '../../store/actions';
+import icons from '../../util/icon';
+import { ListProductBySupplier, ListProductOrder, InputGroup, Combobox, Button } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from '../../store/actions'
+import {formatMony} from '../../util/formatMony'
 
-const ReceiptAdd = () => {
+const { MdChevronRight, FiUserPlus, MdOutlineDateRange } = icons;
+
+const ReceiptEdit = () => {
+    const statusList = [
+        {id: 'chưa xác nhận', text: 'Chưa xác nhận'},
+        {id: 'đã xác nhận', text: 'Đã xác nhận'},
+        {id: 'đã hủy', text: 'Đã hủy'},
+    ]
+    const { id } = useParams();
     const dispatch = useDispatch();
+    const {receipt, receiptDetail, message} = useSelector(state => state.app);
+    useEffect(() => {
+        dispatch(actions.getDetailReceipt(id))
+    }, [dispatch, id])
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [currentSupplier, setCurrentSupplier] = useState(null);
     const [formData, setFormData] = useState({
         supplier: "",
         supplierName: "",
         item: [],
-        totalPrice: ""
-    });
-    const navigate = useNavigate();
-    const { message } = useSelector(state => state.app)
+        totalPrice: "",
+        status: "",
+        dateEntry: "",
+    })
     useEffect(() => {
-        if(message === "Thêm phiếu nhập thành công") {
-            navigate("/receipt");
+        if(receipt && receiptDetail){
+            setFormData({
+                supplier: receipt.supplier?._id || "",
+                supplierName: receipt.supplier?.name || "",
+                item: receiptDetail.map(receipt => ({
+                    product: receipt?.product_id?._id,
+                    quantity: receipt?.quantity,
+                    price: receipt?.price
+                })),
+                totalPrice: receipt?.totalPrice,
+                status: receipt?.status,
+                dateEntry: receipt?.dateFormat
+            })
+            // Initialize selectedProducts with receiptDetail data
+            setSelectedProducts(receiptDetail.map(item => ({
+                ...item.product_id,
+                quantity: item.quantity,
+                price: item.price,
+                totalPrice: item.price * item.quantity
+            })))
+            setCurrentSupplier(receipt.supplier?._id)
         }
-    }, [navigate, message])
-    useEffect(() => {
-        dispatch(actions.getSuppliers());
-    }, [dispatch])
-
+    }, [receipt, receiptDetail])
     const handleProductsSelect = (products, supplierId) => {
         // Get supplier name from first product
         const supplierName = products[0]?.supplier?.name || "";
@@ -91,7 +118,7 @@ const ReceiptAdd = () => {
             return product;
         }));
 
-        // Update formData.item state
+        // Update formData.item and totalPrice state
         setFormData(prev => {
             const newItems = prev.item.map(item => {
                 if (item.product === productId) {
@@ -103,23 +130,41 @@ const ReceiptAdd = () => {
                 }
                 return item;
             });
-            const newTotalPrice = newItems.reduce((total, item) => total + item.totalPrice, -50000);
+            
+            // Calculate new total price from selectedProducts
+            const newTotalPrice = selectedProducts
+                .reduce((total, product) => {
+                    const productTotal = product._id === productId 
+                        ? product.price * newQuantity 
+                        : product.totalPrice;
+                    return total + productTotal;
+                }, 0);
+
             return {
                 ...prev,
                 item: newItems,
-                totalPrice: newTotalPrice
+                totalPrice: newTotalPrice + 50000 // Add shipping cost
             };
         });
     };
-
+    const handleChange = (e, selected) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: selected ? selected.id : e.target.value
+        })
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.addReceipt(formData))
+        dispatch(actions.updateReceipt(id, formData))
     }
-    console.log(formData)
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(message === "Cập nhật phiếu nhập thành công"){
+            navigate("/receipt")
+        }
+    }, [navigate, message])
     return (
-        <div className="full pt-5">
-            <PageTitle title="Edit Supplier" />
+        <div className="w-full pt-5">
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -131,12 +176,12 @@ const ReceiptAdd = () => {
                             Receipt
                         </NavLink>
                         <MdChevronRight/>
-                        <NavLink to={'/receipt/add'} className={"text-blue-600"}>
-                            Add receipt
+                        <NavLink to={`/receipt/${id}/edit`} className={"text-blue-600"}>
+                            Edit receipt
                         </NavLink>
                     </div>
                     <h2 className="text-[35px] font-[600]">Receipt</h2>
-                    <h5 className="text-[12px] text-[#6d6c6c]">Add a new receipt of your company</h5>
+                    <h5 className="text-[12px] text-[#6d6c6c]">Edit a receipt of your company</h5>
                 </div>
             </div>
             <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
@@ -185,13 +230,14 @@ const ReceiptAdd = () => {
                                     </div>
                                     <div className="w-1/2 text-right text-3xl font-medium text-main">
                                         <span className="text-xl">₫ </span>
-                                        {selectedProducts.reduce((total, product) => total + product.totalPrice, -50000).toLocaleString('vi-VN')}
+                                        {formatMony(formData.totalPrice)}
                                     </div>
                                 </div>
                             </div>
                         </div>                        
                     </div>
                 </div>
+
                 <div className="w-full flex border-b-custom py-10">
                     <div className="w-2/6 ">
                         <h5 className="text-[20px] font-medium text-black text-color mt-5">
@@ -210,10 +256,23 @@ const ReceiptAdd = () => {
                             value={formData.supplierName}
                             readOnly
                         />
-                        
+                        <InputGroup 
+                            type={"date"} 
+                            label={"Date Entry"} 
+                            icon={<MdOutlineDateRange className="text-[18px] text-gray-600"/>} 
+                            name={"dateEntry"} 
+                            value={formData.dateEntry}
+                            onChange={handleChange}
+                        />
+                        <Combobox 
+                            data={statusList}
+                            label={"Status"} 
+                            name={"status"} 
+                            selected={formData.status}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
-                
                 <div className="w-full py-20 relative">
                     <Button type="button" className={"absolute left-[77.777%] transform -translate-x-[210%] top-[50%] !border-none -translate-y-[50%] font-medium "}>
                         <NavLink to={"/article"}>
@@ -226,7 +285,7 @@ const ReceiptAdd = () => {
                 </div>
             </form>
         </div>
-    ) 
+    )
 }
 
-export default ReceiptAdd;
+export default ReceiptEdit

@@ -132,7 +132,10 @@ const Product = () => {
                                     name
                                 </th>
                                 <th scope="col" className="px-4 py-3">
-                                    price
+                                    sp
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    cog
                                 </th>
                                 <th scope="col" className="px-4 py-3">
                                     supplier
@@ -170,9 +173,12 @@ const Product = () => {
                                         ₫ {format(item.price)}
                                     </td>
                                     <td className="px-4 py-4 w-2/17">
+                                        ₫ {format(item.cog)}
+                                    </td>
+                                    <td className="px-4 py-4 w-2/17">
                                         {item.supplier?.name}
                                     </td>
-                                    <td className="px-4 py-4 w-2/14">
+                                    <td className="px-4 py-4 w-2/17">
                                         <Button className={item.category.name === "Linh kiện điện" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main capitalize" : "hidden"}>
                                             {item.category.name}
                                         </Button>
@@ -189,10 +195,10 @@ const Product = () => {
                                             {item.category.name}
                                         </Button>
                                     </td>
-                                    <td className="px-4 py-4 w-2/14 text-justify">
+                                    <td className="px-4 py-4 w-2/20 text-justify">
                                         Giảm giá: {item.sale}%
                                     </td>
-                                    <td className="px-4 py-4 w-2/14">
+                                    <td className="px-4 py-4 w-2/18">
                                         đơn vị tính: {item.unit}
                                     </td>
                                     <td className="py-4 w-2/12 text-center">

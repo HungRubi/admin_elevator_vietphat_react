@@ -34,6 +34,11 @@ const initState = {
     comment: [],
     productsByOrder: [],
     suppliers: [],
+    productsBySupplier: [],
+    receipts: [],
+    receipt: {},
+    receiptDetail: [],
+    warehouse: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -46,6 +51,84 @@ const appReducer = (state = initState, action) => {
                 message:null
             }
 
+        /** === WAREHOUSE === */
+        case actionType.GET_WAREHOUSE:
+            return {
+                ...state,
+                warehouse: action.payload?.search ?
+                action.payload?.data?.searchWarehouse : 
+                action.payload?.data?.warehouses,
+                totalPage: action.payload?.data?.totalPage || 1,
+            }
+
+        case actionType.GET_WAREHOUSE_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+
+        /** === RECEIPT  === */
+        case actionType.ADD_RECEIPT: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.ADD_RECEIPT_ERR: 
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.GET_RECEIPT: 
+            return {
+                ...state,
+                receipts: action.payload.search ? 
+                action.payload?.data?.receiptSearch :
+                action.payload?.data?.receipts,
+                totalPage: action.payload?.data?.totalPage || 1
+            }
+
+        case actionType.GET_RECEIPT_ERR: 
+            return {
+                ...state,
+                message: action.payload.message
+            }
+
+        case actionType.GET_DETAIL_RECEIPT:
+            return {
+                ...state,
+                receipt: action.payload.receipt,
+                receiptDetail: action.payload.receiptDetails
+            }
+        
+        case actionType.UPDATE_RECEIPT:
+            return {
+                ...state,
+                message: action.payload.message
+            }
+
+        case actionType.UPDATE_RECEIPT_ERR:
+            return {
+                ...state,
+                message: action.payload.message
+            }
+        
+        case actionType.DELETE_RECEIPT:
+            return {
+                ...state,
+                message: action.payload.message
+            }
+        
+        case actionType.DELETE_RECEIPT_ERR:
+            return {
+                ...state,
+                message: action.payload.message
+            }
+
+
+
         /** === SUPPLIER === */
 
         case actionType.GET_SUPPLIER:
@@ -56,7 +139,16 @@ const appReducer = (state = initState, action) => {
                 action.payload?.data?.supplier,
                 totalPage: action.payload?.data?.totalPage || 1,
             }
-        
+        case actionType.GET_PRODUCT_BY_SUPPLIER:
+            return {
+                ...state,
+                productsBySupplier: action.payload?.products || [],
+            }
+        case actionType.GET_PRODUCT_BY_SUPPLIER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
         case actionType.GET_SUPPLIER_ERR:
             return {
                 ...state,

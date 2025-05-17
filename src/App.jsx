@@ -33,6 +33,8 @@ import {
   SupplierEdit,
   Receipt,
   ReceiptAdd,
+  ReceiptEdit,
+  Warehouse,
   } from './page/system'
 
 function App() {
@@ -61,6 +63,7 @@ function App() {
           <Route path='article' element={<Article/>}/>
           <Route path='article/add' element={<ArticleAdd/>}/>
           <Route path='article/:id/edit' element={<ArticleEdit/>}/>
+          <Route path='warehouse' element={<Warehouse/>}/>
           <Route path='report' element={<Report/>}/>
           <Route path='setting' element={<Setting/>}/>
           <Route path='category/product' element={<ProductCategory/>}/>
@@ -72,6 +75,7 @@ function App() {
           <Route path='category/banner' element={<Banner/>}/>
           <Route path='receipt' element={<Receipt/>}/>
           <Route path='receipt/add' element={<ReceiptAdd/>}/>
+          <Route path='receipt/:id/edit' element={<ReceiptEdit/>}/>
           <Route path='category/supplier' element={<Supplier/>}/>
           <Route path='category/supplier/:id/edit' element={<SupplierEdit/>}/>
           <Route path='category/supplier/add' element={<SupplierAdd/>}/>

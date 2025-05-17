@@ -9,10 +9,8 @@ const { MdChevronRight, BsPerson, MdCall, MdOutlineMail, FaMapMarkerAlt } = icon
 
 const SupplierEdit = () => {
     const dispatch = useDispatch()
-    const { detailSupplier } = useSelector(state => state.app);
+    const { detailSupplier, message } = useSelector(state => state.app);
     const {id} = useParams();
-    console.log(id)
-    const { message } = useSelector(state => state.app)
     const [formData, setFormData] = useState({
         name: '',
         phone: '',

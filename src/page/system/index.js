@@ -32,4 +32,6 @@ export {default as SupplierAdd} from './SupplierAdd'
 export {default as SupplierEdit} from './SupplierEdit'
 export {default as Receipt} from './Receipt'
 export {default as ReceiptAdd} from './ReceiptAdd'
+export {default as ReceiptEdit} from './ReceiptEdit'
+export {default as Warehouse} from './Warehouse'
 

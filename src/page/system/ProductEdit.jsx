@@ -27,6 +27,7 @@ const ProductEdit = () => {
         name: '',
         description: '',
         sale: '',
+        cog: '',
         price: '',
         shipping_cost: '',
         unit: '',
@@ -48,6 +49,7 @@ const ProductEdit = () => {
                 price: detailProduct?.price,
                 shipping_cost: detailProduct?.shipping_cost,
                 unit: detailProduct?.unit,
+                cog: detailProduct?.cog,
                 category: detailProduct?.category,
                 minimum: detailProduct?.minimum,
                 supplier: detailProduct?.supplier,
@@ -146,6 +148,15 @@ const ProductEdit = () => {
                             placeholder={"> 0"} value={formData.price}
                             icon={<AiOutlineDollarCircle className="text-[18px] text-gray-600"/>} 
                             name="price"
+                        />
+                        <InputGroup 
+                            onChange={handleChange}
+                            type={"number"} 
+                            label={"COG"}
+                            helper={"Please enter a numer greater than 0"}
+                            placeholder={"> 0"} value={formData.cog}
+                            icon={<AiOutlineDollarCircle className="text-[18px] text-gray-600"/>} 
+                            name="cog"
                         />
                         <InputGroup 
                             type={"number"} 

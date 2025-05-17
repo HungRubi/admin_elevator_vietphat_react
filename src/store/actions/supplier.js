@@ -113,3 +113,25 @@ export const deleteSupplier = (id) => async (dispatch) => {
         })
     }
 }
+
+export const getProductBySupplier = (id) => async (dispatch) => {
+    try{
+        const response = await apis.getProductBySupplier(id);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.GET_PRODUCT_BY_SUPPLIER,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.GET_PRODUCT_BY_SUPPLIER_ERR,
+                payload: response.data
+            })
+        }
+    }catch(error){
+        dispatch({
+            type: actionTypes.GET_PRODUCT_BY_SUPPLIER_ERR,
+            payload: error.response
+        })
+    }
+}

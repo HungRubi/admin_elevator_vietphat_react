@@ -91,3 +91,21 @@ export const deleteSupplier = async (id) => {
         };
     }
 }
+
+export const getProductBySupplier = async (id) => {
+    try {
+        const response = await axios({
+            method: "GET",
+            url: `/supplier/product/${id}`,   
+        })
+        return response;
+    } catch (error) {
+        if(error.response) {
+            return error.response;
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau",
+        };
+    }
+}

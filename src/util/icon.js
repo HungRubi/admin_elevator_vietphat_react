@@ -40,9 +40,11 @@ import { BiVideo } from "react-icons/bi";
 import { MdOutlineWarehouse } from "react-icons/md";
 import { MdBusiness } from "react-icons/md";
 import { LuReceiptText } from "react-icons/lu";
+import { MdOutlineDateRange } from "react-icons/md";
 
 
 const icon = {
+    MdOutlineDateRange,
     MdOutlineMail,
     LuReceiptText,
     MdBusiness,

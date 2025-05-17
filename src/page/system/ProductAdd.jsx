@@ -32,6 +32,7 @@ const ProductAdd = () => {
         name: '',
         description: '',
         sale: '',
+        cog: '',
         price: '',
         shipping_cost: '',
         unit: '',
@@ -126,6 +127,16 @@ const ProductAdd = () => {
                             name="price"
                             onChange={handleChange}
                             value={formData.price}
+                        />
+                        <InputGroup 
+                            type={"number"} 
+                            label={"COG"}
+                            helper={"Please enter a numer greater than 0"}
+                            placeholder={"> 0"} 
+                            icon={<AiOutlineDollarCircle className="text-[18px] text-gray-600"/>} 
+                            name="cog"
+                            onChange={handleChange}
+                            value={formData.cog}
                         />
                         <InputGroup 
                             type={"number"} 
