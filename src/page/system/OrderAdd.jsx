@@ -141,13 +141,22 @@ const OrderAdd = () => {
     };
 
     const handleQuantityChange = (productId, newQuantity, newPrice) => {
-        setDataProductOrder(prev => 
-            prev.map(item => 
+        setDataProductOrder(prev => {
+            const updatedProducts = prev.map(item => 
                 item._id === productId 
                     ? { ...item, quantity: newQuantity, totalPrice: newPrice }
                     : item
-            )
-        );
+            );
+            
+            // Tính toán lại shipping và total
+            const newShipping = updatedProducts.reduce((acc, curr) => acc + curr.shipping_cost, 0);
+            const newTotal = updatedProducts.reduce((acc, curr) => acc + (curr.quantity || 1) * curr.price, 0);
+            
+            setShipping(newShipping);
+            setTotal(newTotal);
+            
+            return updatedProducts;
+        });
     };
 
     // Calculate final price with discount
@@ -167,6 +176,7 @@ const OrderAdd = () => {
     };
 
     const finalPrice = calculateFinalPrice();
+    console.log(finalPrice)
     const discountAmount = total - finalPrice;
     const data = {
         user_id: info.id,

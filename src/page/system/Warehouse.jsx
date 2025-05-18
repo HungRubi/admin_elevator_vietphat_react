@@ -129,24 +129,24 @@ const Warehouse = () => {
                                         </td>
                                         <td className="py-4 w-1/14 ">
                                             <div className="w-full flex justify-center">
-                                                <img src={item.productId.thumbnail_main} alt="ảnh sản phẩm" 
+                                                <img src={item.productId?.thumbnail_main} alt="ảnh sản phẩm" 
                                                 className='w-[70px] h-[70px] rounded-[5px] border-custom'/>
                                             </div>
                                         </td>
                                         <th scope="row" className="px-4 py-4 font-medium text-gray-900 dark:text-white w-2/14">
-                                            <span className='line-clamp-2'>{item.productId.name}</span>
+                                            <span className='line-clamp-2'>{item.productId?.name}</span>
                                         </th>
                                         <td className="px-4 py-4 w-2/18">
-                                            {item.productId.category.name}
+                                            {item.productId?.category.name}
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
-                                            {item.productId.supplier.name}
+                                            {item.productId?.supplier.name}
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
-                                            {item.productId.cog}
+                                            {item.productId?.cog}
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
-                                            {formatMony(item.productId.price)} đ
+                                            {formatMony(item.productId?.price)} đ
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
                                             {item.stock}
