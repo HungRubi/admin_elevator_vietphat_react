@@ -1,10 +1,10 @@
 import axios from "../axios"; 
 
-export const  getNotification = async () => {
+export const  getNotification = async (search="") => {
     try{
         const response = await axios({
             method: "GET",
-            url: "notification"
+            url: `/notification?timkiem=${search}`
         })
         return response
     }catch(error){

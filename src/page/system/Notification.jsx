@@ -1,11 +1,28 @@
 import { NavLink } from "react-router-dom";
 import icons from '../../util/icon';
-import { Button, PageTitle, Search } from "../../components";
+import { Button, Empty, PageTitle, Search, CircleButton, PageBar } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import * as actions from '../../store/actions'
 
 const {MdChevronRight, IoMdAdd, MdAutoFixHigh, RiDeleteBin6Line, PiDotsThreeBold } = icons
 
 const Notification = () => {
     const notificationFilter = [];
+    const dispatch = useDispatch();
+    const { notificaiton, totalPage } = useSelector(state => state.app);
+
+    useEffect(() => {
+        dispatch(actions.getNotification())
+    }, [dispatch]);
+
+    const [current, setCurrent] = useState(1);
+
+    const limit = 10;
+    const lastItemIndex = current * limit;
+    const firstItemIndex = lastItemIndex - limit;
+
+    const currentNoti = notificaiton?.slice(firstItemIndex, lastItemIndex)
     return (
         <div>
             <div className="full pt-5">
@@ -78,90 +95,90 @@ const Notification = () => {
                                     <th scope="col" className="px-2 py-3">
                                         <input type="checkbox" className='scale-120'/>
                                     </th>
-                                    <th scope="col" className="py-3"></th>
                                     <th scope="col" className="px-4 py-3">
-                                        product
+                                        user
                                     </th>
                                     <th scope="col" className="px-4 py-3">
-                                        category
+                                        type
                                     </th>
                                     <th scope="col" className="px-4 py-3">
-                                        supplier
+                                        message
                                     </th>
                                     <th scope="col" className="px-4 py-3">
-                                        cog
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        sp
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        stock
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        status
+                                       status
                                     </th>
                                     <th scope="col" className="py-3 text-center">
-                                        Time
+                                        time
                                     </th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                <tr
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
-                                    <td className="px-2 py-4 w-[15px]">
-                                        <input type="checkbox" className='scale-120'/>
-                                    </td>
-                                    <td className="py-4 w-1/14 ">
-                                        <div className="w-full flex justify-center">
-                                            <img src="" alt="ảnh sản phẩm" 
-                                            className='w-[70px] h-[70px] rounded-[5px] border-custom'/>
-                                        </div>
-                                    </td>
-                                    <th scope="row" className="px-4 py-4 font-medium text-gray-900 dark:text-white w-2/14">
-                                        <span className='line-clamp-2'></span>
-                                    </th>
-                                    <td className="px-4 py-4 w-2/18">
-                                    </td>
-                                    <td className="px-4 py-4 w-2/18">
-                                    </td>
-                                    <td className="px-4 py-4 w-2/18">
-                                    </td>
-                                    <td className="px-4 py-4 w-2/18">
-                                    </td>
-                                    <td className="px-4 py-4 w-2/18">
-                                    </td>
-                                    <td className="px-4 py-4 w-2/18">
-                                        {/* <Button className={item.status === "còn hàng" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main capitalize" : "hidden"}>
-                                            {item.status}
-                                        </Button>
-                                        <Button className={item.status === "hết hàng" ? "!border-red-500 !py-[2px] bg-red-200 text-red-600 capitalize" : "hidden"}>
-                                            {item.status}
-                                        </Button>
-                                        <Button className={item.status === "sắp hết hàng" ? "!border-yellow-500 !py-[2px] bg-yellow-200 text-yellow-600 capitalize" : "hidden"}>
-                                            {item.status}
-                                        </Button> */}
-                                    </td>
-                                    <td className="py-4 w-2/12 text-center">
-                                        <span className='time_text'></span>
-                                        <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
-                                            <NavLink to={`/product//edit`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                    <MdAutoFixHigh className='text-[18px]'/>
+                                {notificaiton && notificaiton.length > 0 ? currentNoti.map(item => (
+                                    <tr key={item._id}
+                                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
+                                        <td className="px-2 py-4 w-[15px] min-h-[70px]">
+                                            <input type="checkbox" className='scale-120'/>
+                                        </td>
+                                        <td className="px-4 py-4 w-2/13">
+                                            <div className="flex items-center gap-2.5">
+                                                <CircleButton>
+                                                    <img src={item.user_id?.avatar} alt="ảnh sản phẩm" 
+                                                    className='w-full object-cover rounded-[50%]'/>
+                                                </CircleButton>
+                                                <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
+                                                    {item.user_id?.name}
+                                                </h5>
+                                            </div>
+                                        </td> 
+                                        <th scope="row" className="px-4 py-4 font-medium w-2/12 truncate">
+                                            {item.type}
+                                        </th>
+                                        <td className="px-4 py-4 w-5/12">
+                                            <span className="line-clamp-2">
+                                                {item.message}
+                                            </span>
+                                        </td>
+                                                                           
+                                        <td className="px-4 py-4 w-2/14">
+                                            {(item.isRead === true || item.isRead === false) && (
+                                                <Button
+                                                    className={`!py-[2px] capitalize ${
+                                                    item.isRead === "true"
+                                                        ? "!border-blue-500 bg-blue-200 text-blue-600"
+                                                        : "!border-red-500 bg-red-200 text-red-600"
+                                                    }`}
+                                                >
+                                                    {item.isRead ? "Read" : "Unread"}
                                                 </Button>
-                                            </NavLink>
-                                            <Button
-                                            className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
-                                                <RiDeleteBin6Line className='text-[18px]'/>
-                                            </Button>
-                                            <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                <PiDotsThreeBold className='text-[18px]'/>
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            )}
+                                        </td>
+                                        <td className="py-4 text-center">
+                                            <span className='time_text'>{item.lastUpdate}</span>
+                                            <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
+                                                <NavLink to={`/category/notification/${item._id}/edit`}>
+                                                    <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                        <MdAutoFixHigh className='text-[18px]'/>
+                                                    </Button>
+                                                </NavLink>
+                                                <Button
+                                                className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
+                                                    <RiDeleteBin6Line className='text-[18px]'/>
+                                                </Button>
+                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                    <PiDotsThreeBold className='text-[18px]'/>
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <Empty 
+                                        title={"No notification"}
+                                        subTitle={"There are no announcements on your website."}
+                                    />
+                                )}
                             </tbody>
                         </table>
+                        <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
                     </div>
                 </div>
             </div>
