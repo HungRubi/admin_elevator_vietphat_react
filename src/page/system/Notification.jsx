@@ -41,7 +41,7 @@ const Notification = () => {
                         <h2 className="text-[35px] font-[600]">Notification</h2>
                         <h5 className="text-[12px] text-[#6d6c6c]">List of notification of your website</h5>
                         <div className="flex mt-5">
-                            <NavLink to={'/category/notification'}>
+                            <NavLink to={'/category/notification/add'}>
                                 <Button className={"gap-2.5 !py-2 !border-none bg-blue-400 text-white hover:bg-blue-500"}>
                                     <IoMdAdd/>
                                     Add

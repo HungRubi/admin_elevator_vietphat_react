@@ -143,7 +143,7 @@ const Warehouse = () => {
                                             {item.productId?.supplier.name}
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
-                                            {item.productId?.cog}
+                                            {formatMony(item.productId?.cog)} đ
                                         </td>
                                         <td className="px-4 py-4 w-2/18">
                                             {formatMony(item.productId?.price)} đ

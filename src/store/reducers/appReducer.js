@@ -68,6 +68,18 @@ const appReducer = (state = initState, action) => {
                 message: action.payload.message || null
             }
 
+        case actionType.ADD_NOTIFICATION:
+            return{
+                ...state,
+                message: action.payload.message || null
+            }
+
+        case actionType.ADD_NOTIFICATION_ERR:
+            return{
+                ...state,
+                message: action.payload.message || null
+            }
+
         /** === WAREHOUSE === */
         case actionType.GET_WAREHOUSE:
             return {

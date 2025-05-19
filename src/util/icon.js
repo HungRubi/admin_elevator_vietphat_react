@@ -41,9 +41,11 @@ import { MdOutlineWarehouse } from "react-icons/md";
 import { MdBusiness } from "react-icons/md";
 import { LuReceiptText } from "react-icons/lu";
 import { MdOutlineDateRange } from "react-icons/md";
+import { RiMessage3Line } from "react-icons/ri";
 
 
 const icon = {
+    RiMessage3Line,
     MdOutlineDateRange,
     MdOutlineMail,
     LuReceiptText,

@@ -25,3 +25,25 @@ export const getNotification = (search='') => async (dispatch) => {
         })
     }
 }
+export const addNotification = (data) => async (dispatch) => {
+    try{
+        const response = await apis.addNotification(data);
+        if(response.status === 200) {
+            dispatch({
+                type: actionTypes.ADD_NOTIFICATION,
+                payload: response.data,
+                
+            })
+        }else{
+            dispatch({
+                type: actionTypes.ADD_NOTIFICATION_ERR,
+                payload: response.data
+            })
+        }
+    }catch(error){
+        dispatch({
+            type: actionTypes.ADD_NOTIFICATION_ERR,
+            payload: error.response
+        })
+    }
+}

@@ -17,3 +17,22 @@ export const  getNotification = async (search="") => {
         }
     }
 }
+
+export const  addNotification = async (data) => {
+    try{
+        const response = await axios({
+            method: "POST",
+            url: `notification/add`,
+            data: data
+        })
+        return response
+    }catch(error){
+        if(error.response){
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server: " + error
+        }
+    }
+}
