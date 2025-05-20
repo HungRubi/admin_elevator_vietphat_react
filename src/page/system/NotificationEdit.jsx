@@ -1,15 +1,19 @@
 import icons from '../../util/icon';
 import { InputGroup, Button, Combobox, Textearea } from '../../components';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import * as actions from '../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const {MdChevronRight, MdCall, MdOutlineMail, FaMapMarkerAlt, RiMessage3Line } = icons
 
-const NotificationAdd = () => {
+const NotificationEdit = () => {
     const dispatch = useDispatch();
-    const {message} = useSelector(state => state.app)
+    const { message, notificaitonDetails } = useSelector(state => state.app)
+    const {id} = useParams();
+    useEffect(() => {
+        dispatch(actions.editNotification(id))
+    }, [dispatch, id])
     const typeNotifi = [
         {
             id: "Thông báo hệ thống", 
@@ -29,6 +33,15 @@ const NotificationAdd = () => {
         message: "",
         user_id: "",
     })
+    useEffect(() => {
+        if(notificaitonDetails){
+            setFormData({
+                type: notificaitonDetails?.type || "",
+                message: notificaitonDetails?.message || "",
+                user_id: notificaitonDetails?.user_id || "",
+            })
+        }
+    }, [notificaitonDetails])
     const handleChange = (e, selected) => {
         setFormData({
             ...formData,
@@ -58,12 +71,12 @@ const NotificationAdd = () => {
                             Notification    
                         </NavLink>
                         <MdChevronRight/>
-                        <NavLink to={'/category/notification/add'} className={"text-blue-600"}>
-                            Add notification
+                        <NavLink to={'/category/notification/:id/edit'} className={"text-blue-600"}>
+                            Edit notification
                         </NavLink>
                     </div>
                     <h2 className="text-[35px] font-[600]">Notification</h2>
-                    <h5 className="text-[12px] text-[#6d6c6c]">Add a new notification of your company</h5>
+                    <h5 className="text-[12px] text-[#6d6c6c]">Edit a notification of your company</h5>
                 </div>
             </div>
             <form className="w-full px-[30px] bg-white mt-8" onSubmit={handleSubmit}>
@@ -119,4 +132,4 @@ const NotificationAdd = () => {
     )
 }
 
-export default NotificationAdd
+export default NotificationEdit

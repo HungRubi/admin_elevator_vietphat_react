@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import icons from '../../util/icon';
-import { Button, Empty, PageTitle, Search, CircleButton, PageBar } from "../../components";
+import { Button, Empty, PageTitle, Search, CircleButton, PageBar, ModalToast } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import * as actions from '../../store/actions'
@@ -8,7 +8,20 @@ import * as actions from '../../store/actions'
 const {MdChevronRight, IoMdAdd, MdAutoFixHigh, RiDeleteBin6Line, PiDotsThreeBold } = icons
 
 const Notification = () => {
-    const notificationFilter = [];
+    const notificationFilter = [
+        {
+            id: "Thông báo hệ thống", 
+            name: "Thông báo hệ thống"
+        },
+        {
+            id: "Thông báo đơn hàng", 
+            name: "Thông báo đơn hàng"
+        },
+        {
+            id: "Thông báo khách hàng", 
+            name: "Thông báo khách hàng"
+        },
+    ];
     const dispatch = useDispatch();
     const { notificaiton, totalPage } = useSelector(state => state.app);
 
@@ -23,9 +36,15 @@ const Notification = () => {
     const firstItemIndex = lastItemIndex - limit;
 
     const currentNoti = notificaiton?.slice(firstItemIndex, lastItemIndex)
+    const [isOpen, setIsOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const handleDelete = () => {
+        dispatch(actions.deleteNotification(deleteId))
+    }
     return (
         <div>
             <div className="full pt-5">
+                <ModalToast isOpen={isOpen} setIsOpen={setIsOpen} onDelete={handleDelete}/>
                 <PageTitle title="Notification" />
                 <div className="w-full px-[30px] flex gap-8">
                     <div className="w-full">
@@ -121,13 +140,21 @@ const Notification = () => {
                                         </td>
                                         <td className="px-4 py-4 w-2/13">
                                             <div className="flex items-center gap-2.5">
-                                                <CircleButton>
-                                                    <img src={item.user_id?.avatar} alt="ảnh sản phẩm" 
-                                                    className='w-full object-cover rounded-[50%]'/>
-                                                </CircleButton>
-                                                <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
-                                                    {item.user_id?.name}
-                                                </h5>
+                                                {item.user_id ? (
+                                                    <>
+                                                        <CircleButton>
+                                                            <img src={item.user_id?.avatar} alt="ảnh sản phẩm" 
+                                                            className='w-full object-cover rounded-[50%]'/>
+                                                        </CircleButton>
+                                                        <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
+                                                            {item.user_id?.name}
+                                                        </h5>
+                                                    </>
+                                                ): (
+                                                    <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
+                                                        Tất cả người dùng  
+                                                    </h5>
+                                                )}
                                             </div>
                                         </td> 
                                         <th scope="row" className="px-4 py-4 font-medium w-2/12 truncate">
@@ -160,7 +187,10 @@ const Notification = () => {
                                                         <MdAutoFixHigh className='text-[18px]'/>
                                                     </Button>
                                                 </NavLink>
-                                                <Button
+                                                <Button onClick={() => {
+                                                    setIsOpen(true);
+                                                    setDeleteId(item._id);
+                                                }}
                                                 className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
                                                     <RiDeleteBin6Line className='text-[18px]'/>
                                                 </Button>

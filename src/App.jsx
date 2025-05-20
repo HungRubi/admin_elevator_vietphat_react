@@ -36,7 +36,8 @@ import {
   ReceiptEdit,
   Warehouse,
   Notification,
-  NotificationAdd
+  NotificationAdd,
+  NotificationEdit
   } from './page/system'
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
           <Route path='warehouse' element={<Warehouse/>}/>
           <Route path='category/notification' element={<Notification/>}/>
           <Route path='category/notification/add' element={<NotificationAdd/>}/>
+          <Route path='category/notification/:id/edit' element={<NotificationEdit/>}/>
           <Route path='report' element={<Report/>}/>
           <Route path='setting' element={<Setting/>}/>
           <Route path='category/product' element={<ProductCategory/>}/>

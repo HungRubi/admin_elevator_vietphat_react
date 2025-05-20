@@ -39,7 +39,8 @@ const initState = {
     receipt: {},
     receiptDetail: [],
     warehouse: [],
-    notificaiton: []
+    notificaiton: [],
+    notificaitonDetails: {}
 }
 
 const appReducer = (state = initState, action) => {
@@ -79,6 +80,31 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message: action.payload.message || null
             }
+
+        case actionType.DELETE_NOTIFICATION:
+            return{
+                ...state,
+                message: action.payload.message || null
+            }
+
+        case actionType.DELETE_NOTIFICATION_ERR:
+            return{
+                ...state,
+                message: action.payload.message || null
+            }
+
+        case actionType.EDIT_NOTIFICATION:
+            return{
+                ...state,
+                notificaitonDetails: action.payload.notification
+            }
+
+        case actionType.EDIT_NOTIFICATION_ERR:
+            return{
+                ...state,
+                message: action.payload.message || null
+            }
+        
 
         /** === WAREHOUSE === */
         case actionType.GET_WAREHOUSE:
