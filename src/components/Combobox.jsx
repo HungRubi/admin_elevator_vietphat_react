@@ -19,8 +19,8 @@ const Combobox = ({ data, label, name, selected, onChange, className }) => {
                 name={name}
             >
                 <option value="">--- Choice ---</option>
-                {data.map((item, index) => (
-                    <option key={index} value={item.id || item._id}>{item.text || item.name || item.title}</option>
+                {data?.map((item, index) => (
+                    <option key={index} value={item.id || item._id}>{item.text || item.name || item.title || item.order_code}</option>
                 ))}
             </select>
         </div>

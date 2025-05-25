@@ -1,5 +1,6 @@
 import { IoHomeOutline } from "react-icons/io5";
 import { LuUser } from "react-icons/lu";
+import { HiOutlineDocumentCheck } from "react-icons/hi2";
 import { BsBox } from "react-icons/bs";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { HiOutlineNewspaper } from "react-icons/hi2";
@@ -42,10 +43,13 @@ import { MdBusiness } from "react-icons/md";
 import { LuReceiptText } from "react-icons/lu";
 import { MdOutlineDateRange } from "react-icons/md";
 import { RiMessage3Line } from "react-icons/ri";
+import { MdVerified } from "react-icons/md";
 
 
 const icon = {
+    MdVerified,
     RiMessage3Line,
+    HiOutlineDocumentCheck,
     MdOutlineDateRange,
     MdOutlineMail,
     LuReceiptText,

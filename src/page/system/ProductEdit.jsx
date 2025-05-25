@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import * as actions from '../../store/actions'
 
-const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers } = icon
+const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers,MdVerified } = icon
 
 const ProductEdit = () => {
     const { detailProduct, categoryProduct, message, suppliers } = useSelector(state => state.app);
@@ -38,7 +38,7 @@ const ProductEdit = () => {
         thumbnail_1: '',
         thumbnail_2: '',
         thumbnail_3: '',
-
+        warranty_period: '',
     })
     useEffect(() => {
         if(detailProduct){
@@ -57,6 +57,7 @@ const ProductEdit = () => {
                 thumbnail_1: detailProduct?.thumbnail_1,
                 thumbnail_2: detailProduct?.thumbnail_2,
                 thumbnail_3: detailProduct?.thumbnail_3,
+                warranty_period: detailProduct?.warranty_period
             })
         }
     }, [detailProduct])
@@ -166,6 +167,16 @@ const ProductEdit = () => {
                             placeholder={"> 0"} value={formData.shipping_cost}
                             icon={<AiOutlineDollarCircle className="text-[18px] text-gray-600"/>} 
                             name="shipping_cost"
+                        />
+                        <InputGroup 
+                            type={"number"} 
+                            label={"Warranty Period"}
+                            helper={"Please enter a larger number and units are in months"}
+                            placeholder={"> 1"} 
+                            icon={<MdVerified className="text-[18px] text-gray-600"/>} 
+                            name="warranty_period"
+                            onChange={handleChange}
+                            value={formData.warranty_period}
                         />
                     </div>
                 </div>

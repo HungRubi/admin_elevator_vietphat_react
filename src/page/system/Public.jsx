@@ -19,7 +19,7 @@ const Public = () => {
                         <Navbar/>
                     </div>
                     <div className="h-full flex-1 bg-div min-w-[1500px] overflow-y-auto 
-                        [&::-webkit-scrollbar]:w-2.5
+                        [&::-webkit-scrollbar]:w-2.5 relative
                         [&::-webkit-scrollbar-track]:rounded-full
                         [&::-webkit-scrollbar-track]:bg-gray-100
                         [&::-webkit-scrollbar-thumb]:rounded-full

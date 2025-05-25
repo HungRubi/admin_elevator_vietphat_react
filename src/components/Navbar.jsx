@@ -23,8 +23,15 @@ const Navbar = () => {
         };
     }, []);
     return (
-        <nav className="w-full h-full border-r-custom relative overflow-hidden">
-            <ul className="w-full">
+        <nav className="w-full h-full border-r-custom">
+            <ul className="w-full relative overflow-auto h-[calc(100%-70px)]
+                        [&::-webkit-scrollbar]:w-1
+                        [&::-webkit-scrollbar-track]:rounded-full
+                        [&::-webkit-scrollbar-track]:bg-gray-100
+                        [&::-webkit-scrollbar-thumb]:rounded-full
+                        [&::-webkit-scrollbar-thumb]:bg-[#74717171]
+                        dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+                        dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
                 {menu.map((item, index) => (
                     <li key={index} className="px-[15px] my-[5px] w-full relative">
                         <NavLink 

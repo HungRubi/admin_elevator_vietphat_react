@@ -1,10 +1,9 @@
-import { Children } from 'react';
 import icon from './icon';
 
 const {
     IoHomeOutline, LuUser, BsBox, BsBarChart, 
     IoSettingsOutline, FaSortDown,TbCategory, AiOutlineTool, 
-    IoImageOutline, HiOutlineShoppingBag, BsTag,FaRegBell,
+    IoImageOutline, HiOutlineShoppingBag, BsTag,FaRegBell,HiOutlineDocumentCheck,
     HiOutlineNewspaper, BiVideo, MdOutlineWarehouse,MdBusiness,LuReceiptText,
 } = icon;
 
@@ -33,6 +32,11 @@ export const menu = [
         text: 'order',
         icon: <HiOutlineShoppingBag className='text-[18px] text-color'/>,
         path: '/order'
+    },
+    {       
+        text: 'warranty',
+        icon: <HiOutlineDocumentCheck className='text-[18px] text-color'/>,
+        path: '/warranty'
     },
     {
         text: 'article',

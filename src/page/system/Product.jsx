@@ -21,7 +21,7 @@ const Product = () => {
     const lastUserIndex = current * limit;
     const firstUserIndex = lastUserIndex - limit;
 
-    const currentProduct = products.slice(firstUserIndex, lastUserIndex);
+    const currentProduct = products?.slice(firstUserIndex, lastUserIndex);
     const [isModal, setIsModal] = useState(false);
     const [deleteItem, setDeleteItem] = useState();
     const handleDelete = () => {

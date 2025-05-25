@@ -9,3 +9,4 @@ export * from './supplier';
 export * from './receipt';
 export * from './warehouse';
 export * from './notification';
+export * from './warranty';

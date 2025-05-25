@@ -40,7 +40,8 @@ const initState = {
     receiptDetail: [],
     warehouse: [],
     notificaiton: [],
-    notificaitonDetails: {}
+    notificaitonDetails: {},
+    ordersByWarranty: []
 }
 
 const appReducer = (state = initState, action) => {
@@ -51,6 +52,17 @@ const appReducer = (state = initState, action) => {
             return {
                 ...state,
                 message:null
+            }
+
+        /** WARRANTY */
+        case actionType.GET_ADD_WARRANTY:
+            return {
+                ordersByWarranty: action.payload.orders
+            }
+
+        case actionType.GET_ADD_WARRANTY_ERR:
+            return {
+                message: action.payload.message
             }
 
         /** === NOTIFICATION === */

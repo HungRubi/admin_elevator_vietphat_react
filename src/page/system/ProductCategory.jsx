@@ -43,7 +43,7 @@ const ProductCategory = () => {
         setSearchTerm(term);
     };
     return (
-        <div className="full py-5">
+        <div className="full pt-5">
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">

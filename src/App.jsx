@@ -37,7 +37,9 @@ import {
   Warehouse,
   Notification,
   NotificationAdd,
-  NotificationEdit
+  NotificationEdit,
+  Warranty,
+  WarrantyAdd
   } from './page/system'
 
 function App() {
@@ -63,6 +65,8 @@ function App() {
           <Route path='product' element={<Product/>}/>
           <Route path='product/add' element={<ProductAdd/>}/>
           <Route path='product/:id/edit' element={<ProductEdit/>}/>
+          <Route path='warranty' element={<Warranty/>}/>
+          <Route path='warranty/add' element={<WarrantyAdd/>}/>
           <Route path='article' element={<Article/>}/>
           <Route path='article/add' element={<ArticleAdd/>}/>
           <Route path='article/:id/edit' element={<ArticleEdit/>}/>

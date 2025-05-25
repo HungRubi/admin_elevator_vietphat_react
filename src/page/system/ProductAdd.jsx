@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../store/actions'
 
-const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers } = icon
+const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers, MdVerified } = icon
 
 const ProductAdd = () => {
     const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const ProductAdd = () => {
         thumbnail_1: '',
         thumbnail_2: '',
         thumbnail_3: '',
-
+        warranty_period: '',
     })
     const handleChange = (e, selectedItem) => {
         setFormData({
@@ -141,12 +141,22 @@ const ProductAdd = () => {
                         <InputGroup 
                             type={"number"} 
                             label={"Shipping Cost"}
-                            helper={"Please enter a numer greater than 0"}
+                            helper={"Please enter a larger number and units are in months"}
                             placeholder={"> 0"} 
                             icon={<AiOutlineDollarCircle className="text-[18px] text-gray-600"/>} 
                             name="shipping_cost"
                             onChange={handleChange}
                             value={formData.shipping_cost}
+                        />
+                        <InputGroup 
+                            type={"number"} 
+                            label={"Warranty Period"}
+                            helper={"Please enter a numer greater than 1"}
+                            placeholder={"> 1"} 
+                            icon={<MdVerified className="text-[18px] text-gray-600"/>} 
+                            name="warranty_period"
+                            onChange={handleChange}
+                            value={formData.warranty_period}
                         />
                     </div>
                 </div>
