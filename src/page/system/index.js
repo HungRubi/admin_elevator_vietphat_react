@@ -38,4 +38,5 @@ export {default as ReceiptEdit} from './ReceiptEdit'
 export {default as Warehouse} from './Warehouse'
 export {default as Warranty} from './Warranty'
 export {default as WarrantyAdd} from './WarrantyAdd'
+export {default as WarrantyEdit} from './WarrantyEdit'
 

@@ -84,7 +84,7 @@ const ArticleAdd = () => {
                             value={formData.subject}
                         />
                         <Textearea 
-                            row={5} 
+                            row={15} 
                             label={"Content"} 
                             name={"content"}
                             onChange={handleChange}

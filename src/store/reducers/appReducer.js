@@ -41,7 +41,9 @@ const initState = {
     warehouse: [],
     notificaiton: [],
     notificaitonDetails: {},
-    ordersByWarranty: []
+    ordersByWarranty: [],
+    warranties: [],
+    warranty: {},
 }
 
 const appReducer = (state = initState, action) => {
@@ -55,6 +57,21 @@ const appReducer = (state = initState, action) => {
             }
 
         /** WARRANTY */
+        case actionType.GET_WARRANTY:
+            return {
+                ...state,
+                warranties: action.payload.search 
+                ? action.payload?.data?.searchWarranty 
+                : action.payload?.data?.warranties,
+                totalPage: action.payload?.data?.totalPage || 1
+            }
+
+        case actionType.GET_DETAIL_WARRANTY:
+            return {
+                ...state,
+                warranty: action.payload.warranty,
+            }
+
         case actionType.GET_ADD_WARRANTY:
             return {
                 ordersByWarranty: action.payload.orders
@@ -64,6 +81,53 @@ const appReducer = (state = initState, action) => {
             return {
                 message: action.payload.message
             }
+
+        case actionType.ADD_WARRANTY:
+            return {
+                message: action.payload.message
+            }
+
+        case actionType.ADD_WARRANTY_ERR:
+            return {
+                message: action.payload.message
+            }
+
+        case actionType.UPDATE_WARRANTY_ERR:
+            return {
+                ...state,
+                message: action.payload.message || null
+            }
+        
+        case actionType.UPDATE_WARRANTY:
+            return {
+                ...state,
+                message: action.payload.message || null
+            }
+        
+        case actionType.DELETE_WARRANTY:
+            return {
+                ...state,
+                message: action.payload.message || null
+            }
+
+        case actionType.DELETE_WARRANTY_ERR:
+            return {
+                ...state,
+                message: action.payload.message || null
+            }
+
+        case actionType.FILTER_WARRANTY:
+            return {
+                ...state,
+                warranties: action.payload.warranties
+            }
+
+        case actionType.FILTER_WARRANTY_ERR:
+            return {
+                ...state,
+                message: action.payload.message
+            }
+        
 
         /** === NOTIFICATION === */
         case actionType.GET_NOTIFICATION:
@@ -148,13 +212,25 @@ const appReducer = (state = initState, action) => {
                 message: action.payload?.message
             }
 
-        case actionType.GET_RECEIPT: 
+        case actionType.GET_RECEIPT:
             return {
                 ...state,
                 receipts: action.payload.search ? 
                 action.payload?.data?.receiptSearch :
                 action.payload?.data?.receipts,
-                totalPage: action.payload?.data?.totalPage || 1
+                totalPage: action.payload?.data?.totalPages || 1
+            }
+
+        case actionType.FILTER_RECEIPT:
+            return {
+                ...state,
+                receipts: action.payload.receipts
+            }
+        
+        case actionType.FILTER_RECEIPT_ERR:
+            return {
+                ...state,
+                message: action.payload.message || null
             }
 
         case actionType.GET_RECEIPT_ERR: 

@@ -3,7 +3,7 @@ import Select from "react-select";
 import { useState } from "react";
 const SelectiObject = ({ data, onSelectedUser }) => {
     const [selected, setSelected] = useState(null);
-    const customOptions = data.map(item => ({
+    const customOptions = data?.map(item => ({
         value: item._id,
         name: item.name,
         phone: item.phone,
@@ -27,7 +27,7 @@ const SelectiObject = ({ data, onSelectedUser }) => {
             <Select 
                 className="w-2/3 "
                 options={customOptions} 
-                value={customOptions.find(option => option.value === selected)}
+                value={customOptions?.find(option => option.value === selected)}
                 onChange={(selectedOption) => {
                     setSelected(selectedOption.value);
                     onSelectedUser(selectedOption);

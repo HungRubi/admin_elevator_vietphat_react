@@ -16,11 +16,11 @@ const ModalList = ({btn, data, existingProducts = []}) => {
     const firstOrderIndex = lastOrderIndex - limit;
 
     // Lọc ra các sản phẩm chưa được chọn
-    const filteredData = data.filter(item => {
+    const filteredData = data?.filter(item => {
         return !existingProducts.some(existing => existing._id === item._id);
     });
 
-    const currentOrder = filteredData.slice(firstOrderIndex, lastOrderIndex);
+    const currentOrder = filteredData?.slice(firstOrderIndex, lastOrderIndex);
     const dispatch = useDispatch();
     const [productSelected, setProductSelected] = useState([]);
 

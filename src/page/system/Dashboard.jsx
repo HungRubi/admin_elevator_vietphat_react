@@ -74,7 +74,7 @@ const Dashboard = () => {
         const currentMonth = now.getMonth(); // từ 0 - 11
         const currentYear = now.getFullYear();
         
-        const ordersThisMonth = orders.filter((order) => {
+        const ordersThisMonth = orders?.filter((order) => {
             const createdAt = new Date(order.createdAt);
             return (
                 createdAt.getMonth() === currentMonth &&
@@ -84,11 +84,11 @@ const Dashboard = () => {
       
         const allOrders = ordersThisMonth;
       
-        const processingAndShipping = ordersThisMonth.filter(
+        const processingAndShipping = ordersThisMonth?.filter(
             (order) => order.status === 'Đang xử lý' || order.status === 'Đang giao hàng'
         );
       
-        const failedOrders = ordersThisMonth.filter(
+        const failedOrders = ordersThisMonth?.filter(
             (order) => order.status === 'Thất bại'
         );
       

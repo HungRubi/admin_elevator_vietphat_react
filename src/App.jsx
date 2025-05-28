@@ -39,7 +39,8 @@ import {
   NotificationAdd,
   NotificationEdit,
   Warranty,
-  WarrantyAdd
+  WarrantyAdd,
+  WarrantyEdit
   } from './page/system'
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
           <Route path='product/:id/edit' element={<ProductEdit/>}/>
           <Route path='warranty' element={<Warranty/>}/>
           <Route path='warranty/add' element={<WarrantyAdd/>}/>
+          <Route path='warranty/:id/edit' element={<WarrantyEdit/>}/>
           <Route path='article' element={<Article/>}/>
           <Route path='article/add' element={<ArticleAdd/>}/>
           <Route path='article/:id/edit' element={<ArticleEdit/>}/>

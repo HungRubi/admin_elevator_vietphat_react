@@ -29,6 +29,41 @@ const Receipt  = () => {
     const handleDelete = () => {
         dispatch(actions.deleteReceipt(deleteId));
     }
+    const [selected, setSelected] = useState("");
+    const handleChange = (e) => {
+        const newValue = e.target.value;
+        setSelected(newValue);
+        if(newValue === "chưa xác nhận") {
+            dispatch(actions.filterReceipt("status", "chưa xác nhận"))
+        }else if(newValue === "đã xác nhận") {
+            dispatch(actions.filterReceipt("status", "đã xác nhận"))
+        }else if(newValue === "đã hủy") {
+            dispatch(actions.filterReceipt("status", "đã hủy"))
+        }else{
+            dispatch(actions.getReceipt())
+        }
+        console.log(newValue);
+    }
+    const [ valueDate, setValueDate ] = useState({
+            startDate: '',
+            endDate: ''
+        })
+    const onChangeDate = (e) => {
+        setValueDate({
+            ...valueDate,
+            [e.target.name] : e.target.value,
+        })
+    }
+    useEffect(() => {
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterReceipt("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+        }else{
+            dispatch(actions.getReceipt())
+        }
+    }, [valueDate, dispatch]);
+    const handleSearch = (value) => {
+        dispatch(actions.getReceipt(value));
+    }
     return (
         <div className="w-full pt-5">
             <div className="w-full px-[30px] flex gap-8">
@@ -70,6 +105,8 @@ const Receipt  = () => {
                         <input 
                             type="date"
                             name="startDate"
+                            onChange={onChangeDate}
+                            value={valueDate.startDate}
                             className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                         />
                     </div>
@@ -77,12 +114,16 @@ const Receipt  = () => {
                         <input 
                             type="date" 
                             name="endDate"
+                            onChange={onChangeDate}
+                            value={valueDate.endDate}
                             className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                         />
                     </div>
                     <select 
+                        onChange={handleChange}
                         className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
                         aria-label="Default select example"
+                        value={selected}
                     >
                         <option value="">--- Filter Supplier ---</option>
                         {filterReceipt?.map((item, index) => (
@@ -90,7 +131,7 @@ const Receipt  = () => {
                         ))}
                     </select>
                     <div className="w-1/2">
-                        <Search className={"!rounded-lg"}  placeholder={"Enter title discount..."}/>
+                        <Search className={"!rounded-lg"}  placeholder={"Enter title discount..."} onSearch={handleSearch}/>
                     </div>
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right shadow text-gray-500 dark:text-gray-400 mt-8">

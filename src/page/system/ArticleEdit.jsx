@@ -102,7 +102,7 @@ const ArticleEdit = () => {
                             value={formData?.subject}
                         />
                         <Textearea 
-                            row={5} 
+                            row={15} 
                             label={"Content"} 
                             onChange={handleChange} 
                             name={"content"} 

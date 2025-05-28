@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 const Combobox = ({ data, label, name, selected, onChange, className }) => {
     const handleChange = (e) => {
-        const selectedItem = data.find(item => item.id === e.target.value);
+        const selectedItem = data.find(item => (item.id || item._id)?.toString() === e.target.value);
         onChange(e, selectedItem);
     }
 
@@ -20,7 +20,9 @@ const Combobox = ({ data, label, name, selected, onChange, className }) => {
             >
                 <option value="">--- Choice ---</option>
                 {data?.map((item, index) => (
-                    <option key={index} value={item.id || item._id}>{item.text || item.name || item.title || item.order_code}</option>
+                    <option key={index} value={(item.id || item._id)?.toString()}>
+                        {item.text || item.order_code || item.name || item.title}
+                    </option>
                 ))}
             </select>
         </div>

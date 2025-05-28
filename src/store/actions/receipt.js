@@ -124,3 +124,25 @@ export const deleteReceipt = (id) => async (dispatch) => {
         })
     }
 }
+
+export const filterReceipt = (query, value, query2, value2) => async (dispatch) => {{
+    try{
+        const response = await apis.filterReceipt(query, value, query2, value2);
+        if(response.status === 200) {
+            dispatch({
+                type: actionTypes.FILTER_RECEIPT,
+                payload: response.data
+            })
+        }else{
+            dispatch({
+                type: actionTypes.FILTER_RECEIPT_ERR,
+                payload: response.data
+            })
+        }
+    }catch (error) {
+            dispatch({
+                type: actionTypes.FILTER_RECEIPT_ERR,
+                payload: error.response.data
+            })
+    }
+}}

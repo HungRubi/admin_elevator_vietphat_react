@@ -100,7 +100,7 @@ const OrderAdd = () => {
         },
     ];
 
-    const cbxDiscount = orderDiscount.map(item => ({
+    const cbxDiscount = orderDiscount?.map(item => ({
         id: item?.id,
         text: item?.title,
     }));
@@ -176,7 +176,6 @@ const OrderAdd = () => {
     };
 
     const finalPrice = calculateFinalPrice();
-    console.log(finalPrice)
     const discountAmount = total - finalPrice;
     const data = {
         user_id: info.id,
