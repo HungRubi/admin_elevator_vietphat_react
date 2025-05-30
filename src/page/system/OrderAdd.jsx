@@ -191,10 +191,11 @@ const OrderAdd = () => {
         status: info.status,
         items: dataProductOrder.map(item => ({
             product_id: item._id,
-            quantity: item.quantity,
+            quantity: item.quantity || 1,
             price: item.price,
         }))
     }
+    console.log(data)
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(actions.addOrder(data));

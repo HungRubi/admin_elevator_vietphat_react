@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import * as actions from "../store/actions"
 
 export default function MonthlyChart() {
-    const data = [
-        { month: 'Jan', value: 1000 },
-        { month: 'Feb', value: 1500 },
-        { month: 'Mar', value: 1300 },
-        { month: 'Apr', value: 1000 },
-        { month: 'May', value: 1050 },
-        { month: 'Jun', value: 1950 },
-        { month: 'Jul', value: 1200 },
-        { month: 'Aug', value: 1300 },
-        { month: 'Sep', value: 1000 },
-        { month: 'Oct', value: 1200 },
-        { month: 'Nov', value: 1400 },
-        { month: 'Dec', value: 1200 },
-    ];
-
-
+    const dispatch = useDispatch();
+    const {dataMonthlyRevenue} = useSelector(state => state.app);
+    useEffect(() => {
+        dispatch(actions.getMonthlyRevenue());
+    }, [dispatch])
+    
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             const monthData = payload[0].payload;
@@ -35,11 +27,11 @@ export default function MonthlyChart() {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-sm w-full h-113 relative">
+        <div className="bg-white py-6 rounded-lg shadow-sm w-full h-113 relative">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
-                    data={data}
-                    margin={{ top: 0, right: 20, left:0, bottom: 0 }}
+                    data={dataMonthlyRevenue}
+                    margin={{ top: 0, right: 40, left:0, bottom: 0 }}
                 >
                     <CartesianGrid 
                         vertical={false} 
@@ -56,8 +48,8 @@ export default function MonthlyChart() {
                         axisLine={false} 
                         tickLine={false} 
                         tick={{ fill: '#6B7280', fontSize: 12 }} 
-                        domain={[600, 2100]}
-                        ticks={[600, 900, 1200, 1500, 1800, 2100]} 
+                        domain={[5, 50]}
+                        ticks={[5, 10, 15, 20, 25, 30, 35, 40, 45]} 
                         tickFormatter={(value) => value.toLocaleString()}
                     />
                     <Tooltip 

@@ -1,4 +1,4 @@
-import { PageTitle, Button, Search, PageBar, Empty } from "../../components";
+import { PageTitle, Button, Search, PageBar, Empty, ModalToast } from "../../components";
 import { NavLink } from "react-router-dom";
 import icons from "../../util/icon";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,20 @@ import { formatMony } from "../../util/formatMony"
 const { MdChevronRight, IoMdAdd, MdAutoFixHigh, RiDeleteBin6Line, PiDotsThreeBold } = icons;
 
 const Warehouse = () => {
-    const warehouseFilter = [];
+    const warehouseFilter = [
+        {
+            id: "sắp hết hàng", 
+            text: "Sắp hết hàng"
+        },
+        {
+            id: "còn hàng", 
+            text: "Còn hàng"
+        },
+        {
+            id: "hết hàng", 
+            text: "Hết hàng"
+        }
+    ];
     const dispatch = useDispatch();
     const { warehouse, totalPage } = useSelector(state => state.app);
     const [current, setCurrent] = useState(1);
@@ -20,9 +33,46 @@ const Warehouse = () => {
     useEffect(() => {
         dispatch(actions.getWarehouse());
     }, [dispatch])
+    const [deleteId, setDeleteId] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const handleDelete = () => {
+        dispatch(actions.deleteWarehouse(deleteId));
+    }
+    const [selected, setSelected] = useState("");
+    const handleChange = (e) => {
+        const newValue = e.target.value.trim();
+        setSelected(newValue);
+        if(newValue === "sắp hết hàng") {
+            dispatch(actions.filterWarehouse("status",newValue))
+        }else if(newValue === "hết hàng") {
+            dispatch(actions.filterWarehouse("status",newValue))
+        }else if(newValue === "còn hàng") {
+            dispatch(actions.filterWarehouse("status",newValue))
+        }else{
+            dispatch(actions.filterWarehouse())
+        }
+    }
+    const [ valueDate, setValueDate ] = useState({
+            startDate: '',
+            endDate: ''
+        })
+    const onChangeDate = (e) => {
+        setValueDate({
+            ...valueDate,
+            [e.target.name] : e.target.value,
+        })
+    }
+    useEffect(() => {
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterWarranty("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+        }else{
+            dispatch(actions.getWarranty())
+        }
+    }, [valueDate, dispatch]);
     return (
         <div className="full pt-5">
             <PageTitle title="Warehouse" />
+            <ModalToast isOpen={isOpen} setIsOpen={setIsOpen} onDelete={handleDelete}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -60,6 +110,8 @@ const Warehouse = () => {
                     <div className="flex flex-col">
                         <input 
                             type="date"
+                            onChange={onChangeDate}
+                            value={valueDate.startDate}
                             name="startDate"
                             className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                         />
@@ -68,16 +120,20 @@ const Warehouse = () => {
                         <input 
                             type="date" 
                             name="endDate"
+                            onChange={onChangeDate}
+                            value={valueDate.endDate}
                             className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                         />
                     </div>
                     <select 
                         className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
                         aria-label="Default select example"
+                        onChange={handleChange}
+                        value={selected}
                     >
-                        <option value="">--- Filter Product ---</option>
+                        <option value="">--- Filter Warehouse ---</option>
                         {warehouseFilter?.map((item, index) => (
-                            <option key={index} value={item._id}>{item.name}</option>
+                            <option key={index} value={item.id}>{item.text}</option>
                         ))}
                     </select>
                     <div className="w-1/2">
@@ -165,17 +221,12 @@ const Warehouse = () => {
                                         <td className="py-4 w-2/12 text-center">
                                             <span className='time_text'>{item.formatDate}</span>
                                             <div className="option items-center justify-center gap-3 hidden w-[100px] m-auto">
-                                                <NavLink to={`/product//edit`}>
-                                                    <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                        <MdAutoFixHigh className='text-[18px]'/>
-                                                    </Button>
-                                                </NavLink>
-                                                <Button
+                                                <Button onClick={() => {
+                                                    setIsOpen(true);
+                                                    setDeleteId(item._id);
+                                                }}
                                                 className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
                                                     <RiDeleteBin6Line className='text-[18px]'/>
-                                                </Button>
-                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                    <PiDotsThreeBold className='text-[18px]'/>
                                                 </Button>
                                             </div>
                                         </td>

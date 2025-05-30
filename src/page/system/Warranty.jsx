@@ -44,7 +44,6 @@ const Warranty = () => {
         }else{
             dispatch(actions.getWarranty())
         }
-        console.log(newValue);
     }
     const [ valueDate, setValueDate ] = useState({
             startDate: '',

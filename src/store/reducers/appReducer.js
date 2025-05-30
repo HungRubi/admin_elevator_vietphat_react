@@ -44,6 +44,20 @@ const initState = {
     ordersByWarranty: [],
     warranties: [],
     warranty: {},
+    dataTotalOrder: [],
+    summaryOrder: {},
+    newUserData: [],
+    summaryUser: {},
+    dataDiscountChart: [],
+    dataOrderPayment: [],
+    dataMonthlyRevenue: [],
+    summaryReport: {},
+    dataReportWeek: [],
+    dataCategoryChart: [],
+    productTren: [],
+    formatComment: [],
+    columnComment: [],
+    warehouseReport: []
 }
 
 const appReducer = (state = initState, action) => {
@@ -54,6 +68,65 @@ const appReducer = (state = initState, action) => {
             return {
                 ...state,
                 message:null
+            }
+
+        /** === REPORT === */
+        case actionType.GET_REPORT:
+            return {
+                ...state,
+                warehouseReport: action.payload.warehouses || [],
+                columnComment: action.payload.columnComment || [],
+                formatComment: action.payload.formatComment || [],
+                productTren: action.payload.productTren || [],
+                summaryReport: action.payload.summary,
+                dataCategoryChart: action.payload?.dataCategoryChart || [],
+                topSpenders: action.payload.topSpenders || []
+            }
+
+        case actionType.GET_REPORT_ERR:
+            return {
+                ...state,
+                message: action.payload.message,
+            }
+
+        case actionType.GET_REPORT_WEEK:
+            return {
+                ...state,
+                dataReportWeek: action.payload.result,
+                
+            }
+
+        /** === DASHBOARD === */
+        case actionType.GET_TOTAL_WEEK:
+            return {
+                ...state,
+                dataTotalOrder: action.payload.data,
+                summaryOrder: action.payload.summary
+            }
+
+        case actionType.GET_NEW_USER:
+            return {
+                ...state,
+                newUserData: action.payload.chartData,
+                summaryUser: action.payload.summary,
+            }
+
+        case actionType.GET_ORDER_DISCOUNT:
+            return {
+                ...state,
+                dataDiscountChart: action.payload.data
+            }
+
+        case actionType.GET_ORDER_PAYMENT:
+            return {
+                ...state,
+                dataOrderPayment: action.payload.data
+            }
+
+        case actionType.GET_MONTH_REVENUE:
+            return {
+                ...state,
+                dataMonthlyRevenue: action.payload.data,
             }
 
         /** WARRANTY */
@@ -193,6 +266,30 @@ const appReducer = (state = initState, action) => {
             }
 
         case actionType.GET_WAREHOUSE_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.DELETE_WAREHOUSE:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.DELETE_WAREHOUSE_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
+
+        case actionType.FILTER_WAREHOUSE:
+            return {
+                ...state,
+                warehouse: action.payload.warehouses
+            }
+
+        case actionType.FILTER_WAREHOUSE_ERR:
             return {
                 ...state,
                 message: action.payload?.message || null,

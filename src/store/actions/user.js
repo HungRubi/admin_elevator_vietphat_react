@@ -149,3 +149,4 @@ export const deleteUser = (id) => async(dispatch) => {
         })
     }
 }
+

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Combobox = ({ data, label, name, selected, onChange, className }) => {
+const Combobox = ({ data, label, name, selected, onChange, className, isLable }) => {
     const handleChange = (e) => {
         const selectedItem = data.find(item => (item.id || item._id)?.toString() === e.target.value);
         onChange(e, selectedItem);
@@ -8,7 +8,7 @@ const Combobox = ({ data, label, name, selected, onChange, className }) => {
 
     return (
         <div className="mt-5">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className={`block mb-2 text-sm font-medium text-gray-900 dark:text-white ${isLable}`}>
                 {label}
             </label>
             <select 
@@ -38,7 +38,8 @@ Combobox.propTypes = {
     name: PropTypes.string.isRequired,
     selected: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    isLable: PropTypes.string,
 }
 
 export default Combobox

@@ -10,3 +10,6 @@ export * from './receipt';
 export * from './warehouse';
 export * from './notification';
 export * from './warranty';
+export * from './dashboard';
+export * from './report';
+
