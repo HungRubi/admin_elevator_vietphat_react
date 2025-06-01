@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as actions from '../../store/actions';
+
 import { 
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
@@ -9,6 +10,12 @@ import { Combobox, Empty, PageTitle, CircleButton, ColumnChart, Button, PageBar 
 import { useDispatch, useSelector } from 'react-redux';
 import { formatMony } from "../../util/formatMony";
 import { NavLink } from 'react-router-dom';
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver';
+import { toast } from 'react-toastify';
+import { getEndOfMonth, getEndOfWeek, getEndOfYear, getStartOfMonth, getStartOfWeek, getStartOfYear, getToday, getYesterday } from '../../util/formatTime';
+
+
 export default function Report() {
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
     const timeOption = [
@@ -58,6 +65,108 @@ export default function Report() {
             return acc;
         }, {})
     ];
+
+    const handleExportInvoiceExcel = async () => {
+        try {
+            const response = await fetch('/bao-cao-doanh-thu.xlsx');
+            const arrayBuffer = await response.arrayBuffer();
+
+            const workbook = new ExcelJS.Workbook();
+            await workbook.xlsx.load(arrayBuffer);
+
+            const worksheet = workbook.getWorksheet(1); // lấy sheet đầu tiên
+
+            const rowTime = worksheet.getRow(3);
+            if(valueDate.date === "hôm nay") {
+                rowTime.getCell(1).value = getToday();
+            }else if(valueDate === "hôm qua"){
+                rowTime.getCell(1).value = getYesterday();
+            }else if(valueDate === "tuần này"){
+                rowTime.getCell(1).value = `Thời gian: ${getStartOfWeek()} - ${getEndOfWeek()}`;
+            }else if(valueDate === "tháng này"){
+                rowTime.getCell(1).value = `Thời gian: ${getStartOfMonth()} - ${getEndOfMonth()}`;
+            }else if(valueDate === "năm này"){
+                rowTime.getCell(1).value = `Thời gian: ${getStartOfYear()} - ${getEndOfYear()}`;
+            }else{
+                rowTime.getCell(1).value = `Thời gian: ${getStartOfWeek()} - ${getEndOfWeek()}`;
+            }
+
+
+            const startRow1 = 6; // hàng bắt đầu ghi dữ liệu (Tổng đơn hàng)
+            summaryReport.forEach((item, index) => {
+                const row = worksheet.getRow(startRow1 + index);
+                row.getCell(2).value = item.count; // cột B: thông tin
+                row.getCell(3).value = `${item.change >= 0 ? '+' : ''}${item.change}%`; // cột C: so với kỳ trước
+                row.commit();
+            });
+
+            const startRow2 = 13; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            dataReportWeek.forEach((item, index) => {
+                const row = worksheet.getRow(startRow2 + index);
+                row.getCell(1).value = item.date; 
+                row.getCell(2).value = item.target;
+                row.getCell(3).value = item.revenue; 
+                row.commit();
+            });
+
+            const startRow3 = 23; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            dataCategoryChart.forEach((item, index) => {
+                const row = worksheet.getRow(startRow3 + index);
+                row.getCell(1).value = item.name; 
+                row.getCell(2).value = `${item.value.toFixed(1)} %`;
+                row.commit();
+            });
+
+            const startRow4 = 32; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            topSpenders.forEach((item, index) => {
+                const row = worksheet.getRow(startRow4 + index);
+                row.getCell(1).value = item.name; 
+                row.getCell(2).value = item.email;
+                row.getCell(3).value = item.address;
+                row.getCell(4).value = item.totalSpent;
+                row.commit();
+            });
+
+            const startRow5 = 40; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            productTren.forEach((item, index) => {
+                const row = worksheet.getRow(startRow5 + index);
+                row.getCell(1).value = item.name; 
+                row.getCell(2).value = item.price;
+                row.getCell(3).value = item.totalSold;
+                row.commit();
+            });
+
+            const startRow6 = 48; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            const ratingData = formatComment[0]; // vì chỉ có 1 object trong mảng
+
+            // Loại bỏ key 'day' để chỉ lấy các đánh giá sao
+            const entries = Object.entries(ratingData).filter(([key]) => key !== 'day');
+
+            entries.forEach(([key, value], index) => {
+                const row = worksheet.getRow(startRow6 + index);
+                row.getCell(1).value = key;    // ví dụ: '1 sao'
+                row.getCell(2).value = value;  // ví dụ: 0
+                row.commit();
+            });
+
+            const startRow7 = 56; // hàng bắt đầu ghi dữ liệu (Doanh thu theo ngày)
+            warehouseReport.forEach((item, index) => {
+                const row = worksheet.getRow(startRow7 + index);
+                row.getCell(1).value = item.productId?.name; 
+                row.getCell(2).value = item.productId?.supplier?.name;
+                row.getCell(3).value = item.status;
+                row.getCell(4).value = item.stock;
+                row.commit();
+            });
+
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            saveAs(new Blob([buffer]), `Bao-cao-doanh-thu-${getToday()}.xlsx`);
+        } catch (error) {
+            console.error('Lỗi khi xuất file Excel:', error);
+            toast.warn('Có lỗi xảy ra khi tạo hóa đơn Excel. Vui lòng thử lại!');
+        }
+    };
     return (
         <div className="bg-gray-100 w-full pt-8">
             <PageTitle title={"Report"}/>
@@ -74,7 +183,8 @@ export default function Report() {
                                 onChange={handleChange}
                                 selected={valueDate.date}                        
                             />
-                            <button className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700 shadow">
+                            <button onClick={handleExportInvoiceExcel}
+                            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700 shadow">
                                 Xuất báo cáo
                             </button>
                         </div>

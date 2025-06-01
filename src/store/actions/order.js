@@ -106,15 +106,14 @@ export const addOrder = (data) => async(dispatch) => {
             })
         }else{
             dispatch({
-                type: actionTypes.ADD_ORDER,
-                payload: null
+                type: actionTypes.ADD_ORDER_ERR,
+                payload: response.data || { message: 'Có lỗi xảy ra' }
             })
         }
-    }catch(err){
+    }catch(error){
         dispatch({
-            type: actionTypes.ADD_ORDER,
-            payload: null,
-            err
+            type: actionTypes.ADD_ORDER_ERR,
+            payload: (error.response && error.response.data) || { message: 'Lỗi server vui lòng thử lại sau' }
         })
     }
 }

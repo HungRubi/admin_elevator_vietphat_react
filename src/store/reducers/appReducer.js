@@ -513,6 +513,12 @@ const appReducer = (state = initState, action) => {
                 ...state,
                 message: action.payload?.message || null,
             }
+        
+        case actionType.ADD_ORDER_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null,
+            }
 
         case actionType.CREATE_PRODUCT: 
             return {
@@ -790,7 +796,7 @@ const appReducer = (state = initState, action) => {
                 categoryDiscount: action.payload?.search ? 
                 action.payload?.data?.data?.searchDiscount : 
                 action.payload?.data?.data?.formatDiscount,
-                totalPage: action.payload?.data?.totalPage || 1
+                totalPage: action.payload?.data?.data?.totalPage || 1
             }
 
         case actionType.GET_CATEGORY_DISCOUNT_DETAIL:
@@ -812,10 +818,22 @@ const appReducer = (state = initState, action) => {
             }
 
         case actionType.UPDATE_DISCOUNT: 
-        return {
-            ...state,
-            message: action.payload?.message
-        }
+            return {
+                ...state,
+                message: action.payload?.message
+            }
+
+        case actionType.DELETE_CATEGORY_DISCOUNT:
+            return {
+                ...state,
+                message: action.payload?.message || null
+            }
+
+        case actionType.DELETE_CATEGORY_DISCOUNT_ERR:
+            return {
+                ...state,
+                message: action.payload?.message || null
+            }
 
         case actionType.UPDATE_DISCOUNT_ERR: 
             return {

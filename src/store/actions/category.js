@@ -200,6 +200,28 @@ export const createDiscount = (data) => async (dispatch) => {
     }
 }
 
+export const deleteDiscount = (id) => async (dispatch) => {
+    try{
+        const response = await apis.deleteDiscount(id);
+        if(response.status === 200){
+            dispatch({
+                type: actionTypes.DELETE_CATEGORY_DISCOUNT,
+                payload: response.data,
+            })
+        }else{
+            dispatch({
+                type: actionTypes.DELETE_CATEGORY_DISCOUNT_ERR,
+                payload: response.data,
+            })
+        }
+    }catch(err){
+        dispatch({
+            type: actionTypes.DELETE_CATEGORY_DISCOUNT_ERR,
+            payload: err.response.data
+        })
+    }
+}
+
 export const updateDiscount = (data, id) => async (dispatch) => {
     try{
         const response = await apis.updateDiscount(data, id);

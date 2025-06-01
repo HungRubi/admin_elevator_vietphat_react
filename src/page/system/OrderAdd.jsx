@@ -11,7 +11,7 @@ const { MdChevronRight, MdOutlineDiscount, FaMapMarkerAlt, BsTag } = icon
 const OrderAdd = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const {orderUser, orderProduct, orderDiscount, productsByOrder} = useSelector(state => state.app);
+    const {orderUser, orderProduct, orderDiscount, productsByOrder, message} = useSelector(state => state.app);
 
     // States
     const [shipping, setShipping] = useState(0);
@@ -186,7 +186,7 @@ const OrderAdd = () => {
             address: info.address,
         },
         shipping_cost: shipping,
-        discount: discountInfo.id,
+        discount_id: discountInfo.id,
         payment_method: info.payment_method,
         status: info.status,
         items: dataProductOrder.map(item => ({
@@ -195,12 +195,15 @@ const OrderAdd = () => {
             price: item.price,
         }))
     }
-    console.log(data)
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(actions.addOrder(data));
-        navigate('/order')
     }
+    useEffect(() => {
+        if(message === "Tạo đơn hàng thành công") {
+            navigate('/order')
+        }
+    }, [message, navigate])
     return (
         <div className="full pt-5">
             <PageTitle title="Add Order" />

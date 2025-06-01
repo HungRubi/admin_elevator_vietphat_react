@@ -109,6 +109,24 @@ export const createDiscount = async (data) => {
     }
 }
 
+export const deleteDiscount = async (id) => {
+    try{
+        const response = await axios({
+            url: `/category/discount/${id}`,
+            method: 'DELETE',
+        })
+        return response;
+    }catch(error){
+        if(error.response){
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
+    }
+}
+
 export const updateDiscount = async (data, id) => {
     try{
         const response = await axios({
@@ -229,8 +247,6 @@ export const filterBanner = async (query, value, query2, value2) => {
         }
     }
 }
-
-
 
 /** === CATEGORY VIDEO === */
 

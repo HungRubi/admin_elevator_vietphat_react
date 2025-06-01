@@ -56,7 +56,13 @@ export const addOrder = async (data) => {
         })
         return response
     }catch(error){
-        console.log("Err call api: ", error);
+        if(error.response) {
+            return error.response
+        }
+        return {
+            status: 500,
+            message: "Lỗi server vui lòng thử lại sau"
+        }
     }
 }
 

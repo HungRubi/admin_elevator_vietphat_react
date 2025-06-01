@@ -1,4 +1,4 @@
-import  { Search, Button, PageBar, PageTitle, Empty } from '../../components';
+import  { Search, Button, PageBar, PageTitle, Empty, ModalToast } from '../../components';
 import icon from '../../util/icon';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ const DiscountCategory = () => {
     const { totalPage, categoryDiscount } = useSelector(state => state.app);
     useEffect(() => {
         dispatch(actions.getCategoryDiscount());
-    }, []);
+    }, [dispatch]);
     const filterDiscount = [
         {id: 'active', text: 'Active'},
         {id: 'stop', text: 'Stop'},
@@ -23,7 +23,7 @@ const DiscountCategory = () => {
     const lastUserIndex = current * limit;
     const firstUserIndex = lastUserIndex - limit;
 
-    const currentDiscount = categoryDiscount.slice(firstUserIndex, lastUserIndex);
+    const currentDiscount = categoryDiscount?.slice(firstUserIndex, lastUserIndex);
 
     const [valueDate, setValueDate] = useState({
         startDate: '',
@@ -54,9 +54,16 @@ const DiscountCategory = () => {
             dispatch(actions.filterDiscount("startDate", valueDate.startDate, "endDate", valueDate.endDate))
         }
     }, [valueDate.startDate, valueDate.endDate, dispatch])
+    const [deleteId, setDeleteId] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleDelete = () => {
+        dispatch(actions.deleteDiscount(deleteId));
+    }
     return (
         <div className="full py-5">
             <PageTitle title={"Category Discount"}/>
+            <ModalToast isOpen={isOpen} setIsOpen={setIsOpen} onDelete={handleDelete}/>
             <div className="w-full px-[30px] flex gap-8">
                 <div className="w-full">
                     <div className="flex items-center gap-2 text-[15px] text-color">
@@ -211,11 +218,13 @@ const DiscountCategory = () => {
                                                     <MdAutoFixHigh className='text-[18px]'/>
                                                 </Button>
                                             </NavLink>
-                                            <NavLink to={`/category/discount/${item._id}/delete`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
-                                                    <RiDeleteBin6Line className='text-[18px]'/>
-                                                </Button>
-                                            </NavLink>
+                                            <Button onClick={() => {
+                                                setDeleteId(item._id);
+                                                setIsOpen(true);
+                                            }}
+                                            className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}>
+                                                <RiDeleteBin6Line className='text-[18px]'/>
+                                            </Button>
                                             <NavLink>
                                                 <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
                                                     <PiDotsThreeBold className='text-[18px]'/>
