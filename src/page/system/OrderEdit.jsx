@@ -21,7 +21,7 @@ const OrderEdit = () => {
     useEffect(() => {
         dispatch(actions.getOrderDetail(id));
     }, [dispatch, id])
-    const {orderEditProduct, orderDetail, discountOrder} = useSelector(state => state.app);
+    const {orderEditProduct, orderDetail, discountOrder, message} = useSelector(state => state.app);
     const totalPurchase = orderEditProduct?.reduce((acc, item ) => {
         return acc + (Number(item.price) * Number(item.quantity));
     }, 0);
@@ -70,8 +70,11 @@ const OrderEdit = () => {
         },
         payment_method: '',
         status: '',
+        items: {
+            product_id: "",
+            quantity: "",
+        }
     })
-
     useEffect(() => {
         if (orderDetail) {
             setFormData({
@@ -82,9 +85,15 @@ const OrderEdit = () => {
                 },
                 payment_method: orderDetail?.payment_method || '',
                 status: orderDetail?.status || '',
+                items: orderEditProduct?.map(item => (
+                    {
+                        product_id: item.product_id,
+                        quantity: item.quantity
+                    }
+                ))
             })
         }
-    }, [orderDetail])
+    }, [orderDetail, orderEditProduct])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -109,8 +118,12 @@ const OrderEdit = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(actions.updateOrder(id, formData));
-        navigate("/order");
     }
+    useEffect(() => {
+        if(message === "Cập nhật đơn hàng thành công") {
+            navigate("/order");
+        }
+    }, [message, navigate])
     const shippingCost = orderEditProduct?.reduce((acc, item) => acc + item.shipping_cost, 0) || 0;
     const vat = Math.round((totalPurchase * 10) / 100);
     const handleExportInvoice = async () => {

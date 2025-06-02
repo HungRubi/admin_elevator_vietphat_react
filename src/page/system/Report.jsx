@@ -24,7 +24,6 @@ export default function Report() {
         {id: "tuần này", text: "Tuần này"},
         {id: "tháng này", text: "Tháng này"},
         {id: "năm này", text: "Năm này"},
-        {id: "tùy chọn", text: "Tùy chọn"},
     ]
     const dispatch = useDispatch();
     const [valueDate, setValueDate] = useState({
