@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import * as actions from '../../store/actions';
 
 import { 
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+  LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
 
@@ -312,7 +312,6 @@ export default function Report() {
                     <div className="bg-white px-4 pt-4 rounded-lg shadow lg:col-span-2 ">
                         <div className="pt-5">
                             <h2 className="text-lg font-semibold">Danh sách hàng tồn kho</h2>
-                            <span className='text-xs text-gray-400'>Số lượng hàng còn tồn trong kho sắp xếp giảm dần</span>
                         </div>
                         <div className="overflow-x-auto mt-10">
                             <table className="min-w-full shadow">
