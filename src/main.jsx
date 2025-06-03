@@ -5,17 +5,20 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import reduxConfig from './redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
-const store = reduxConfig();
+const {store, persistor} = reduxConfig();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <HelmetProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </HelmetProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <HelmetProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </HelmetProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
 )

@@ -4,13 +4,10 @@ import { Route, Routes } from 'react-router-dom';
 import {Login} from '../public';
 
 const Public = () => {
-    
     return (
         <div className='w-full h-screen relative'>  
             <div className="w-full h-screen ">
-                <Routes>
-                    <Route path='/login' element={<Login/>} />
-                </Routes>
+                {}
                 <div className="w-full fixed h-[70px] border-b-custom z-20">
                     <Header/>
                 </div>

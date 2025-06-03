@@ -1,6 +1,9 @@
 const actionTypes = {
     RESET_MESSAGE: 'RESET_MESSAGE',
 
+    /** USER */
+    SET_CURRENT_USER: 'SET_CURRENT_USER',
+    LOGOUT: 'LOGOUT',
     /** REPORT */
     GET_REPORT: 'GET_REPORT',
     GET_REPORT_ERR: 'GET_REPORT_ERR',

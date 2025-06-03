@@ -1,13 +1,14 @@
 import {CircleButton, Search } from './index'
 import icon from '../util/icon'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../store/actions'
 
 const { IoSunnyOutline, FaRegBell, FaArrowRightFromBracket, BsPerson, IoSettingsOutline} = icon;
 
 const Header = () => {
-    const { currentUser } = useSelector(state => state.app);
+    const { currentUser } = useSelector(state => state.user);
     const [openMenu, setOpenMenu] = useState(null);
     const toggleMenu = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);
@@ -23,6 +24,12 @@ const Header = () => {
           document.removeEventListener("click", handleClickOutside);
         };
       }, []);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(actions.logout());
+        navigate("/login");
+    }
     return (
         <header className="w-full flex justify-between items-center h-full">
             <div className="w-[240px] flex items-center">
@@ -45,7 +52,7 @@ const Header = () => {
                     <FaRegBell className='text-[20px] text-gray-500'/>
                 </CircleButton>
                 <CircleButton className={"relative btn_togglo"} onClick={() => toggleMenu("account")}>
-                    <img src="/img/default/default.png" alt="avatar"
+                    <img src={currentUser?.avatar} alt="avatar"
                     className='w-full object-center rounded-[50%]'/>
                     {openMenu === "account" && (
                         <div className="absolute bg-white w-[250px] top-[140%] right-0 rounded-[3px] menu pb-2.5 menu_togglo ">
@@ -61,7 +68,7 @@ const Header = () => {
                                     <li className="px-[1rem] py-[0.5rem] flex gap-2.5 items-center hover_bg_li">
                                         <BsPerson className='text-lg text-gray-600'/>
                                         <NavLink className="capitalize text-[15px] text-gray-600"
-                                        to={"/account/profile"}>
+                                        to={`/user/${currentUser._id}/edit`}>
                                             tài khoản
                                         </NavLink>
                                     </li>
@@ -81,13 +88,10 @@ const Header = () => {
                                     </li>
                                 </ul>
                                 <div className="px-[1rem] w-full">
-                                    <button className="text-base cursor-pointer bg-[rgba(121,119,119,0.1215686275)] w-full py-1.5 rounded-[8px] !text-black border border-[#cbd0dd]">
-                                        <NavLink
-                                        to={"/login"}
-                                        className="flex items-center justify-center gap-2.5">
-                                            <FaArrowRightFromBracket className='text-base'/>
-                                            Sign out
-                                        </NavLink>
+                                    <button onClick={handleLogout}
+                                    className="flex items-center justify-center gap-2.5 text-base cursor-pointer bg-[rgba(121,119,119,0.1215686275)] w-full py-1.5 rounded-[8px] !text-black border border-[#cbd0dd]">
+                                        <FaArrowRightFromBracket className='text-base'/>
+                                        Sign out
                                     </button>
                                 </div>
                             </div>

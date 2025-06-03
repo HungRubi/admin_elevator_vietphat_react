@@ -3,13 +3,17 @@ import axios from "../axios";
 export const login = async (data) => {
     try {
         const response = await axios({
-            url: "/auth/login",
+            url: "/auth/login/admin",
             method: "post",
             data: data,
         });
         return response;
     } catch (err) {
-        console.log(err);
-        throw err;
+        if(err.response) {
+            return err.response
+        }
+        return {
+            message: "Lỗi server thử lại sau"
+        }
     }
 };

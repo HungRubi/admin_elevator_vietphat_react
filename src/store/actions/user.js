@@ -150,3 +150,9 @@ export const deleteUser = (id) => async(dispatch) => {
     }
 }
 
+export const setCurrrentUser = (user) => {
+    return {
+        type: actionTypes.SET_CURRENT_USER,
+        user,
+    }
+}

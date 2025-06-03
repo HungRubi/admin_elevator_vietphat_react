@@ -19,7 +19,12 @@ export const login = (data) => async (dispatch) => {
         dispatch({
             type: actionTypes.LOGIN_FAIL,
             payload: err.response?.data || "Đã xảy ra lỗi",
-            err,
         });
     }
 };
+
+export const logout = () => {
+    return {
+        type: actionTypes.LOGOUT
+    }
+}

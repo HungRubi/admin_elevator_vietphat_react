@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../store/actions';
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 const {FcGoogle, FaFacebook} = icons;
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { message, loginError } = useSelector(state => state.app);
+    const { message, loginError, currentUser } = useSelector(state => state.app);
     const [formData, setFormData] = useState({
         account: "",
         password: ""
@@ -27,9 +26,9 @@ const Login = () => {
     }
     
     useEffect(() => {
-        if(message){
-            toast.success(message);
+        if(message === "Login successful"){
             navigate("/");
+            dispatch(actions.setCurrrentUser(currentUser))
         }
     }, [message, navigate])
     
@@ -69,7 +68,7 @@ const Login = () => {
                         </div>
                         <div className="mt-4">
                             <p className="text-red-600 text-sm">
-                                {loginError ? "Tài khoản mật khẩu không chính xác" : ""}
+                                {loginError}
                             </p>
                         </div>
                         <div className={`${loginError ? "mt-4" : "mt-8"}`}>

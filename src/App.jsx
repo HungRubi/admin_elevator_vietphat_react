@@ -42,6 +42,8 @@ import {
   WarrantyAdd,
   WarrantyEdit
   } from './page/system'
+import { Login } from './page/public';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,50 +57,57 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Public/>}>
-          <Route path='' element={<Dashboard/>}/>
-          <Route path='order' element={<Order/>}/>
-          <Route path='order/add' element={<OrderAdd/>}/>
-          <Route path='order/:id/edit' element={<OrderEdit/>}/>
-          <Route path='user' element={<User/>}/>
-          <Route path='user/add' element={<UserAdd/>}/>
-          <Route path='user/:id/edit' element={<UserEdit/>}/>
-          <Route path='product' element={<Product/>}/>
-          <Route path='product/add' element={<ProductAdd/>}/>
-          <Route path='product/:id/edit' element={<ProductEdit/>}/>
-          <Route path='warranty' element={<Warranty/>}/>
-          <Route path='warranty/add' element={<WarrantyAdd/>}/>
-          <Route path='warranty/:id/edit' element={<WarrantyEdit/>}/>
-          <Route path='article' element={<Article/>}/>
-          <Route path='article/add' element={<ArticleAdd/>}/>
-          <Route path='article/:id/edit' element={<ArticleEdit/>}/>
-          <Route path='warehouse' element={<Warehouse/>}/>
-          <Route path='category/notification' element={<Notification/>}/>
-          <Route path='category/notification/add' element={<NotificationAdd/>}/>
-          <Route path='category/notification/:id/edit' element={<NotificationEdit/>}/>
-          <Route path='report' element={<Report/>}/>
-          <Route path='setting' element={<Setting/>}/>
-          <Route path='category/product' element={<ProductCategory/>}/>
-          <Route path='category/product/add' element={<ProductCategoryAdd/>}/>
-          <Route path='category/product/:id/edit' element={<ProductCategoryEdit/>}/>
-          <Route path='category/discount' element={<DiscountCategory/>}/>
-          <Route path='category/discount/add' element={<DiscountCategoryAdd/>}/>
-          <Route path='category/discount/:id/edit' element={<DiscountCategoryEdit/>}/>
-          <Route path='category/banner' element={<Banner/>}/>
-          <Route path='receipt' element={<Receipt/>}/>
-          <Route path='receipt/add' element={<ReceiptAdd/>}/>
-          <Route path='receipt/:id/edit' element={<ReceiptEdit/>}/>
-          <Route path='category/supplier' element={<Supplier/>}/>
-          <Route path='category/supplier/:id/edit' element={<SupplierEdit/>}/>
-          <Route path='category/supplier/add' element={<SupplierAdd/>}/>
-          <Route path='category/banner/add' element={<BannerAdd/>}/>
-          <Route path='category/banner/:id/edit' element={<BannerEdit/>}/>
-          <Route path='category/video' element={<Video/>}/>
-          <Route path='category/video/add' element={<VideoAdd/>}/>
-          <Route path='category/video/:id/edit' element={<VideoEdit/>}/>
-          <Route path='*' element={<Dashboard/>}/>
+        <Route path="/login" element={<Login />} />
+        
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Public />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Dashboard />} />
+          <Route path="order" element={<Order />} />
+          <Route path="order/add" element={<OrderAdd />} />
+          <Route path="order/:id/edit" element={<OrderEdit />} />
+          <Route path="user" element={<User />} />
+          <Route path="user/add" element={<UserAdd />} />
+          <Route path="user/:id/edit" element={<UserEdit />} />
+          <Route path="product" element={<Product />} />
+          <Route path="product/add" element={<ProductAdd />} />
+          <Route path="product/:id/edit" element={<ProductEdit />} />
+          <Route path="warranty" element={<Warranty />} />
+          <Route path="warranty/add" element={<WarrantyAdd />} />
+          <Route path="warranty/:id/edit" element={<WarrantyEdit />} />
+          <Route path="article" element={<Article />} />
+          <Route path="article/add" element={<ArticleAdd />} />
+          <Route path="article/:id/edit" element={<ArticleEdit />} />
+          <Route path="warehouse" element={<Warehouse />} />
+          <Route path="category/notification" element={<Notification />} />
+          <Route path="category/notification/add" element={<NotificationAdd />} />
+          <Route path="category/notification/:id/edit" element={<NotificationEdit />} />
+          <Route path="report" element={<Report />} />
+          <Route path="setting" element={<Setting />} />
+          <Route path="category/product" element={<ProductCategory />} />
+          <Route path="category/product/add" element={<ProductCategoryAdd />} />
+          <Route path="category/product/:id/edit" element={<ProductCategoryEdit />} />
+          <Route path="category/discount" element={<DiscountCategory />} />
+          <Route path="category/discount/add" element={<DiscountCategoryAdd />} />
+          <Route path="category/discount/:id/edit" element={<DiscountCategoryEdit />} />
+          <Route path="category/banner" element={<Banner />} />
+          <Route path="receipt" element={<Receipt />} />
+          <Route path="receipt/add" element={<ReceiptAdd />} />
+          <Route path="receipt/:id/edit" element={<ReceiptEdit />} />
+          <Route path="category/supplier" element={<Supplier />} />
+          <Route path="category/supplier/:id/edit" element={<SupplierEdit />} />
+          <Route path="category/supplier/add" element={<SupplierAdd />} />
+          <Route path="category/banner/add" element={<BannerAdd />} />
+          <Route path="category/banner/:id/edit" element={<BannerEdit />} />
+          <Route path="category/video" element={<Video />} />
+          <Route path="category/video/add" element={<VideoAdd />} />
+          <Route path="category/video/:id/edit" element={<VideoEdit />} />
+          <Route path="*" element={<Dashboard />} />
         </Route>
       </Routes>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

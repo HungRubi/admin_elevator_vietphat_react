@@ -478,10 +478,10 @@ const appReducer = (state = initState, action) => {
                 loginError: null
             }
         case actionType.LOGIN_FAIL:
+            console.log(action.payload.message)
             return {
                 ...state,
-                message: null,
-                loginError: action.payload || null,
+                loginError: action.payload.message || null,
             }
         
         /** === PRODUCT === */
