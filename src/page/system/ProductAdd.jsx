@@ -48,7 +48,7 @@ const ProductAdd = () => {
     const handleChange = (e, selectedItem) => {
         setFormData({
             ...formData,
-            [e.target.name]: selectedItem ? selectedItem.id : e.target.value,
+            [e.target.name]: selectedItem ? selectedItem.id || selectedItem._id : e.target.value,
         })
     }
     const hanleSubmit = (e) => {

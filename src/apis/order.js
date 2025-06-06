@@ -8,7 +8,9 @@ export const getOrder = async (searchType) => {
         })
         return response
     }catch(err){
-        console.log("Err call api: ", err);
+        if(err.response){
+            return err.response
+        }
     }
 }
 export const getOrderAdd = async () => {

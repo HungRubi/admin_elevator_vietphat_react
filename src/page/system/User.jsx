@@ -167,8 +167,15 @@ const User = () => {
                                     <td className="px-4 py-4 w-2/13">
                                         <div className="flex items-center gap-2.5">
                                             <CircleButton>
-                                                <img src={item.avatar} alt="ảnh sản phẩm" 
-                                                className='w-full object-cover rounded-[50%]'/>
+                                                <img 
+                                                    src={
+                                                    item?.avatar?.startsWith('/uploads')
+                                                        ? `${import.meta.env.VITE_SERVER_URL}${item.avatar}`
+                                                        : item.avatar
+                                                    } 
+                                                    alt="avatar" 
+                                                    className='w-full object-cover rounded-[50%]'
+                                                />
                                             </CircleButton>
                                             <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
                                                 {item.name}

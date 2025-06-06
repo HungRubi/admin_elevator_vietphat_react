@@ -193,8 +193,15 @@ const Order = () => {
                                     <th scope="row" className="px-4 py-4  w-2/14">
                                         <div className="flex items-center gap-2.5">
                                             <CircleButton>
-                                                <img src={item.userAvatar} alt={item.userName}
-                                                className='w-full object-cover rounded-[50%]'/>
+                                                <img 
+                                                    src={
+                                                    item.userAvatar?.startsWith('/uploads')
+                                                        ? `${import.meta.env.VITE_SERVER_URL}${item.userAvatar}`
+                                                        : item.userAvatar
+                                                    } 
+                                                    alt="avatar" 
+                                                    className='w-full object-cover rounded-[50%]'
+                                                />
                                             </CircleButton>
                                             <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
                                             {item.userName}

@@ -199,8 +199,15 @@ const Warranty = () => {
                                     <th scope="row" className="px-4 py-4  w-2/14">
                                         <div className="flex items-center gap-2.5">
                                             <CircleButton>
-                                                <img src={item.user_id?.avatar} alt=""
-                                                className='w-full object-cover rounded-[50%]'/>
+                                                <img 
+                                                    src={
+                                                    item?.user_id?.avatar?.startsWith('/uploads')
+                                                        ? `${import.meta.env.VITE_SERVER_URL}${item?.user_id?.avatar}`
+                                                        : item?.user_id?.avatar
+                                                    } 
+                                                    alt="avatar" 
+                                                    className='w-full object-cover rounded-[50%]'
+                                                />
                                             </CircleButton>
                                             <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
                                                 {item.user_id?.account}
