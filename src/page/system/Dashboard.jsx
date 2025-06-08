@@ -153,7 +153,7 @@ const Dashboard = () => {
         },
     ]
     return (
-        <div className="full py-5">
+        <div className="full pt-5">
             <PageTitle title="Dashboard" />
             <div className="w-full px-[30px] flex gap-5">
                 <div className="w-1/2">

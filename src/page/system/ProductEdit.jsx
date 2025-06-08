@@ -64,7 +64,7 @@ const ProductEdit = () => {
     const handleChange = (e, selected ) => {
         setFormData({
             ...formData,
-            [e.target.name]: selected ? selected.id : e.target.value
+            [e.target.name]: selected ? selected.id || selected._id : e.target.value
         })
     }
     const dispatch = useDispatch();

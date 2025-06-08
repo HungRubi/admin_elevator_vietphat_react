@@ -9,11 +9,11 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const Article = () => {
     const dispatch = useDispatch();
-    const {article, totalPage} = useSelector(state => state.app);
+    const {article} = useSelector(state => state.app);
     
     useEffect(() => {
         dispatch(actions.getArticle())
-    }, [])
+    }, [dispatch])
     const [current, setCurrent] = useState(1);
     const limit = 5;
     const lastArticleIndex = current * limit;
@@ -216,7 +216,7 @@ const Article = () => {
                             )}
                         </tbody>
                     </table>
-                    <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
+                    <PageBar currentPage={current} totalPage={Math.ceil(article.length / limit)} onPageChange={setCurrent}/>
                 </div>
             </div>
         </div>

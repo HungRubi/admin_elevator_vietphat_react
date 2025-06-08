@@ -72,3 +72,15 @@ export const  deleteNotification = async (id) => {
         }
     }
 }
+
+export const filterNotification = async (paramsString) => {
+    try{
+        const response = await axios({
+            method: "GET",
+            url: `/notification/filter?${paramsString}`,
+        });
+        return response;
+    }catch(error){
+        return error.response;
+    }
+}

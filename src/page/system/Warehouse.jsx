@@ -18,13 +18,9 @@ const Warehouse = () => {
             id: "còn hàng", 
             text: "Còn hàng"
         },
-        {
-            id: "hết hàng", 
-            text: "Hết hàng"
-        }
     ];
     const dispatch = useDispatch();
-    const { warehouse, totalPage } = useSelector(state => state.app);
+    const { warehouse } = useSelector(state => state.app);
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastCurrentIndex = current * limit;
@@ -42,11 +38,7 @@ const Warehouse = () => {
     const handleChange = (e) => {
         const newValue = e.target.value.trim();
         setSelected(newValue);
-        if(newValue === "sắp hết hàng") {
-            dispatch(actions.filterWarehouse("status",newValue))
-        }else if(newValue === "hết hàng") {
-            dispatch(actions.filterWarehouse("status",newValue))
-        }else if(newValue === "còn hàng") {
+        if(newValue) {
             dispatch(actions.filterWarehouse("status",newValue))
         }else{
             dispatch(actions.filterWarehouse())
@@ -129,7 +121,7 @@ const Warehouse = () => {
                         className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
                         aria-label="Default select example"
                         onChange={handleChange}
-                        value={selected}
+                        defaultValue={selected}
                     >
                         <option value="">--- Filter Warehouse ---</option>
                         {warehouseFilter?.map((item, index) => (
@@ -240,7 +232,7 @@ const Warehouse = () => {
                             
                         </tbody>
                     </table>
-                    <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent} />
+                    <PageBar currentPage={current} totalPage={Math.ceil(warehouse?.length / limit)} onPageChange={setCurrent} />
                 </div>
             </div>
         </div>

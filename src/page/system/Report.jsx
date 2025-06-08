@@ -289,8 +289,15 @@ export default function Report() {
                                                 <div className="flex items-center gap-2.5">
                                                     <NavLink to={`/user/${item._id}/edit`}>
                                                         <CircleButton>
-                                                            <img src={item.avatar} alt="ảnh sản phẩm" 
-                                                            className='w-full object-cover rounded-[50%]'/>
+                                                            <img 
+                                                                src={
+                                                                    item?.avatar?.startsWith('/uploads')
+                                                                    ? `${import.meta.env.VITE_SERVER_URL}${item.avatar}`
+                                                                    : item.avatar
+                                                                } 
+                                                                alt="avatar" 
+                                                                className='w-full object-cover rounded-[50%]'
+                                                            />
                                                         </CircleButton>
                                                     </NavLink>
                                                     <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">

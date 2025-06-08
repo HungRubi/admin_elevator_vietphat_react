@@ -57,7 +57,7 @@ const initState = {
     productTren: [],
     formatComment: [],
     columnComment: [],
-    warehouseReport: []
+    warehouseReport: [],
 }
 
 const appReducer = (state = initState, action) => {
@@ -203,6 +203,11 @@ const appReducer = (state = initState, action) => {
         
 
         /** === NOTIFICATION === */
+        case actionType.FILTER_NOTIFICATION:
+            return {
+                ...state,
+                notificaiton: action.payload.notifications,
+            }
         case actionType.GET_NOTIFICATION:
             return {
                 ...state,

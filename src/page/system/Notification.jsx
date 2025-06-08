@@ -23,7 +23,7 @@ const Notification = () => {
         },
     ];
     const dispatch = useDispatch();
-    const { notificaiton, totalPage } = useSelector(state => state.app);
+    const { notificaiton } = useSelector(state => state.app);
 
     useEffect(() => {
         dispatch(actions.getNotification())
@@ -41,6 +41,33 @@ const Notification = () => {
     const handleDelete = () => {
         dispatch(actions.deleteNotification(deleteId))
     }
+    const [selected, setSelected] = useState("");
+    const handleChange = (e) => {
+        const newValue = e.target.value;
+        setSelected(newValue);
+        if(newValue) {
+            dispatch(actions.filterNotification("type", newValue))
+        }else {
+            dispatch(actions.getNotification())
+        }
+    }
+    const [ valueDate, setValueDate ] = useState({
+            startDate: '',
+            endDate: ''
+        })
+    const onChangeDate = (e) => {
+        setValueDate({
+            ...valueDate,
+            [e.target.name] : e.target.value,
+        })
+    }
+    useEffect(() => {
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterNotification("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+        }else{
+            dispatch(actions.getNotification())
+        }
+    }, [valueDate, dispatch]);
     return (
         <div>
             <div className="full pt-5">
@@ -84,6 +111,8 @@ const Notification = () => {
                             <input 
                                 type="date"
                                 name="startDate"
+                                onChange={onChangeDate}
+                                value={valueDate.startDate}
                                 className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                             />
                         </div>
@@ -91,20 +120,24 @@ const Notification = () => {
                             <input 
                                 type="date" 
                                 name="endDate"
+                                onChange={onChangeDate}
+                                value={valueDate.endDate}
                                 className={`w-[250px] flex-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                             />
                         </div>
                         <select 
                             className={`w-1/3 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 `} 
                             aria-label="Default select example"
+                            onChange={handleChange}
+                            defaultValue={selected}
                         >
-                            <option value="">--- Filter Product ---</option>
+                            <option value="">--- Filter Notification ---</option>
                             {notificationFilter?.map((item, index) => (
                                 <option key={index} value={item._id}>{item.name}</option>
                             ))}
                         </select>
                         <div className="w-1/2">
-                            <Search className={"!rounded-lg"} placeholder={"Enter product name..."}/>
+                            <Search className={"!rounded-lg"} placeholder={"Enter user name..."}/>
                         </div>
                     </div>
                     <div className="relative overflow-x-auto mt-5">
@@ -143,8 +176,15 @@ const Notification = () => {
                                                 {item.user_id ? (
                                                     <>
                                                         <CircleButton>
-                                                            <img src={item.user_id?.avatar} alt="ảnh sản phẩm" 
-                                                            className='w-full object-cover rounded-[50%]'/>
+                                                            <img 
+                                                                src={
+                                                                    item?.user_id?.avatar?.startsWith('/uploads')
+                                                                    ? `${import.meta.env.VITE_SERVER_URL}${item?.user_id?.avatar}`
+                                                                    : item?.user_id?.avatar
+                                                                } 
+                                                                alt="ảnh sản phẩm" 
+                                                                className='w-full object-cover rounded-[50%]'
+                                                            />
                                                         </CircleButton>
                                                         <h5 className="font-medium text-gray-900 dark:text-white line-clamp-1">
                                                             {item.user_id?.name}
@@ -170,8 +210,8 @@ const Notification = () => {
                                             {(item.isRead === true || item.isRead === false) && (
                                                 <Button
                                                     className={`!py-[2px] capitalize ${
-                                                    item.isRead === "true"
-                                                        ? "!border-blue-500 bg-blue-200 text-blue-600"
+                                                    item.isRead
+                                                        ? "!border-blue-500 !bg-blue-200 text-blue-600"
                                                         : "!border-red-500 bg-red-200 text-red-600"
                                                     }`}
                                                 >
@@ -208,7 +248,7 @@ const Notification = () => {
                                 )}
                             </tbody>
                         </table>
-                        <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
+                        <PageBar currentPage={current} totalPage={Math.ceil(notificaiton.length / limit)} onPageChange={setCurrent}/>
                     </div>
                 </div>
             </div>

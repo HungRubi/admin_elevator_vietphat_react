@@ -37,7 +37,7 @@ const PageBar = ({ currentPage, totalPage, onPageChange, className }) => {
     const visiblePages = getVisiblePages();
 
     return (
-        <div className={`flex items-center justify-center my-5 gap-2 ${className}`}>
+        <div className={`flex items-center justify-center my-8 gap-2 ${className}`}>
             <Button className={`bg-transparent !px-0 !py-0 !border-none ${currentPage === 1 ? "hidden" : ""}`}>
                 <NavLink
                     onClick={() => onPageChange(currentPage - 1)} 

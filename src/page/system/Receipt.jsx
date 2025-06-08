@@ -134,99 +134,101 @@ const Receipt  = () => {
                         <Search className={"!rounded-lg"}  placeholder={"Enter title discount..."} onSearch={handleSearch}/>
                     </div>
                 </div>
-                <table className="w-full text-sm text-left rtl:text-right shadow text-gray-500 dark:text-gray-400 mt-8">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" className="px-2 py-3">
-                                <input type="checkbox" className='scale-120'/>
-                            </th>
-                            <th scope="col" className="px-4 py-3">
-                                receipt code
-                            </th>
-                            <th scope="col" className="px-4 py-3">
-                                supplier
-                            </th>
-                            <th scope="col" className="px-4 py-3">
-                                date entry
-                            </th>
-                            <th scope="col" className="px-4 py-3">
-                                total 
-                            </th>
-                            <th scope="col" className="px-4 py-3">
-                                status
-                            </th>
-                            <th scope="col" className="py-3 text-center">
-                                time
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentReceipt && currentReceipt.length > 0 ?
-                            currentReceipt.map(item => (
-                                <tr key={item._id}
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
-                                    <td className="px-4 py-4 w-5 h-20">
-                                            <input type="checkbox" className='scale-120'/>
-                                    </td>
-                                    <th className="px-4 py-4 font-medium text-gray-900 w-3/12">
-                                        {item.code}
-                                    </th>
-                                    <td className="px-4 py-4 w-2/13 font-medium text-gray-900">
-                                        {item.supplier.name}
-                                    </td>
-                                    <td className="px-4 py-4 w-2/13">
-                                        {item.dateFormat}
-                                    </td>
-                                    <td className="px-4 py-4 w-2/13">
-                                        {formatMony(item.totalPrice)} đ
-                                    </td>
-                                    <td className="px-4 py-4 w-2/13">
-                                        <Button className={item.status === "đã xác nhận" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main" : "hidden"}>
-                                            {item.status}
-                                        </Button>
-                                        <Button className={item.status === "chưa xác nhận" ? "!border-[#ffcc85] !py-[2px] bg-[#ffefca] text-[#bc3803]" : "hidden"}>
-                                            {item.status}
-                                        </Button>
-                                        <Button className={item.status === "đã hủy" ? "!border-[#f74d4d8a] !py-[2px] bg-[#ff8585a6] text-[#c90c05]" : "hidden"}>
-                                            {item.status}
-                                        </Button>
-                                    </td>
-                                    <td className="py-4 text-center">
-                                        <span className='time_text'>{item.updateFormat}</span>
-                                        <div className="option items-center justify-center gap-3 hidden w-[50px] m-auto">
-                                            <NavLink to={`/receipt/${item._id}/edit`}>
-                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                    <MdAutoFixHigh className='text-[18px]'/>
+                <div className="relative overflow-x-auto mt-5">
+                    <table className="w-full text-sm text-left rtl:text-right shadow text-gray-500 dark:text-gray-400 mt-8">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="px-2 py-3">
+                                    <input type="checkbox" className='scale-120'/>
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    receipt code
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    supplier
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    date entry
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    total 
+                                </th>
+                                <th scope="col" className="px-4 py-3">
+                                    status
+                                </th>
+                                <th scope="col" className="py-3 text-center">
+                                    time
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentReceipt && currentReceipt.length > 0 ?
+                                currentReceipt.map(item => (
+                                    <tr key={item._id}
+                                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
+                                        <td className="px-4 py-4 w-5 h-20">
+                                                <input type="checkbox" className='scale-120'/>
+                                        </td>
+                                        <th className="px-4 py-4 font-medium text-gray-900 w-3/12">
+                                            {item.code}
+                                        </th>
+                                        <td className="px-4 py-4 w-2/13 font-medium text-gray-900">
+                                            {item.supplier.name}
+                                        </td>
+                                        <td className="px-4 py-4 w-2/13">
+                                            {item.dateFormat}
+                                        </td>
+                                        <td className="px-4 py-4 w-2/13">
+                                            {formatMony(item.totalPrice)} đ
+                                        </td>
+                                        <td className="px-4 py-4 w-2/13">
+                                            <Button className={item.status === "đã xác nhận" ? "!border-[#90d67f] !py-[2px] bg-[#d9fbd0] text-main" : "hidden"}>
+                                                {item.status}
+                                            </Button>
+                                            <Button className={item.status === "chưa xác nhận" ? "!border-[#ffcc85] !py-[2px] bg-[#ffefca] text-[#bc3803]" : "hidden"}>
+                                                {item.status}
+                                            </Button>
+                                            <Button className={item.status === "đã hủy" ? "!border-[#f74d4d8a] !py-[2px] bg-[#ff8585a6] text-[#c90c05]" : "hidden"}>
+                                                {item.status}
+                                            </Button>
+                                        </td>
+                                        <td className="py-4 text-center">
+                                            <span className='time_text'>{item.updateFormat}</span>
+                                            <div className="option items-center justify-center gap-3 hidden w-[50px] m-auto">
+                                                <NavLink to={`/receipt/${item._id}/edit`}>
+                                                    <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                        <MdAutoFixHigh className='text-[18px]'/>
+                                                    </Button>
+                                                </NavLink>
+                                                <Button 
+                                                className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}
+                                                onClick={() => {
+                                                    setIsOpen(true);
+                                                    setDeleteId(item._id);
+                                                }}
+                                                >
+                                                    <RiDeleteBin6Line className='text-[18px]'/>
                                                 </Button>
-                                            </NavLink>
-                                            <Button 
-                                            className={"!py-2 !px-2 hover:bg-red-500 hover:text-white"}
-                                            onClick={() => {
-                                                setIsOpen(true);
-                                                setDeleteId(item._id);
-                                            }}
-                                            >
-                                                <RiDeleteBin6Line className='text-[18px]'/>
-                                            </Button>
-                                            <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
-                                                <PiDotsThreeBold className='text-[18px]'/>
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                            : 
-                            (
-                                <Empty
-                                    title={"Not found receipt"} 
-                                    subTitle={"Try adjusting your search or filter to find what you're looking for."}   
-                                />
-                            )
-                        } 
-                        
-                    </tbody>
-                </table>
-                <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
+                                                <Button className={"!py-2 !px-2 hover:bg-blue-500 hover:text-white"}>
+                                                    <PiDotsThreeBold className='text-[18px]'/>
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                                : 
+                                (
+                                    <Empty
+                                        title={"Not found receipt"} 
+                                        subTitle={"Try adjusting your search or filter to find what you're looking for."}   
+                                    />
+                                )
+                            } 
+                            
+                        </tbody>
+                    </table>
+                    <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
+                </div>
             </div>
         </div>
     );

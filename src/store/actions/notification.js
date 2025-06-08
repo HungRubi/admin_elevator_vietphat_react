@@ -93,3 +93,31 @@ export const deleteNotification = (id) => async (dispatch) => {
         })
     }
 }
+
+export const filterNotification = (query, value, query2, value2) => async (dispatch) => {
+    try {
+        const params = new URLSearchParams();
+        if (query && value && value !== 'undefined') params.append(query, value);
+        if (query2 && value2 && value2 !== 'undefined') params.append(query2, value2);
+
+        const response = await apis.filterNotification(params.toString());
+
+        if (response.status === 200) {
+            dispatch({
+                type: actionTypes.FILTER_NOTIFICATION,
+                payload: response.data
+            });
+        } else {
+            dispatch({
+                type: actionTypes.FILTER_NOTIFICATION_ERR,
+                payload: response.data
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: actionTypes.FILTER_NOTIFICATION_ERR,
+            payload: err.response
+        });
+    }
+};
+
