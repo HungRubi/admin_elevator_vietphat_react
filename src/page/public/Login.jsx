@@ -10,6 +10,7 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { message, loginError, currentUser } = useSelector(state => state.app);
+    const { accessToken } = useSelector(state => state.user);
     const [formData, setFormData] = useState({
         account: "",
         password: ""
@@ -26,11 +27,10 @@ const Login = () => {
     }
     
     useEffect(() => {
-        if(message === "Login successful"){
+        if(message === "Login successful" && currentUser?._id && accessToken){
             navigate("/");
-            dispatch(actions.setCurrrentUser(currentUser))
         }
-    }, [message, navigate])
+    }, [message, navigate, currentUser, accessToken])
     
     return (
         <div className="fixed w-full bg-[#f3f3f3] top-0 z-[9999999999999999999999999999999999999999999999999999999] h-screen overflow-y-hidden">

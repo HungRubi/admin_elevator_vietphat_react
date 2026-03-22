@@ -15,6 +15,7 @@ const userConfig = {
     key: 'userAdmin',
     whitelist: [
         'currentUser', 
+        'accessToken',
     ],
 }
 

@@ -3,6 +3,7 @@ const actionTypes = {
 
     /** USER */
     SET_CURRENT_USER: 'SET_CURRENT_USER',
+    SET_ACCESS_TOKEN: 'SET_ACCESS_TOKEN',
     LOGOUT: 'LOGOUT',
     /** REPORT */
     GET_REPORT: 'GET_REPORT',

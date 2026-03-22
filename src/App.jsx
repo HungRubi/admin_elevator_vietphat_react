@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as actions from './store/actions';
+import { setAccessToken, setAuthEventHandlers } from './axios';
 import {
   Article, 
   Dashboard, 
@@ -48,12 +49,26 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   const dispatch = useDispatch();
   const {message} = useSelector(state => state.app);
+  const { accessToken } = useSelector(state => state.user);
+
   useEffect(() => {
     if (message) {
       toast.success(message);
     }
     dispatch(actions.resetMessage());
   }, [message, dispatch]);
+
+  useEffect(() => {
+    setAccessToken(accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    setAuthEventHandlers({
+      onTokenRefreshed: (newToken) => dispatch(actions.setAccessTokenState(newToken)),
+      onAuthFailed: () => dispatch(actions.logout()),
+    });
+  }, [dispatch]);
+
   return (
     <>
       <Routes>

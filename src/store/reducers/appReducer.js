@@ -1,4 +1,3 @@
-import { BiMessageError } from "react-icons/bi";
 import actionType from "../actions/actionTypes";
 
 const initState = {
@@ -487,6 +486,14 @@ const appReducer = (state = initState, action) => {
             return {
                 ...state,
                 loginError: action.payload.message || null,
+            }
+
+        case actionType.LOGOUT:
+            return {
+                ...state,
+                currentUser: {},
+                loginError: null,
+                message: null,
             }
         
         /** === PRODUCT === */

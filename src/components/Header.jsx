@@ -26,8 +26,8 @@ const Header = () => {
       }, []);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const handleLogout = () => {
-        dispatch(actions.logout());
+    const handleLogout = async () => {
+        await dispatch(actions.logout());
         navigate("/login");
     }
     return (
@@ -52,12 +52,27 @@ const Header = () => {
                     <FaRegBell className='text-[20px] text-gray-500'/>
                 </CircleButton>
                 <CircleButton className={"relative btn_togglo"} onClick={() => toggleMenu("account")}>
-                    <img src={currentUser?.avatar} alt="avatar"
-                    className='w-full object-center rounded-[50%]'/>
+                    <img 
+                        src={
+                            currentUser?.avatar?.startsWith('/uploads')
+                            ? `${import.meta.env.VITE_SERVER_URL}${currentUser.avatar}`
+                            : currentUser.avatar
+                        } 
+                        alt="avatar" 
+                        className='rounded-[50%]'
+                    />
                     {openMenu === "account" && (
                         <div className="absolute bg-white w-[250px] top-[140%] right-0 rounded-[3px] menu pb-2.5 menu_togglo ">
                             <div className="flex flex-col items-center pt-[15px] justify-center">
-                                <img src={currentUser?.avatar} alt="" className='w-[40px] h-[40px] rounded-[50%] '/>
+                                <img 
+                                    src={
+                                        currentUser?.avatar?.startsWith('/uploads')
+                                        ? `${import.meta.env.VITE_SERVER_URL}${currentUser.avatar}`
+                                        : currentUser.avatar
+                                    } 
+                                    alt="avatar" 
+                                    className='rounded-[50%] w-[40px] h-[40px]'
+                                />
                                 <h5 className="text-[15px] mt-2.5">
                                     {currentUser?.name}
                                 </h5>
