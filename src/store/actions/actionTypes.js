@@ -1,5 +1,6 @@
 const actionTypes = {
     RESET_MESSAGE: 'RESET_MESSAGE',
+    SET_GLOBAL_LOADING: 'SET_GLOBAL_LOADING',
 
     /** USER */
     SET_CURRENT_USER: 'SET_CURRENT_USER',
@@ -81,6 +82,7 @@ const actionTypes = {
 
 
     /**  === AUTHEN === */
+    LOGIN_START: 'LOGIN_START',
     LOGIN : 'LOGIN',
     LOGIN_FAIL: 'LOGIN_FAIL',
 

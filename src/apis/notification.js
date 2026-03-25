@@ -1,86 +1,37 @@
-import axios from "../axios"; 
+import { request } from "./_request";
 
 export const  getNotification = async (search="") => {
-    try{
-        const response = await axios({
-            method: "GET",
-            url: `/notification?timkiem=${search}`
-        })
-        return response
-    }catch(error){
-        if(error.response){
-            return error.response
-        }
-        return {
-            status: 500,
-            message: "Lỗi server: " + error
-        }
-    }
+    return request({
+        method: "GET",
+        url: `/notification?timkiem=${search}`
+    });
 }
 
 export const  editNotification = async (id) => {
-    try{
-        const response = await axios({
-            method: "GET",
-            url: `notification/${id}`,
-        })
-        return response
-    }catch(error){
-        if(error.response){
-            return error.response
-        }
-        return {
-            status: 500,
-            message: "Lỗi server: " + error
-        }
-    }
+    return request({
+        method: "GET",
+        url: `notification/${id}`,
+    });
 }
 
 export const  addNotification = async (data) => {
-    try{
-        const response = await axios({
-            method: "POST",
-            url: `notification/add`,
-            data: data
-        })
-        return response
-    }catch(error){
-        if(error.response){
-            return error.response
-        }
-        return {
-            status: 500,
-            message: "Lỗi server: " + error
-        }
-    }
+    return request({
+        method: "POST",
+        url: `notification/add`,
+        data
+    });
 }
 
 export const  deleteNotification = async (id) => {
-    try{
-        const response = await axios({
-            method: "DELETE",
-            url: `notification/${id}`,
-        })
-        return response
-    }catch(error){
-        if(error.response){
-            return error.response
-        }
-        return {
-            status: 500,
-            message: "Lỗi server: " + error
-        }
-    }
+    return request({
+        method: "DELETE",
+        url: `notification/${id}`,
+    });
 }
 
 export const filterNotification = async (paramsString) => {
-    try{
-        const response = await axios({
-            method: "GET",
-            url: `/notification/filter?${paramsString}`,
-        });
-        return response;
-    }catch(error){
-        return error.response;
-    }
+    return request({
+        method: "GET",
+        url: `/notification/filter?${paramsString}`,
+    });
 }

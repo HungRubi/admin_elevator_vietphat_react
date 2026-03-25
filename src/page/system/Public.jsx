@@ -1,4 +1,4 @@
-import {Header,Footer,Navbar} from '../../components';
+import {Header,Footer,Navbar, TopLoadingBar} from '../../components';
 import { Outlet } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 import {Login} from '../public';
@@ -9,6 +9,7 @@ const Public = () => {
             <div className="w-full h-screen ">
                 {}
                 <div className="w-full fixed h-[70px] border-b-custom z-20">
+                    <TopLoadingBar />
                     <Header/>
                 </div>
                 <div className="w-full h-full flex pt-[70px] z-10">

@@ -4,6 +4,7 @@ import { clearAccessToken, setAccessToken } from "../../axios";
 
 export const login = (data) => async (dispatch) => {
     try {
+        dispatch({ type: actionTypes.LOGIN_START });
         const response = await apis.login(data);
         if (response?.status === 200) {
             const token = response?.data?.accessToken;

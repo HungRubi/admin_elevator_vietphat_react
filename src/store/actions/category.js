@@ -6,6 +6,11 @@ export const resetMessage = () => ({
     type: "RESET_MESSAGE",
 });
 
+export const setGlobalLoading = (isLoading) => ({
+    type: actionTypes.SET_GLOBAL_LOADING,
+    payload: !!isLoading,
+});
+
 /** === CATEGORY PRODUCT === */
 export const getCategoryProduct = (searchTerm = '') => async (dispatch) => {
     try{

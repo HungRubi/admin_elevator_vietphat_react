@@ -1,111 +1,45 @@
-import axios from "../axios";
+import { request } from "./_request";
 
 export const getSuppliers = async (search='') => {
-    try {
-        const response = await axios({
-            method: "GET",
-            url: `/supplier?timkiem=${search}`,
-        });
-        return response;
-    } catch (error) {
-        if (error.response) {
-            return error.response;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "GET",
+        url: `/supplier?timkiem=${search}`,
+    });
 }
 
 export const addSupplier = async (data) => {
-    try {
-        const response = await axios({
-            method: "POST",
-            url: "/supplier/add",
-            data: data,
-        })
-        return response;
-    } catch (error) {
-        if(error.response) {
-            return error.response.data;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "POST",
+        url: "/supplier/add",
+        data,
+    });
 }
 
 export const getDetails = async (id) => {
-    try {
-        const response = await axios({
-            method: "GET",
-            url: `/supplier/edit/${id}`,
-        })
-        return response;
-    } catch (error) {
-        if(error.response) {
-            return error.response.data;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "GET",
+        url: `/supplier/edit/${id}`,
+    });
 }
 
 export const update = async (data ,id) => {
-    try {
-        const response = await axios({
-            method: "PUT",
-            url: `/supplier/update/${id}`,   
-            data: data, 
-        })
-        return response;
-    } catch (error) {
-        if(error.response) {
-            return error.response;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "PUT",
+        url: `/supplier/update/${id}`,   
+        data, 
+    });
 }
 
 export const deleteSupplier = async (id) => {
-    try {
-        const response = await axios({
-            method: "DELETE",
-            url: `/supplier/delete/${id}`,   
-        })
-        return response;
-    } catch (error) {
-        if(error.response) {
-            return error.response;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "DELETE",
+        url: `/supplier/delete/${id}`,   
+    });
 }
 
 export const getProductBySupplier = async (id) => {
-    try {
-        const response = await axios({
-            method: "GET",
-            url: `/supplier/product/${id}`,   
-        })
-        return response;
-    } catch (error) {
-        if(error.response) {
-            return error.response;
-        }
-        return {
-            status: 500,
-            message: "Lỗi server vui lòng thử lại sau",
-        };
-    }
+    return request({
+        method: "GET",
+        url: `/supplier/product/${id}`,   
+    });
 }

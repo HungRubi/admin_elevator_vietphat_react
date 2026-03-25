@@ -99,4 +99,23 @@ button{
 .shadow_table{
     box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
 }
+
+@keyframes loadingbar {
+  0% {
+    transform: scaleX(0.08);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleX(0.55);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0.98);
+    opacity: 0.85;
+  }
+}
+
+.animate-loadingbar {
+  animation: loadingbar 1.15s ease-in-out infinite;
+}
   

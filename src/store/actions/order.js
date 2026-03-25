@@ -2,164 +2,101 @@ import actionTypes from "./actionTypes";
 import * as apis from '../../apis/order';
 
 export const getOrder = (searchType='') => async(dispatch) => {
-    try{
-        const response = await apis.getOrder(searchType);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_ORDER,
-                payload: {
-                    data: response.data,
-                    searchType: !! searchType,
-                }
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_ORDER,
-                payload: null
-            })
-        }
-    }catch(err){
+    const result = await apis.getOrder(searchType);
+    if(result.ok){
         dispatch({
             type: actionTypes.GET_ORDER,
-            payload: null,
-            err
+            payload: {
+                data: result.data,
+                searchType: !! searchType,
+            }
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_ORDER,
+        payload: {
+            data: { orderFormat: [], searchOrder: [], totalPage: 1 },
+            searchType: !!searchType,
+            message: result.message
+        }
+    })
 }
 
 export const getOrderAdd = () => async(dispatch) => {
-    try{
-        const response = await apis.getOrderAdd();
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_ADD_ORDER,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_ADD_ORDER,
-                payload: null
-            })
-        }
-    }catch(err){
+    const result = await apis.getOrderAdd();
+    if(result.ok){
         dispatch({
             type: actionTypes.GET_ADD_ORDER,
-            payload: null,
-            err
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_ADD_ORDER,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getOrderDetail = (id) => async(dispatch) => {
-    try{
-        const response = await apis.getOrderDetail(id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_ORDER_DETAIL,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_ORDER_DETAIL,
-                payload: null
-            })
-        }
-    }catch(err){
+    const result = await apis.getOrderDetail(id);
+    if(result.ok){
         dispatch({
             type: actionTypes.GET_ORDER_DETAIL,
-            payload: null,
-            err
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_ORDER_DETAIL,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const updateOrder = (data, id) => async(dispatch) => {
-    try{
-        const response = await apis.updateOrder(id, data);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.UPDATE_ORDER,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.UPDATE_ORDER,
-                payload: null
-            })
-        }
-    }catch(err){
+    const result = await apis.updateOrder(data, id);
+    if(result.ok){
         dispatch({
             type: actionTypes.UPDATE_ORDER,
-            payload: null,
-            err
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.UPDATE_ORDER,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const addOrder = (data) => async(dispatch) => {
-    try{
-        const response = await apis.addOrder(data);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.ADD_ORDER,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.ADD_ORDER_ERR,
-                payload: response.data || { message: 'Có lỗi xảy ra' }
-            })
-        }
-    }catch(error){
+    const result = await apis.addOrder(data);
+    if(result.ok){
         dispatch({
-            type: actionTypes.ADD_ORDER_ERR,
-            payload: (error.response && error.response.data) || { message: 'Lỗi server vui lòng thử lại sau' }
+            type: actionTypes.ADD_ORDER,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.ADD_ORDER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const filterOrder = (query, value, query2, value2) => async (dispatch) => {
-    try{
-        const response = await apis.filterOrder(query, value, query2, value2);
-        if(response?.status === 200){
-            dispatch({
-                type: actionTypes.FILTER_ORDER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.FILTER_ORDER,
-                payload: response.data,
-            })
-        }
-    }catch(error){
-        dispatch({
-            type: actionTypes.FILTER_ORDER,
-            payload: null,
-            error
-        })
-    }
+    const result = await apis.filterOrder(query, value, query2, value2);
+    dispatch({
+        type: actionTypes.FILTER_ORDER,
+        payload: result.data,
+        error: result.ok ? null : result.message
+    })
 }
 
 export const deleteOrder = (id) => async(dispatch) => {
-    try{
-        const response = await apis.deleteOrder(id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.DELETE_ORDER,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.DELETE_ORDER,
-                payload: null
-            })
-        }
-    }catch(err){
-        dispatch({
-            type: actionTypes.DELETE_ORDER,
-            payload: null,
-            err
-        })
-    }
+    const result = await apis.deleteOrder(id);
+    dispatch({
+        type: actionTypes.DELETE_ORDER,
+        payload: result.ok ? result.data : null,
+        error: result.ok ? null : result.message
+    })
 }

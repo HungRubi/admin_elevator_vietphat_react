@@ -2,48 +2,34 @@ import actionTypes from "./actionTypes";
 import * as apis from '../../apis/comments';
 
 export const getComment = (search='') => async (dispatch) => {
-    try{
-        const response = await apis.getComment(search);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_COMMENT,
-                payload: {
-                    data: response.data,
-                    search: !! search
-                }
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_COMMENT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getComment(search);
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_COMMENT_ERR,
-            payload: error.response
+            type: actionTypes.GET_COMMENT,
+            payload: {
+                data: result.data,
+                search: !! search
+            }
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_COMMENT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const filterComment = (query, value, query2, value2) => async (dispatch) => {
-    try{
-        const response = await apis.filterComment(query, value, query2, value2);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.FILTER_COMMENT,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.FILTER_COMMENT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.filterComment(query, value, query2, value2);
+    if(result.ok){
         dispatch({
-            type: actionTypes.FILTER_COMMENT_ERR,
-            payload: error.response
+            type: actionTypes.FILTER_COMMENT,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.FILTER_COMMENT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }

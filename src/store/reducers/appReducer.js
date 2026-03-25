@@ -30,6 +30,8 @@ const initState = {
     currentUser: {},
     message: null,
     loginError: null,
+    isLoggingIn: false,
+    globalLoading: false,
     comment: [],
     productsByOrder: [],
     suppliers: [],
@@ -67,6 +69,11 @@ const appReducer = (state = initState, action) => {
             return {
                 ...state,
                 message:null
+            }
+        case actionType.SET_GLOBAL_LOADING:
+            return {
+                ...state,
+                globalLoading: !!action.payload,
             }
 
         /** === REPORT === */
@@ -474,18 +481,26 @@ const appReducer = (state = initState, action) => {
 
 
         /** === LOGIN === */
+        case actionType.LOGIN_START:
+            return {
+                ...state,
+                isLoggingIn: true,
+                loginError: null,
+            }
         case actionType.LOGIN:
             return {
                 ...state,
                 currentUser: action.payload?.user || {},
                 message: action.payload?.message || null,
-                loginError: null
+                loginError: null,
+                isLoggingIn: false,
             }
         case actionType.LOGIN_FAIL:
             console.log(action.payload.message)
             return {
                 ...state,
                 loginError: action.payload.message || null,
+                isLoggingIn: false,
             }
 
         case actionType.LOGOUT:
@@ -494,6 +509,7 @@ const appReducer = (state = initState, action) => {
                 currentUser: {},
                 loginError: null,
                 message: null,
+                isLoggingIn: false,
             }
         
         /** === PRODUCT === */

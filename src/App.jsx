@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as actions from './store/actions';
-import { setAccessToken, setAuthEventHandlers } from './axios';
+import { setAccessToken, setAuthEventHandlers, setLoadingEventHandlers } from './axios';
 import {
   Article, 
   Dashboard, 
@@ -66,6 +66,12 @@ function App() {
     setAuthEventHandlers({
       onTokenRefreshed: (newToken) => dispatch(actions.setAccessTokenState(newToken)),
       onAuthFailed: () => dispatch(actions.logout()),
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    setLoadingEventHandlers({
+      onLoadingChange: (isLoading) => dispatch(actions.setGlobalLoading(isLoading)),
     });
   }, [dispatch]);
 

@@ -8,6 +8,8 @@ let isRefreshing = false;
 let refreshSubscribers = [];
 let onTokenRefreshedHandler = null;
 let onAuthFailedHandler = null;
+let onLoadingChangeHandler = null;
+let pendingRequests = 0;
 
 export const setAccessToken = (token) => {
     accessToken = token || null;
@@ -22,6 +24,24 @@ export const setAuthEventHandlers = ({ onTokenRefreshed, onAuthFailed } = {}) =>
     onAuthFailedHandler = onAuthFailed || null;
 };
 
+export const setLoadingEventHandlers = ({ onLoadingChange } = {}) => {
+    onLoadingChangeHandler = onLoadingChange || null;
+};
+
+const incPendingRequests = () => {
+    pendingRequests += 1;
+    if (pendingRequests === 1 && onLoadingChangeHandler) {
+        onLoadingChangeHandler(true);
+    }
+};
+
+const decPendingRequests = () => {
+    pendingRequests = Math.max(0, pendingRequests - 1);
+    if (pendingRequests === 0 && onLoadingChangeHandler) {
+        onLoadingChangeHandler(false);
+    }
+};
+
 const subscribeTokenRefresh = (cb) => {
     refreshSubscribers.push(cb);
 };
@@ -33,6 +53,7 @@ const notifyTokenRefreshed = (token) => {
 
 instance.interceptors.request.use(
     function (config) {
+        incPendingRequests();
         if (accessToken) {
             config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -40,15 +61,18 @@ instance.interceptors.request.use(
         return config;
     },
     function (error) {
+        decPendingRequests();
         return Promise.reject(error);
     }
 );
 
 instance.interceptors.response.use(
     function (response) {
+        decPendingRequests();
         return response;
     },
     async function (error) {
+        decPendingRequests();
         const originalRequest = error?.config;
         const status = error?.response?.status;
         const requestUrl = originalRequest?.url || "";

@@ -2,111 +2,76 @@ import actionTypes from "./actionTypes";
 import * as apis from "../../apis/dashboard";
 
 export const getTotalOrderLastWeek = () => async (dispatch) => {
-    try{
-        const response = await apis.getTotalOrderLastWeek();
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.GET_TOTAL_WEEK,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_TOTAL_WEEK_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getTotalOrderLastWeek();
+    if(result.ok) {
         dispatch({
-            type: actionTypes.GET_TOTAL_WEEK_ERR,
-            payload: error.response
+            type: actionTypes.GET_TOTAL_WEEK,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_TOTAL_WEEK_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getNewUser = () => async(dispatch) => {
-    try{
-        const response = await apis.getNewUser();
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_NEW_USER,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_NEW_USER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(err){
+    const result = await apis.getNewUser();
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_NEW_USER_ERR,
-            payload: err.response.data
+            type: actionTypes.GET_NEW_USER,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_NEW_USER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getOrderDiscount = () => async(dispatch) => {
-    try{
-        const response = await apis.getOrderDiscount();
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_ORDER_DISCOUNT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_ORDER_DISCOUNT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(err){
+    const result = await apis.getOrderDiscount();
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_ORDER_DISCOUNT_ERR,
-            payload: err.response.data
+            type: actionTypes.GET_ORDER_DISCOUNT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_ORDER_DISCOUNT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getOrderPayment = () => async(dispatch) => {
-    try{
-        const response = await apis.getOrderPayment();
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_ORDER_PAYMENT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_ORDER_PAYMENT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(err){
+    const result = await apis.getOrderPayment();
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_ORDER_PAYMENT_ERR,
-            payload: err.response.data
+            type: actionTypes.GET_ORDER_PAYMENT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_ORDER_PAYMENT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getMonthlyRevenue = () => async(dispatch) => {
-    try{
-        const response = await apis.getMonthlyRevenue();
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_MONTH_REVENUE,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_MONTH_REVENUE_ERR,
-                payload: response.data
-            })
-        }
-    }catch(err){
+    const result = await apis.getMonthlyRevenue();
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_MONTH_REVENUE_ERR,
-            payload: err.response.data
+            type: actionTypes.GET_MONTH_REVENUE,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_MONTH_REVENUE_ERR,
+        payload: result.data || { message: result.message }
+    })
 }

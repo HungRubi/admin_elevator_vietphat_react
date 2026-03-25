@@ -2,136 +2,94 @@ import actionTypes from "./actionTypes";
 import * as apis from '../../apis/supplier';
 
 export const getSuppliers = (search='') => async (dispatch) => {
-    try{
-        const response = await apis.getSuppliers(search);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_SUPPLIER,
-                payload: {
-                    data: response.data,
-                    search: !! search
-                },
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getSuppliers(search);
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.GET_SUPPLIER,
+            payload: {
+                data: result.data,
+                search: !! search
+            },
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const addSupplier = (data) => async (dispatch) => {
-    try{
-        const response = await apis.addSupplier(data);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.ADD_SUPPLIER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.ADD_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.addSupplier(data);
+    if(result.ok){
         dispatch({
-            type: actionTypes.ADD_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.ADD_SUPPLIER,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.ADD_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getDetails = (id) => async (dispatch) => {
-    try{
-        const response = await apis.getDetails(id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_DETAIL_SUPPLIER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_DETAIL_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getDetails(id);
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_DETAIL_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.GET_DETAIL_SUPPLIER,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_DETAIL_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const update = (id, data) => async (dispatch) => {
-    try{
-        const response = await apis.update(data, id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.UPDATE_SUPPLIER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.UPDATE_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.update(data, id);
+    if(result.ok){
         dispatch({
-            type: actionTypes.UPDATE_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.UPDATE_SUPPLIER,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.UPDATE_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const deleteSupplier = (id) => async (dispatch) => {
-    try{
-        const response = await apis.deleteSupplier(id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.DELETE_SUPPLIER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.DELETE_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.deleteSupplier(id);
+    if(result.ok){
         dispatch({
-            type: actionTypes.DELETE_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.DELETE_SUPPLIER,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.DELETE_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getProductBySupplier = (id) => async (dispatch) => {
-    try{
-        const response = await apis.getProductBySupplier(id);
-        if(response.status === 200){
-            dispatch({
-                type: actionTypes.GET_PRODUCT_BY_SUPPLIER,
-                payload: response.data,
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_PRODUCT_BY_SUPPLIER_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getProductBySupplier(id);
+    if(result.ok){
         dispatch({
-            type: actionTypes.GET_PRODUCT_BY_SUPPLIER_ERR,
-            payload: error.response
+            type: actionTypes.GET_PRODUCT_BY_SUPPLIER,
+            payload: result.data,
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_PRODUCT_BY_SUPPLIER_ERR,
+        payload: result.data || { message: result.message }
+    })
 }

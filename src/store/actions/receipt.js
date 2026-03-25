@@ -3,146 +3,94 @@ import * as apis from '../../apis/recpeit';
 
 
 export const getReceipt = (search='') => async (dispatch) => {
-    try{
-        const response = await apis.getReceipt(search);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.GET_RECEIPT,
-                payload: {
-                    data: response.data,
-                    search: !! search,
-                }
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getReceipt(search);
+    if(result.ok) {
         dispatch({
-            type: actionTypes.GET_RECEIPT_ERR,
+            type: actionTypes.GET_RECEIPT,
             payload: {
-                message: "Lỗi server: " + error
+                data: result.data,
+                search: !! search,
             }
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const addReceipt = (data) => async (dispatch) => {
-    try{
-        const response = await apis.addReceipt(data);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.ADD_RECEIPT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.ADD_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.addReceipt(data);
+    if(result.ok) {
         dispatch({
-            type: actionTypes.ADD_RECEIPT_ERR,
-            payload: {
-                message: "Lỗi server: " + error
-            }
+            type: actionTypes.ADD_RECEIPT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.ADD_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const getDetailReceipt = (id) => async (dispatch) => {
-    try{
-        const response = await apis.getDetailReceipt(id);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.GET_DETAIL_RECEIPT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.GET_DETAIL_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.getDetailReceipt(id);
+    if(result.ok) {
         dispatch({
-            type: actionTypes.GET_DETAIL_RECEIPT_ERR,
-            payload: {
-                message: "Lỗi server: " + error
-            }
+            type: actionTypes.GET_DETAIL_RECEIPT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.GET_DETAIL_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const updateReceipt = (id, data) => async (dispatch) => {
-    try{
-        const response = await apis.updateReceipt(id, data);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.UPDATE_RECEIPT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.UPDATE_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.updateReceipt(id, data);
+    if(result.ok) {
         dispatch({
-            type: actionTypes.UPDATE_RECEIPT_ERR,
-            payload: {
-                message: "Lỗi server: " + error
-            }
+            type: actionTypes.UPDATE_RECEIPT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.UPDATE_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
 export const deleteReceipt = (id) => async (dispatch) => {
-    try{
-        const response = await apis.deleteReceipt(id);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.DELETE_RECEIPT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.DELETE_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch(error){
+    const result = await apis.deleteReceipt(id);
+    if(result.ok) {
         dispatch({
-            type: actionTypes.DELETE_RECEIPT_ERR,
-            payload: {
-                message: "Lỗi server: " + error
-            }
+            type: actionTypes.DELETE_RECEIPT,
+            payload: result.data
         })
+        return;
     }
+    dispatch({
+        type: actionTypes.DELETE_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
 }
 
-export const filterReceipt = (query, value, query2, value2) => async (dispatch) => {{
-    try{
-        const response = await apis.filterReceipt(query, value, query2, value2);
-        if(response.status === 200) {
-            dispatch({
-                type: actionTypes.FILTER_RECEIPT,
-                payload: response.data
-            })
-        }else{
-            dispatch({
-                type: actionTypes.FILTER_RECEIPT_ERR,
-                payload: response.data
-            })
-        }
-    }catch (error) {
-            dispatch({
-                type: actionTypes.FILTER_RECEIPT_ERR,
-                payload: error.response.data
-            })
+export const filterReceipt = (query, value, query2, value2) => async (dispatch) => {
+    const result = await apis.filterReceipt(query, value, query2, value2);
+    if(result.ok) {
+        dispatch({
+            type: actionTypes.FILTER_RECEIPT,
+            payload: result.data
+        })
+        return;
     }
-}}
+    dispatch({
+        type: actionTypes.FILTER_RECEIPT_ERR,
+        payload: result.data || { message: result.message }
+    })
+}
