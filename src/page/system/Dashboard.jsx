@@ -67,7 +67,9 @@ const Dashboard = () => {
         dispatch(actions.getOrder());
         dispatch(actions.getTotalOrderLastWeek());
     }, [dispatch])
-    const { comment, order, dataTotalOrder, summaryOrder } = useSelector(state => state.app);
+    const { comment } = useSelector(state => state.comment);
+    const { order } = useSelector(state => state.order);
+    const { dataTotalOrder, summaryOrder } = useSelector(state => state.dashboard);
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const currentComment = getCommentsForCurrentPage(comment, current, limit);
@@ -124,17 +126,9 @@ const Dashboard = () => {
         {id: 5, text: "5 Sao"},
     ]
     const handleChange = (e) => {
-        const newValue = e.target.value;
-        if(newValue === 1){
-            dispatch(actions.filterComment("star",newValue))
-        }else if(newValue === 2){
-            dispatch(actions.filterComment("star",newValue))
-        }else if(newValue === 3){
-            dispatch(actions.filterComment("star",newValue))
-        }else if(newValue === 4){
-            dispatch(actions.filterComment("star",newValue))
-        }else if(newValue === 5){
-            dispatch(actions.filterComment("star",newValue))
+        const newValue = Number(e.target.value);
+        if(newValue >= 1 && newValue <= 5){
+            dispatch(actions.filterComment({ query: "star", value: newValue }))
         }else{
             dispatch(actions.getComment())
         }

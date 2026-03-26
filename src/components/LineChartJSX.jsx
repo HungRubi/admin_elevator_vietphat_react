@@ -9,7 +9,7 @@ const LineChartJSX = () => {
     useEffect(() => {
         dispatch(actions.getNewUser())
     }, [dispatch])
-    const {newUserData, summaryUser} = useSelector(state => state.app);
+    const {newUserData, summaryUser} = useSelector(state => state.dashboard);
     return (
         <div className="bg-white p-4 rounded-lg shadow w-[calc(50%-10px)]">
             <div className="flex justify-between items-center mb-4">

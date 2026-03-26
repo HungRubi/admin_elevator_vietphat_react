@@ -9,7 +9,8 @@ const {MdChevronRight, MdCall, MdOutlineMail, FaMapMarkerAlt, RiMessage3Line } =
 
 const NotificationEdit = () => {
     const dispatch = useDispatch();
-    const { message, notificaitonDetails } = useSelector(state => state.app)
+    const { message } = useSelector(state => state.ui)
+    const { notificaitonDetails } = useSelector(state => state.notification)
     const {id} = useParams();
     useEffect(() => {
         dispatch(actions.editNotification(id))

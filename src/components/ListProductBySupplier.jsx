@@ -14,7 +14,7 @@ const ListProductBySupplier = ({btn, onProductsSelect}) => {
         dispatch(actions.getSuppliers());
     }, [dispatch])
     
-    const { suppliers, productsBySupplier } = useSelector(state => state.app);
+    const { suppliers, productsBySupplier } = useSelector(state => state.supplier);
     const [formData, setFormData] = useState({
         supplier: "",
     });

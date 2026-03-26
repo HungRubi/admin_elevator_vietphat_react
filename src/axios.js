@@ -82,7 +82,24 @@ instance.interceptors.response.use(
             requestUrl.includes("/auth/refresh") ||
             requestUrl.includes("/auth/logout");
 
-        if (status !== 401 || !originalRequest || originalRequest._retry || isAuthEndpoint) {
+        const msg = error?.response?.data?.message;
+        const isStaffForbidden =
+            status === 403 &&
+            typeof msg === "string" &&
+            msg.includes("Staff or admin");
+        const isTokenInvalid =
+            status === 403 && msg === "Token is not valid";
+
+        const shouldTryRefresh =
+            !isStaffForbidden &&
+            (status === 401 || isTokenInvalid);
+
+        if (
+            !shouldTryRefresh ||
+            !originalRequest ||
+            originalRequest._retry ||
+            isAuthEndpoint
+        ) {
             return Promise.reject(error);
         }
 

@@ -9,7 +9,8 @@ const { MdChevronRight, BsPerson, MdCall, MdOutlineMail, FaMapMarkerAlt } = icon
 
 const SupplierEdit = () => {
     const dispatch = useDispatch()
-    const { detailSupplier, message } = useSelector(state => state.app);
+    const { detailSupplier } = useSelector(state => state.supplier);
+    const { message } = useSelector(state => state.ui);
     const {id} = useParams();
     const [formData, setFormData] = useState({
         name: '',
@@ -40,7 +41,7 @@ const SupplierEdit = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.update(id, formData))
+                dispatch(actions.update({ id, data: formData }))
     }
     const navigate = useNavigate()
     useEffect(() => {

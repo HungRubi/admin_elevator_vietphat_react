@@ -10,7 +10,7 @@ const { MdChevronRight } = icon
 const UserEdit = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { detailUser } = useSelector(state => state.app);
+    const { detailUser } = useSelector(state => state.user);
     const id = window.location.pathname.split('/').slice(-2, -1)[0];
 
     useEffect(() => {
@@ -64,7 +64,7 @@ const UserEdit = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateUser(id, formData));
+        dispatch(actions.updateUser({ id, data: formData }));
         navigate("/user");
     }
     return (

@@ -3,9 +3,13 @@ import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children }) => {
-    const { currentUser, accessToken } = useSelector(state => state.user);
-    if (!currentUser || !accessToken) {
+    const { currentUser, accessToken } = useSelector((state) => state.auth);
+    if (!accessToken) {
         return <Navigate to={"/login"} replace />;
+    }
+    /* Chờ restoreSession (GET /auth/me) khi có token nhưng chưa có user */
+    if (!currentUser?._id) {
+        return null;
     }
     return children;
 };

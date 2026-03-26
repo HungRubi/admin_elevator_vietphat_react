@@ -8,7 +8,9 @@ import * as actions from '../../store/actions'
 const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers,MdVerified } = icon
 
 const ProductEdit = () => {
-    const { detailProduct, categoryProduct, message, suppliers } = useSelector(state => state.app);
+    const { detailProduct, categoryProduct } = useSelector(state => state.product);
+    const { message } = useSelector(state => state.ui);
+    const { suppliers } = useSelector(state => state.supplier);
     const unit = [
         {
             id: 'Meter(m)',

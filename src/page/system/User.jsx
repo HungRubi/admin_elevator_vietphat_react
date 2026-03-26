@@ -9,15 +9,15 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, RiDeleteBin6Line, IoMdAd
 
 const User = () => {
     const dispatch = useDispatch();
-    const { user, totalPage } = useSelector(state => state.app);
+    const { user, totalPage } = useSelector(state => state.user);
     const handleChange = (e) => {
         const selected = e.target.value;
         if(selected === 'admin'){
-            dispatch(actions.filterUser("authour", "admin"))
+            dispatch(actions.filterUser({ query: "authour", value: "admin" }))
         }else if(selected === 'employee'){
-            dispatch(actions.filterUser("authour", "employee"))
+            dispatch(actions.filterUser({ query: "authour", value: "employee" }))
         }else if(selected === 'customer'){
-            dispatch(actions.filterUser("authour", "employee"))
+            dispatch(actions.filterUser({ query: "authour", value: "customer" }))
         }else{
             dispatch(actions.getUser())
         }
@@ -52,7 +52,7 @@ const User = () => {
     }
     useEffect(() => {
         if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterUser("start_date", valueDate.startDate, "end_date", valueDate.endDate));
+            dispatch(actions.filterUser({ query: "start_date", value: valueDate.startDate, query2: "end_date", value2: valueDate.endDate }));
         }
     }, [dispatch, valueDate])
     const [isModal, setIsModal] = useState(false);

@@ -9,7 +9,9 @@ const { MdChevronRight, MdOutlineDiscount, AiOutlineDollarCircle, MdNumbers, MdV
 
 const ProductAdd = () => {
     const dispatch = useDispatch();
-    const {categoryProduct, message, suppliers} = useSelector(state => state.app)
+    const { categoryProduct } = useSelector(state => state.product)
+    const { message } = useSelector(state => state.ui)
+    const { suppliers } = useSelector(state => state.supplier)
     useEffect(() => {
         dispatch(actions.getCategoryProduct());
         dispatch(actions.getSuppliers());

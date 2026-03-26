@@ -5,7 +5,7 @@ import * as actions from "../store/actions"
 
 export default function MonthlyChart() {
     const dispatch = useDispatch();
-    const {dataMonthlyRevenue} = useSelector(state => state.app);
+    const {dataMonthlyRevenue} = useSelector(state => state.dashboard);
     useEffect(() => {
         dispatch(actions.getMonthlyRevenue());
     }, [dispatch])

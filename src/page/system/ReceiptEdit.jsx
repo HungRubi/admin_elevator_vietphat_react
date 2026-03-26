@@ -16,7 +16,8 @@ const ReceiptEdit = () => {
     ]
     const { id } = useParams();
     const dispatch = useDispatch();
-    const {receipt, receiptDetail, message} = useSelector(state => state.app);
+    const { message } = useSelector(state => state.ui);
+    const {receipt, receiptDetail} = useSelector(state => state.receipt);
     useEffect(() => {
         dispatch(actions.getDetailReceipt(id))
     }, [dispatch, id])
@@ -155,7 +156,7 @@ const ReceiptEdit = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateReceipt(id, formData))
+        dispatch(actions.updateReceipt({ id, data: formData }))
     }
     const navigate = useNavigate();
     useEffect(() => {

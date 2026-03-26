@@ -23,7 +23,7 @@ const Notification = () => {
         },
     ];
     const dispatch = useDispatch();
-    const { notificaiton } = useSelector(state => state.app);
+    const { notificaiton } = useSelector(state => state.notification);
 
     useEffect(() => {
         dispatch(actions.getNotification())
@@ -46,7 +46,7 @@ const Notification = () => {
         const newValue = e.target.value;
         setSelected(newValue);
         if(newValue) {
-            dispatch(actions.filterNotification("type", newValue))
+            dispatch(actions.filterNotification({ query: "type", value: newValue }))
         }else {
             dispatch(actions.getNotification())
         }
@@ -63,7 +63,7 @@ const Notification = () => {
     }
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterNotification("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+            dispatch(actions.filterNotification({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
         }else{
             dispatch(actions.getNotification())
         }

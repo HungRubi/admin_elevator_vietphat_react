@@ -8,7 +8,7 @@ const { MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
 
 const Order = () => {
     const dispatch = useDispatch();
-    const { order, totalPage } = useSelector(state => state.app);
+    const { order, totalPage } = useSelector(state => state.order);
     const [ valueDate, setValueDate ] = useState({
         startDate: '',
         endDate: ''
@@ -21,13 +21,12 @@ const Order = () => {
     }
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterOrder("from_date", valueDate.startDate, "to_date", valueDate.endDate));
+            dispatch(actions.filterOrder({ query: "from_date", value: valueDate.startDate, query2: "to_date", value2: valueDate.endDate }));
         }else{
             dispatch(actions.getOrder())
         }
     }, [valueDate, dispatch]);
     const [current, setCurrent] = useState(1);
-    const [valueSearch, setValueSearch] = useState('');
     const limit = 10;
     const lastOrderIndex = current * limit;
     const firstOrderIndex = lastOrderIndex - limit;
@@ -65,8 +64,7 @@ const Order = () => {
         }
     }
     const handleSearch = (value) => {
-        setValueSearch(value);
-        dispatch(actions.getOrder(valueSearch));
+        dispatch(actions.getOrder(value));
     };
     const [isModal, setIsModal] = useState(false);
     const [idDeleted, setIdDeleted] = useState('')

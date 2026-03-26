@@ -9,7 +9,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const Article = () => {
     const dispatch = useDispatch();
-    const {article} = useSelector(state => state.app);
+    const {article} = useSelector(state => state.article);
     
     useEffect(() => {
         dispatch(actions.getArticle())
@@ -30,9 +30,9 @@ const Article = () => {
     const handleChange = (e) => {
         const valueFilter = e.target.value;
         if(valueFilter === "public"){
-            dispatch(actions.filterArticle("status", valueFilter))
+            dispatch(actions.filterArticle({ query: "status", value: valueFilter }))
         }else if(valueFilter === 'hidden'){
-            dispatch(actions.filterArticle("status", valueFilter))
+            dispatch(actions.filterArticle({ query: "status", value: valueFilter }))
         }else{
             dispatch(actions.getArticle())
         }
@@ -49,7 +49,7 @@ const Article = () => {
     }
     useEffect(() => {
         if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterArticle("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+            dispatch(actions.filterArticle({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
         }
     }, [valueDate.startDate, valueDate.endDate, dispatch])
     const [isModal, setIsModal] = useState(false);

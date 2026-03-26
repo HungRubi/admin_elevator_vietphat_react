@@ -20,7 +20,8 @@ const WarrantyEdit = () => {
         dispatch(actions.getAdd());
         dispatch(actions.getDetail(id));
     }, [dispatch, id]);
-    const { ordersByWarranty, message, warranty } = useSelector(state => state.app);
+    const { ordersByWarranty, warranty } = useSelector(state => state.warranty);
+    const { message } = useSelector(state => state.ui);
     const status = [
         {
             id: "đang xử lý",
@@ -42,7 +43,7 @@ const WarrantyEdit = () => {
         phone: "",
         user_id: "",
         address: "",
-        products: {},
+        products: [],
         description: "",
         video: "",
         status: "đang xử lý",
@@ -52,29 +53,39 @@ const WarrantyEdit = () => {
         code_order: "",
     })
     useEffect(() => {
-        if(warranty) {
-            setFormData({
-                code: warranty.code || "",
-                order_code: warranty.order_code?._id || "",
-                code_order: warranty.order_code?.order_code || "",
-                name: warranty.user_id?.name || "",
-                user_id: warranty.user_id?._id || "",
-                phone: warranty.user_id?.phone || "",
-                address: warranty.user_id?.address || "",
-                products:  {
-                    ...(warranty.product_id || {}),
+        if (!warranty?._id) return;
+        let od = Array.isArray(warranty.orderDetail) ? [...warranty.orderDetail] : [];
+        if (!od.length && warranty.product_id) {
+            const pid = warranty.product_id;
+            od = [
+                {
+                    _id: `warranty-line-${warranty._id}`,
+                    product_id: typeof pid === "object" ? pid : { _id: pid },
                     quantity: warranty.quantity || 1,
                 },
-                description: warranty.description || "",
-                video: warranty.video || "",
-                status: warranty.status || "đang xử lý",
-                purchase_date: warranty.purchaseDate || "",
-                warranty_date: warranty.warrantyDate || "",
-                orderDetail: warranty.orderDetail || [],
-            });
+            ];
         }
+        const products = od.map((item) => ({
+            product_id: item.product_id?._id || item.product_id,
+            quantity: item.quantity ?? 1,
+        }));
+        setFormData({
+            code: warranty.code || "",
+            order_code: warranty.order_code?._id || "",
+            code_order: warranty.order_code?.order_code || "",
+            name: warranty.user_id?.name || "",
+            user_id: warranty.user_id?._id || "",
+            phone: warranty.user_id?.phone || "",
+            address: warranty.user_id?.address || "",
+            products,
+            description: warranty.description || "",
+            video: warranty.video || "",
+            status: warranty.status || "đang xử lý",
+            purchase_date: warranty.purchaseDate || "",
+            warranty_date: warranty.warrantyDate || "",
+            orderDetail: od,
+        });
     }, [warranty])
-    console.log(formData)
     const handleChange = (e, selected) => {
         const {name} = e.target
         if (selected) {
@@ -117,20 +128,42 @@ const WarrantyEdit = () => {
             });
         }
     }
-    const data = {
-        order_code: formData.order_code,
-        user_id: formData.user_id,
-        address: formData.address,
-        products:formData.products,
-        description: formData.description,
-        video: formData.video,
-        status: formData.status,
-        purchase_date: formData.purchase_date,
-        warranty_date: formData.warranty_date
-    }
+    const handleDeleteItem = (itemToDelete) => {
+        if (!formData.orderDetail || formData.orderDetail.length <= 1) {
+            toast.warn("Phải giữ lại ít nhất một sản phẩm.");
+            return;
+        }
+        const updatedItems = formData.orderDetail.filter(
+            (item) => String(item._id) !== String(itemToDelete._id)
+        );
+        setFormData({
+            ...formData,
+            orderDetail: updatedItems,
+            products: updatedItems.map((item) => ({
+                product_id: item.product_id._id || item.product_id,
+                quantity: item.quantity,
+            })),
+        });
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateWarranty(id, data))
+        const products = Array.isArray(formData.products) ? formData.products : [];
+        if (products.length < 1 || products.length > 50) {
+            toast.warn("Cần từ 1 đến 50 dòng sản phẩm trong phiếu bảo hành.");
+            return;
+        }
+        const data = {
+            order_code: formData.order_code,
+            user_id: formData.user_id,
+            address: formData.address,
+            products,
+            description: formData.description,
+            video: formData.video,
+            status: formData.status,
+            purchase_date: formData.purchase_date,
+            warranty_date: formData.warranty_date,
+        };
+        dispatch(actions.updateWarranty({ id, data }));
     }
     const navigate = useNavigate();
     useEffect(() => {
@@ -154,18 +187,21 @@ const WarrantyEdit = () => {
             });
 
             // Prepare data for template
+            const firstLine = formData.orderDetail?.[0];
+            const p0 = firstLine?.product_id;
+            const prod = typeof p0 === "object" ? p0 : {};
             const data = {
                 code: formData?.code || '',
                 order_code: formData.code_order, 
                 name: formData?.name || '',
                 phone: formData?.phone || '',
                 address: formData?.address || '',
-                product: formData.products?.name || '',
-                quantity: formData.products?.quantity || '1',
+                product: prod?.name || '',
+                quantity: String(formData.products?.[0]?.quantity ?? firstLine?.quantity ?? '1'),
                 purchase_date: formData.purchase_date || '',
                 warranty_date: formData.warranty_date || '',
                 description: formData.description || '',
-                warranty_period: formData.products?.warranty_period || ''
+                warranty_period: prod?.warranty_period || ''
             };
 
             // Render document
@@ -262,58 +298,71 @@ const WarrantyEdit = () => {
                     </div>
                     <div className="flex-1">
                         <ul className="w-full">
-                            {formData.products ? (
-                                <li key={formData.products?._id}
+                            {formData.orderDetail && formData.orderDetail.length > 0 ? (
+                                formData.orderDetail.map((item) => (
+                                <li key={item._id}
                                 className="w-full border-b-custom order_items py-5">
                                     <div className="w-full flex items-center justify-between ">
                                         <div className="flex gap-2.5 items-center w-3/6">
+                                            <div className="w-[50px] h-[50px] flex items-center justify-center">
+                                                <Button type={"button"} onClick={() => handleDeleteItem(item)}
+                                                className={"!p-0.5 !px-1 !text-sm text-white bg-blue-500 shadow"}>
+                                                    Xóa
+                                                </Button>
+                                            </div>
                                             <div className="w-[90px] h-[90px] border border-[#cbd0dd] flex-none">
-                                                <img src={formData.products?.thumbnail_main} alt={formData.products?.name}
+                                                <img src={item.product_id?.thumbnail_main} alt={item.product_id?.name}
                                                 className='w-full object-cover' />
                                             </div>
                                             <div className="w-[80%]">
                                                 <h5 className="line-clamp-1 font-medium text-base text-gray-700">
-                                                    {formData.products?.name}
+                                                    {item.product_id?.name}
                                                 </h5>
                                                 <h5 className="text-sm line-clamp-1 mt-2">
-                                                    Đơn giá: {formatMony(formData.products?.price)}đ
+                                                    Đơn giá: {formatMony(item.product_id?.price)}đ
                                                 </h5>
                                             </div>
                                         </div>
                                         <div className="flex items-center w-2/6">
                                             <ButtonQuantity 
                                                 className="ml-4"
-                                                value={formData?.products?.quantity}
-                                                price={formData.products[0]?.price}
-                                                maxQuantity={warranty?.quantity}
+                                                value={item.quantity || 1}
+                                                price={item.product_id?.price}
+                                                maxQuantity={item.quantity}
                                                 onChange={(newQuantity) => {
-                                                    const updatedOrderDetail = {
-                                                        ...formData.products,
-                                                        quantity: newQuantity,
-                                                        totalPrice: newQuantity * formData.products?.price
-                                                    };
+                                                    const updatedOrderDetail = formData.orderDetail.map((detail) => {
+                                                        if (detail._id === item._id) {
+                                                            return {
+                                                                ...detail,
+                                                                quantity: newQuantity,
+                                                                totalPrice: newQuantity * item.product_id?.price
+                                                            };
+                                                        }
+                                                        return detail;
+                                                    });
                                                     setFormData({
                                                         ...formData,
-                                                        products: {
-                                                            ...formData.products,
-                                                            quantity: updatedOrderDetail.quantity,
-                                                            totalPrice: newQuantity * formData.products?.price
-                                                        }
+                                                        orderDetail: updatedOrderDetail,
+                                                        products: updatedOrderDetail.map((d) => ({
+                                                            product_id: d.product_id._id || d.product_id,
+                                                            quantity: d.quantity
+                                                        }))
                                                     });
                                                 }}
                                             />    
                                         </div>
                                         <div className="flex items-center whitespace-nowrap w-1/4">
                                             <span className="text-gray-500 text-sm leading-0">Category: </span> 
-                                            <span className="font-medium ml-2 text-gray-700">{formData.products?.category?.name || formData.products?.category}</span>    
+                                            <span className="font-medium ml-2 text-gray-700">{item.product_id?.category?.name || item.category}</span>    
                                         </div>
                                         <div className="flex justify-end items-center gap-2.5 leading-0 w-1/5">
                                             <h6 className='text-[25px] text-[#2f904b] font-medium'>
-                                                {formatMony(formData.products?.totalPrice || (formData.products?.quantity || 1) * formData.products?.price)}đ
+                                                {formatMony(item.totalPrice || (item.quantity || 1) * item.product_id?.price)}đ
                                             </h6>
                                         </div>
                                     </div>
                                 </li>
+                                ))
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-8">
                                     <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -9,7 +9,9 @@ const { MdChevronRight, IoImageOutline } = icon
 
 const BannerEdit = () => {
     const dispatch = useDispatch();
-    const {categoryBannerDetail, categoryDiscount, message} = useSelector(state => state.app);
+    const { categoryBannerDetail } = useSelector(state => state.banner);
+    const { categoryDiscount } = useSelector(state => state.discount);
+    const { message } = useSelector(state => state.ui);
     const id = window.location.pathname.split("/").slice(-2, -1)[0]
     useEffect(() => {
         dispatch(actions.getCategoryBannerDetail(id));
@@ -53,7 +55,7 @@ const BannerEdit = () => {
     }
     const handleSubmit  = (e) => {
         e.preventDefault();
-        dispatch(actions.updateBanner(id, formData))
+        dispatch(actions.updateBanner({ id, data: formData }))
     }
     const navigate = useNavigate();
     useEffect(() => {

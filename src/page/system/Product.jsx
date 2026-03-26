@@ -10,10 +10,9 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const Product = () => {
     const dispatch = useDispatch();
-    const { totalPage, products, categoryProduct } = useSelector(state => state.app);
+    const { totalPage, products, categoryProduct } = useSelector(state => state.product);
     useEffect(() => {
         dispatch(actions.getProducts());
-        dispatch(actions.getCategoryProduct())
     }, [dispatch]);
     const format = (money) => money?.toLocaleString('vi-VN');
     const [current, setCurrent] = useState(1);
@@ -43,14 +42,14 @@ const Product = () => {
     const handleChange = (e) => {
         const selectedItem = e.target.value;
         if(selectedItem){
-            dispatch(actions.filterProduct("category", selectedItem))
+            dispatch(actions.filterProduct({ query: "category", value: selectedItem }))
         }else{
             dispatch(actions.getProducts());
         }
     }
     useEffect(() => {
         if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterProduct("startDate", valueDate.startDate, "endDate", valueDate.endDate))
+            dispatch(actions.filterProduct({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }))
         }
     }, [dispatch, valueDate.startDate, valueDate.endDate])
     return (

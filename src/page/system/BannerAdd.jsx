@@ -8,7 +8,8 @@ import * as actions from '../../store/actions'
 const { MdChevronRight, IoImageOutline } = icon
 
 const BannerAdd = () => {
-    const { categoryDiscount, message } = useSelector(state => state.app);
+    const { categoryDiscount } = useSelector(state => state.discount);
+    const { message } = useSelector(state => state.ui);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(actions.getCategoryDiscount());

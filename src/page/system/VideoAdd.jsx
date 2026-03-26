@@ -8,7 +8,7 @@ const { MdChevronRight, IoImageOutline } = icon
 
 const VideoAdd = () => {
     const dispatch = useDispatch();
-    const {message} = useSelector(state => state.app);
+    const {message} = useSelector(state => state.ui);
     const [formData, setFormDate] = useState({
         name: "",
         content: "",

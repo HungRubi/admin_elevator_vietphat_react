@@ -10,7 +10,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const ProductCategory = () => {
     const dispatch = useDispatch();
-    const { totalPage, categoryProduct, searchProduct, searchType } = useSelector(state => state.app);
+    const { totalPage, categoryProduct, searchProduct, searchType } = useSelector(state => state.categoryProduct);
     useEffect(() => {
         dispatch(actions.getCategoryProduct());
     }, [dispatch]);

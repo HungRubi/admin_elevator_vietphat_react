@@ -23,7 +23,7 @@ const SemiCircle = () => {
     useEffect(() => {
         dispatch(actions.getOrderPayment());
     }, [dispatch])
-    const {dataOrderPayment} = useSelector(state => state.app);
+    const {dataOrderPayment} = useSelector(state => state.dashboard);
     useEffect(() => {
         // Simulate fetching data for paying vs non-paying customers
         // In a real application, you'd fetch this from your backend.

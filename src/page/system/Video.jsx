@@ -9,7 +9,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const Video = () => {
     const dispatch = useDispatch();
-    const {categoryVideo, totalPage, searchType, searchVideo} = useSelector(state => state.app);
+    const {categoryVideo, totalPage, searchType, searchVideo} = useSelector(state => state.video);
     const filterVideo = [
         {id: "public", text: "Public"},
         {id: "hidden", text: "Hidden"},
@@ -42,16 +42,16 @@ const Video = () => {
     const handleChange = (e) => {
         const newValue = e.target.value;
         if(newValue === "public"){
-            dispatch(actions.filterVideo("status", newValue))
+            dispatch(actions.filterVideo({ query: "status", value: newValue }))
         }else if(newValue === "hidden"){
-            dispatch(actions.filterVideo("status", newValue))
+            dispatch(actions.filterVideo({ query: "status", value: newValue }))
         }else{
             dispatch(actions.getCategoryVideo()); 
         }
     }
     useEffect(() => {
         if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterVideo("startDate", valueDate.startDate, "endDate", valueDate.endDate))
+            dispatch(actions.filterVideo({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }))
         }
     }, [valueDate.startDate, valueDate.endDate, dispatch])
     return (

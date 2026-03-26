@@ -8,7 +8,7 @@ import * as actions  from '../../store/actions';
 const { MdChevronRight, AiOutlineDollarCircle, BsTag } = icon
 
 const DiscountCategoryAdd = () => {
-    const { message } = useSelector(state => state.app)
+    const { message } = useSelector(state => state.ui)
     const status = [
         {
             id: 'giảm theo phần trăm',

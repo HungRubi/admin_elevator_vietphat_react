@@ -9,7 +9,7 @@ const {MdChevronRight, MdCall, MdOutlineMail, FaMapMarkerAlt, RiMessage3Line } =
 
 const NotificationAdd = () => {
     const dispatch = useDispatch();
-    const {message} = useSelector(state => state.app)
+    const {message} = useSelector(state => state.ui)
     const typeNotifi = [
         {
             id: "Thông báo hệ thống", 

@@ -1,13 +1,27 @@
 import rootReducer from "./store/reducers/rootReducers";
-import { createStore, applyMiddleware } from "redux";
-import { thunk } from 'redux-thunk';
-import { persistStore } from 'redux-persist';
-
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore } from "redux-persist";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 
 const reduxConfig = () => {
-    const store = createStore(rootReducer, applyMiddleware(thunk))
-    const persistor = persistStore(store);
-    return { store, persistor };
-}
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
+  });
+  const persistor = persistStore(store);
+  return { store, persistor };
+};
 
-export default reduxConfig
+export default reduxConfig;

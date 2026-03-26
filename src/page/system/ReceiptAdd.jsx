@@ -17,7 +17,7 @@ const ReceiptAdd = () => {
         totalPrice: ""
     });
     const navigate = useNavigate();
-    const { message } = useSelector(state => state.app)
+    const { message } = useSelector(state => state.ui)
     useEffect(() => {
         if(message === "Thêm phiếu nhập thành công") {
             navigate("/receipt");

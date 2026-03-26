@@ -32,13 +32,19 @@ export default function Report() {
         endDate: ""
     }) 
     useEffect(() => {
-        dispatch(actions.getReport("date", valueDate.date));
+        dispatch(
+            actions.getReport({
+                date: valueDate.date,
+                startDate: valueDate.startDate,
+                endDate: valueDate.endDate,
+            })
+        );
         dispatch(actions.getReprotWeek());
     }, [dispatch, valueDate])
     const { 
         summaryReport, dataReportWeek, dataCategoryChart, topSpenders, 
         productTren, formatComment, columnComment, warehouseReport} 
-    = useSelector(state => state.app);
+    = useSelector(state => state.report);
     const [current, setCurrent] = useState(1);
     const limit = 5;
     const lastCurrentIndex = current * limit;

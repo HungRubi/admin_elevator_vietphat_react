@@ -17,7 +17,7 @@ const Warranty = () => {
     useEffect(() => {
         dispatch(actions.getWarranty())
     }, [dispatch])
-    const  { warranties, totalPage } = useSelector(state => state.app);
+    const  { warranties, totalPage } = useSelector(state => state.warranty);
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastItemIndex = current * limit;
@@ -36,11 +36,11 @@ const Warranty = () => {
         const newValue = e.target.value;
         setSelected(newValue);
         if(newValue === "chấp thuận") {
-            dispatch(actions.filterWarranty("status", "chấp thuận"))
+            dispatch(actions.filterWarranty({ query: "status", value: "chấp thuận" }))
         }else if(newValue === "đang xử lý") {
-            dispatch(actions.filterWarranty("status", "đang xử lý"))
+            dispatch(actions.filterWarranty({ query: "status", value: "đang xử lý" }))
         }else if(newValue === "bị hủy") {
-            dispatch(actions.filterWarranty("status", "bị hủy"))
+            dispatch(actions.filterWarranty({ query: "status", value: "bị hủy" }))
         }else{
             dispatch(actions.getWarranty())
         }
@@ -57,7 +57,7 @@ const Warranty = () => {
     }
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterWarranty("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+            dispatch(actions.filterWarranty({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
         }else{
             dispatch(actions.getWarranty())
         }

@@ -8,7 +8,7 @@ import * as actions from '../store/actions'
 const { IoSunnyOutline, FaRegBell, FaArrowRightFromBracket, BsPerson, IoSettingsOutline} = icon;
 
 const Header = () => {
-    const { currentUser } = useSelector(state => state.user);
+    const { currentUser } = useSelector((state) => state.auth);
     const [openMenu, setOpenMenu] = useState(null);
     const toggleMenu = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);

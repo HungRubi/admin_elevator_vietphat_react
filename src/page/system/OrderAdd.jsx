@@ -11,7 +11,9 @@ const { MdChevronRight, MdOutlineDiscount, FaMapMarkerAlt, BsTag } = icon
 const OrderAdd = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const {orderUser, orderProduct, orderDiscount, productsByOrder, message} = useSelector(state => state.app);
+    const {orderUser, orderProduct, orderDiscount} = useSelector(state => state.order);
+    const { productsByOrder } = useSelector(state => state.product);
+    const { message } = useSelector(state => state.ui);
 
     // States
     const [shipping, setShipping] = useState(0);

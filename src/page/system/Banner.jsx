@@ -9,7 +9,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const Banner = () => {
     const dispatch = useDispatch();
-    const {categoryBanner, totalPage} = useSelector(state => state.app);
+    const {categoryBanner, totalPage} = useSelector(state => state.banner);
     
     useEffect(() => {
         dispatch(actions.getCategoryBanner())

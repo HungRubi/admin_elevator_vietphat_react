@@ -11,9 +11,9 @@ const Supplier = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(actions.getSuppliers())    
-    }, [])
+    }, [dispatch])
     const filterSupplier = []
-    const {totalPage, suppliers} = useSelector((state) => state.app);
+    const {totalPage, suppliers} = useSelector((state) => state.supplier);
     const [currentPage, setCurrentPage] = useState(1)
     const limit = 10;
     const lastIndex = currentPage * limit;

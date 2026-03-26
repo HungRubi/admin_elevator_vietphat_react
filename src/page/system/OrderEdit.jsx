@@ -21,7 +21,8 @@ const OrderEdit = () => {
     useEffect(() => {
         dispatch(actions.getOrderDetail(id));
     }, [dispatch, id])
-    const {orderEditProduct, orderDetail, discountOrder, message} = useSelector(state => state.app);
+    const {orderEditProduct, orderDetail, discountOrder} = useSelector(state => state.order);
+    const { message } = useSelector(state => state.ui);
     const totalPurchase = orderEditProduct?.reduce((acc, item ) => {
         return acc + (Number(item.price) * Number(item.quantity));
     }, 0);
@@ -117,7 +118,7 @@ const OrderEdit = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateOrder(id, formData));
+        dispatch(actions.updateOrder({ id, data: formData }));
     }
     useEffect(() => {
         if(message === "Cập nhật đơn hàng thành công") {

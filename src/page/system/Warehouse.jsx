@@ -20,7 +20,7 @@ const Warehouse = () => {
         },
     ];
     const dispatch = useDispatch();
-    const { warehouse } = useSelector(state => state.app);
+    const { warehouse } = useSelector(state => state.warehouse);
     const [current, setCurrent] = useState(1);
     const limit = 10;
     const lastCurrentIndex = current * limit;
@@ -39,7 +39,7 @@ const Warehouse = () => {
         const newValue = e.target.value.trim();
         setSelected(newValue);
         if(newValue) {
-            dispatch(actions.filterWarehouse("status",newValue))
+            dispatch(actions.filterWarehouse({ query: "status", value: newValue }))
         }else{
             dispatch(actions.filterWarehouse())
         }
@@ -56,9 +56,9 @@ const Warehouse = () => {
     }
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterWarranty("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+            dispatch(actions.filterWarehouse({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
         }else{
-            dispatch(actions.getWarranty())
+            dispatch(actions.getWarehouse())
         }
     }, [valueDate, dispatch]);
     return (
@@ -129,7 +129,11 @@ const Warehouse = () => {
                         ))}
                     </select>
                     <div className="w-1/2">
-                        <Search className={"!rounded-lg"} placeholder={"Enter product name..."}/>
+                        <Search
+                            className={"!rounded-lg"}
+                            placeholder={"Enter product name..."}
+                            onSearch={(value) => dispatch(actions.getWarehouse(value))}
+                        />
                     </div>
                 </div>
                 <div className="relative overflow-x-auto mt-5">

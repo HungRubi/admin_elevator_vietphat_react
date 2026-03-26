@@ -10,7 +10,7 @@ const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Lin
 
 const DiscountCategory = () => {
     const dispatch = useDispatch();
-    const { totalPage, categoryDiscount } = useSelector(state => state.app);
+    const { totalPage, categoryDiscount } = useSelector(state => state.discount);
     useEffect(() => {
         dispatch(actions.getCategoryDiscount());
     }, [dispatch]);

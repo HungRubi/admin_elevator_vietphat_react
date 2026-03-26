@@ -48,8 +48,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const dispatch = useDispatch();
-  const {message} = useSelector(state => state.app);
-  const { accessToken } = useSelector(state => state.user);
+  const { message } = useSelector((state) => state.ui);
+  const { accessToken, toastMessage } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (message) {
@@ -59,12 +59,26 @@ function App() {
   }, [message, dispatch]);
 
   useEffect(() => {
+    if (toastMessage) {
+      toast.success(toastMessage);
+      dispatch(actions.clearAuthToast());
+    }
+  }, [toastMessage, dispatch]);
+
+  useEffect(() => {
     setAccessToken(accessToken);
   }, [accessToken]);
 
   useEffect(() => {
+    if (accessToken) {
+      dispatch(actions.restoreSession());
+    }
+  }, [accessToken, dispatch]);
+
+  useEffect(() => {
     setAuthEventHandlers({
-      onTokenRefreshed: (newToken) => dispatch(actions.setAccessTokenState(newToken)),
+      onTokenRefreshed: (newToken) =>
+        dispatch(actions.setAccessTokenState(newToken)),
       onAuthFailed: () => dispatch(actions.logout()),
     });
   }, [dispatch]);

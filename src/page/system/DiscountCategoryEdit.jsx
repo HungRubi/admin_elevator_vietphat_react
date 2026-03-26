@@ -21,7 +21,8 @@ const DiscountCategoryEdit = () => {
     ]
 
     const dispatch = useDispatch();
-    const { categoryDiscountDetail, message } = useSelector(state => state.app);
+    const { categoryDiscountDetail } = useSelector(state => state.discount);
+    const { message } = useSelector(state => state.ui);
     const id = window.location.pathname.split("/").slice(-2, -1)[0];
     useEffect(() => {
         dispatch(actions.getCategoryDiscountDetail(id))
@@ -43,7 +44,7 @@ const DiscountCategoryEdit = () => {
     })
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateDiscount(formData, id))
+        dispatch(actions.updateDiscount({ data: formData, id }))
     }
     useEffect(() => {
         if(categoryDiscountDetail){

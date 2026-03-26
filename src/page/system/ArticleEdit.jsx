@@ -20,7 +20,8 @@ const ArticleEdit = () => {
     ]
 
     const dispatch = useDispatch();
-    const { detailArticle, message } = useSelector(state => state.app);
+    const { detailArticle } = useSelector(state => state.article);
+    const { message } = useSelector(state => state.ui);
     const id = window.location.pathname.split('/').slice(-2, -1)[0];
     useEffect(() => {
         dispatch(actions.getArticleDetail(id));
@@ -55,7 +56,7 @@ const ArticleEdit = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.updateArticle(id, formData))
+        dispatch(actions.updateArticle({ id, data: formData }))
     }
     const navigate = useNavigate();
     useEffect(() => {

@@ -10,7 +10,7 @@ const { MdChevronRight } = icon
 const UserAdd = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { message } = useSelector(state => state.app)
+    const { message } = useSelector(state => state.ui)
     const [formData, setFormData] = useState({
         name: '',
         email: '',

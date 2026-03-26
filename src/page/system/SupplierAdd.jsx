@@ -9,7 +9,7 @@ const { MdChevronRight, BsPerson, MdCall, MdOutlineMail, FaMapMarkerAlt } = icon
 
 const SupplierAdd = () => {
     const dispatch = useDispatch()
-    const { message } = useSelector(state => state.app)
+    const { message } = useSelector(state => state.ui)
     const [formData, setFormData] = useState({
         name: '',
         phone: '',

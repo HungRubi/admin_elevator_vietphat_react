@@ -19,7 +19,7 @@ const CustomTooltip = ({ active, payload }) => {
 
 const CircleChart = () => {
     const dispatch = useDispatch();
-    const {dataDiscountChart} = useSelector(state => state.app);
+    const {dataDiscountChart} = useSelector(state => state.dashboard);
     useEffect(() => {
         dispatch(actions.getOrderDiscount());
     }, [dispatch])

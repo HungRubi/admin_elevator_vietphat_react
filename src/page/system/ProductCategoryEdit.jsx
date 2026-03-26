@@ -9,7 +9,7 @@ const { MdChevronRight } = icon
 
 const ProductCategoryEdit = () => {
     const dispatch = useDispatch();
-    const {categoryProductDetail} = useSelector(state => state.app);
+    const {categoryProductDetail} = useSelector(state => state.categoryProduct);
     const id = window.location.pathname.split("/").slice(-2,-1)[0];
     const [formData, setFormData] = useState({
         name: categoryProductDetail?.name,

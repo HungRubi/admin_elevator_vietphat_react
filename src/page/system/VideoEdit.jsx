@@ -8,7 +8,8 @@ const { MdChevronRight, IoImageOutline } = icon
 
 const VideoEdit = () => {
     const dispatch = useDispatch();
-    const {message,videoDetail} = useSelector(state => state.app);
+    const {message} = useSelector(state => state.ui);
+    const {videoDetail} = useSelector(state => state.video);
     const [formData, setFormData] = useState({
         name: videoDetail?.name,
         content: videoDetail?.content,
@@ -40,7 +41,7 @@ const VideoEdit = () => {
     }, [videoDetail]);
     const handleSubmit = (e) => {
             e.preventDefault();
-            dispatch(actions.updateCategoryVideo(formData, id));
+            dispatch(actions.updateCategoryVideo({ data: formData, id }));
         }
     const status = [
         {

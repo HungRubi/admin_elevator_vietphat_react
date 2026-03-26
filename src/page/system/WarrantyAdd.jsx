@@ -14,7 +14,8 @@ const WarrantyAdd = () => {
     useEffect(() => {
         dispatch(actions.getAdd());
     }, [dispatch])
-    const { ordersByWarranty, message } = useSelector(state => state.app);
+    const { ordersByWarranty } = useSelector(state => state.warranty);
+    const { message } = useSelector(state => state.ui);
     const status = [
         {
             id: "đang xử lý",
@@ -110,20 +111,26 @@ const WarrantyAdd = () => {
         setFormData(updatedFormData);
     };
 
-    const data = {
+    const buildPayload = () => ({
         order_code: formData.order_code,
         user_id: formData.user_id,
         address: formData.address,
-        products:formData.products,
+        products: Array.isArray(formData.products) ? formData.products : [],
         description: formData.description,
         video: formData.video,
         status: formData.status,
         purchase_date: formData.purchase_date,
-        warranty_date: formData.warranty_date
-    }
+        warranty_date: formData.warranty_date,
+    });
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(actions.addWarranty(data))
+        const data = buildPayload();
+        const n = data.products.length;
+        if (n < 1 || n > 50) {
+            toast.warn("Cần từ 1 đến 50 dòng sản phẩm trong phiếu bảo hành.");
+            return;
+        }
+        dispatch(actions.addWarranty(data));
     }
     const navigate = useNavigate();
     useEffect(() => {
@@ -131,7 +138,6 @@ const WarrantyAdd = () => {
             navigate('/warranty');
         }
     }, [message, navigate])
-    console.log("formData", formData.products);
     return (
         <div className="full pt-5">
             <PageTitle title="Add Warranty" />

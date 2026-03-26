@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const TopLoadingBar = () => {
-  const globalLoading = useSelector((state) => state.app?.globalLoading);
+  const globalLoading = useSelector((state) => state.ui?.globalLoading);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

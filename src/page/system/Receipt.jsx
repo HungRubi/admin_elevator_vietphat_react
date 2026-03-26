@@ -10,7 +10,7 @@ const { MdChevronRight, IoMdAdd, MdAutoFixHigh, RiDeleteBin6Line, PiDotsThreeBol
 
 const Receipt  = () => {
     const dispatch = useDispatch();
-    const { receipts, totalPage } = useSelector(state => state.app);
+    const { receipts, totalPage } = useSelector(state => state.receipt);
     useEffect(() => {
         dispatch(actions.getReceipt());
     }, [dispatch])
@@ -34,15 +34,14 @@ const Receipt  = () => {
         const newValue = e.target.value;
         setSelected(newValue);
         if(newValue === "chưa xác nhận") {
-            dispatch(actions.filterReceipt("status", "chưa xác nhận"))
+            dispatch(actions.filterReceipt({ query: "status", value: "chưa xác nhận" }))
         }else if(newValue === "đã xác nhận") {
-            dispatch(actions.filterReceipt("status", "đã xác nhận"))
+            dispatch(actions.filterReceipt({ query: "status", value: "đã xác nhận" }))
         }else if(newValue === "đã hủy") {
-            dispatch(actions.filterReceipt("status", "đã hủy"))
+            dispatch(actions.filterReceipt({ query: "status", value: "đã hủy" }))
         }else{
             dispatch(actions.getReceipt())
         }
-        console.log(newValue);
     }
     const [ valueDate, setValueDate ] = useState({
             startDate: '',
@@ -56,7 +55,7 @@ const Receipt  = () => {
     }
     useEffect(() => {
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterReceipt("startDate", valueDate.startDate, "endDate", valueDate.endDate));
+            dispatch(actions.filterReceipt({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
         }else{
             dispatch(actions.getReceipt())
         }
