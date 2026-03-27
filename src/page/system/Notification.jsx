@@ -8,6 +8,7 @@ import * as actions from '../../store/actions'
 const {MdChevronRight, IoMdAdd, MdAutoFixHigh, RiDeleteBin6Line, PiDotsThreeBold } = icons
 
 const Notification = () => {
+    const LIMIT = 10;
     const notificationFilter = [
         {
             id: "Thông báo hệ thống", 
@@ -23,19 +24,11 @@ const Notification = () => {
         },
     ];
     const dispatch = useDispatch();
-    const { notificaiton } = useSelector(state => state.notification);
-
-    useEffect(() => {
-        dispatch(actions.getNotification())
-    }, [dispatch]);
+    const { notificaiton, totalPage = 1, page: serverPage = 1 } = useSelector(state => state.notification);
 
     const [current, setCurrent] = useState(1);
 
-    const limit = 10;
-    const lastItemIndex = current * limit;
-    const firstItemIndex = lastItemIndex - limit;
-
-    const currentNoti = notificaiton?.slice(firstItemIndex, lastItemIndex)
+    const [searchTerm, setSearchTerm] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const handleDelete = () => {
@@ -44,12 +37,8 @@ const Notification = () => {
     const [selected, setSelected] = useState("");
     const handleChange = (e) => {
         const newValue = e.target.value;
+        setCurrent(1);
         setSelected(newValue);
-        if(newValue) {
-            dispatch(actions.filterNotification({ query: "type", value: newValue }))
-        }else {
-            dispatch(actions.getNotification())
-        }
     }
     const [ valueDate, setValueDate ] = useState({
             startDate: '',
@@ -61,13 +50,51 @@ const Notification = () => {
             [e.target.name] : e.target.value,
         })
     }
+    const handleSearch = (value) => {
+        setCurrent(1);
+        setSearchTerm(value || "");
+    }
+
     useEffect(() => {
+        const page = current < 1 ? 1 : current;
+        const options = {
+            page,
+            limit: LIMIT,
+            offset: (page - 1) * LIMIT,
+            timkiem: searchTerm || undefined,
+        };
+
         if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterNotification({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
-        }else{
-            dispatch(actions.getNotification())
+            dispatch(actions.filterNotification({
+                query: "startDate",
+                value: valueDate.startDate,
+                query2: "endDate",
+                value2: valueDate.endDate,
+                options: {
+                    ...options,
+                    notification: selected || undefined,
+                },
+            }));
+            return;
         }
-    }, [valueDate, dispatch]);
+
+        if (selected) {
+            dispatch(actions.filterNotification({
+                query: "type",
+                value: selected,
+                options,
+            }));
+            return;
+        }
+
+        dispatch(actions.getNotification({ search: searchTerm, options }));
+    }, [dispatch, current, selected, valueDate.startDate, valueDate.endDate, searchTerm]);
+
+    useEffect(() => {
+        if (serverPage !== current) {
+            setCurrent(serverPage);
+        }
+    }, [serverPage, current]);
     return (
         <div>
             <div className="full pt-5">
@@ -137,7 +164,7 @@ const Notification = () => {
                             ))}
                         </select>
                         <div className="w-1/2">
-                            <Search className={"!rounded-lg"} placeholder={"Enter user name..."}/>
+                            <Search className={"!rounded-lg"} placeholder={"Enter user name..."} onSearch={handleSearch}/>
                         </div>
                     </div>
                     <div className="relative overflow-x-auto mt-5">
@@ -165,7 +192,7 @@ const Notification = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {notificaiton && notificaiton.length > 0 ? currentNoti.map(item => (
+                                {notificaiton && notificaiton.length > 0 ? notificaiton.map(item => (
                                     <tr key={item._id}
                                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
                                         <td className="px-2 py-4 w-[15px] min-h-[70px]">
@@ -248,7 +275,7 @@ const Notification = () => {
                                 )}
                             </tbody>
                         </table>
-                        <PageBar currentPage={current} totalPage={Math.ceil(notificaiton.length / limit)} onPageChange={setCurrent}/>
+                        <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
                     </div>
                 </div>
             </div>

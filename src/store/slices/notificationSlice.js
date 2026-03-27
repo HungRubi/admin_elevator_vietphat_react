@@ -4,9 +4,13 @@ import { setMessage } from "./uiSlice";
 
 export const getNotification = createAsyncThunk(
   "notification/getNotification",
-  async (search = "", { rejectWithValue }) => {
-    const res = await apis.getNotification(search);
-    if (res.ok) return { res: res.data, search };
+  async (payload = "", { rejectWithValue }) => {
+    const normalizedPayload =
+      typeof payload === "string"
+        ? { search: payload, options: {} }
+        : { search: payload?.search || "", options: payload?.options || {} };
+    const res = await apis.getNotification(normalizedPayload.search, normalizedPayload.options);
+    if (res.ok) return { res: res.data, search: normalizedPayload.search };
     return rejectWithValue(res.message || "Lỗi tải thông báo");
   }
 );
@@ -46,11 +50,19 @@ export const deleteNotification = createAsyncThunk(
 
 export const filterNotification = createAsyncThunk(
   "notification/filterNotification",
-  async ({ query, value, query2, value2 }, { rejectWithValue }) => {
-    const params = new URLSearchParams();
-    if (query && value && value !== "undefined") params.append(query, value);
-    if (query2 && value2 && value2 !== "undefined") params.append(query2, value2);
-    const res = await apis.filterNotification(params.toString());
+  async ({ query, value, query2, value2, options = {} }, { rejectWithValue }) => {
+    const res = await apis.filterNotification({
+      [query]: value,
+      ...(query2 ? { [query2]: value2 } : {}),
+      timkiem: options.timkiem,
+      q: options.q,
+      page: options.page,
+      offset: options.offset,
+      limit: options.limit,
+      sort: options.sort,
+      order: options.order,
+      notification: options.notification,
+    });
     if (res.ok) return res.data;
     return rejectWithValue(res.message || "Lọc thông báo thất bại");
   }

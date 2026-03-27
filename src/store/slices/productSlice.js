@@ -4,9 +4,13 @@ import { setMessage } from "./uiSlice";
 
 export const getProducts = createAsyncThunk(
   "product/getProducts",
-  async (search = "", { rejectWithValue }) => {
-    const res = await apis.getProducts(search);
-    if (res.ok) return { data: res.data, search };
+  async (payload = "", { rejectWithValue }) => {
+    const normalizedPayload =
+      typeof payload === "string"
+        ? { search: payload, options: {} }
+        : { search: payload?.search || "", options: payload?.options || {} };
+    const res = await apis.getProducts(normalizedPayload.search, normalizedPayload.options);
+    if (res.ok) return { data: res.data, search: normalizedPayload.search };
     return rejectWithValue(res.message || "Lỗi tải sản phẩm");
   }
 );
@@ -58,8 +62,8 @@ export const deleteProduct = createAsyncThunk(
 
 export const filterProduct = createAsyncThunk(
   "product/filterProduct",
-  async ({ query, value, query2, value2 }, { rejectWithValue }) => {
-    const res = await apis.filterProduct(query, value, query2, value2);
+  async ({ query, value, query2, value2, options = {} }, { rejectWithValue }) => {
+    const res = await apis.filterProduct(query, value, query2, value2, options);
     if (res.ok) return res.data;
     return rejectWithValue(res.message || "Lọc sản phẩm thất bại");
   }

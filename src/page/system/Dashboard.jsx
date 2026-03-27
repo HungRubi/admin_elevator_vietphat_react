@@ -14,67 +14,49 @@ import { formatMony } from '../../util/formatMony';
 const { PiDotsThreeBold, MdAutoFixHigh, RiDeleteBin6Line, FaStar, FaPause, IoClose, FaRegStar} = icon;
 
 const Dashboard = () => {
-    const calculateTotalRows = (comments) => {
-        if (!comments || !Array.isArray(comments)) return 0;
-        
-        return comments.reduce((total, comment) => {
-            const productCount = Array.isArray(comment.product_id) ? comment.product_id.length : 1;
-            return total + productCount;
-        }, 0);
-    };
-    const getCommentsForCurrentPage = (comments, currentPage, limitPerPage) => {
-        if (!comments || !Array.isArray(comments)) return [];
-        let rowCount = 0;
-        let result = [];
-        let startRow = (currentPage - 1) * limitPerPage;
-        let endRow = startRow + limitPerPage;
-            
-        for (let i = 0; i < comments.length; i++) {
-            const comment = comments[i];
-            const products = Array.isArray(comment.product_id) ? comment.product_id : [];
-            const productCount = products.length || 1;
-            
-            // Nếu tất cả các hàng của comment này đều dưới startRow, bỏ qua
-            if (rowCount + productCount <= startRow) {
-                rowCount += productCount;
-                continue;
-            }
-            
-            if (rowCount >= endRow) break;
-            
-            // Tính các sản phẩm nằm trong phạm vi trang hiện tại
-            const productsInRange = [];
-            for (let j = 0; j < products.length; j++) {
-                if (rowCount >= startRow && rowCount < endRow) {
-                    productsInRange.push(products[j]);
-                }
-                rowCount++;
-            }
-            
-            // Nếu có sản phẩm nằm trong phạm vi, thêm comment này vào kết quả
-            if (productsInRange.length > 0) {
-                result.push({
-                    ...comment,
-                    product_id: productsInRange
-                });
-            }
-        }
-        return result;
-    };
+    const COMMENT_LIMIT = 10;
     const dispatch = useDispatch();
+    const [current, setCurrent] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedStar, setSelectedStar] = useState("");
+
     useEffect(() => {
-        dispatch(actions.getComment());
         dispatch(actions.getOrder());
         dispatch(actions.getTotalOrderLastWeek());
     }, [dispatch])
-    const { comment } = useSelector(state => state.comment);
+    const { comment, totalPage = 1 } = useSelector(state => state.comment);
     const { order } = useSelector(state => state.order);
     const { dataTotalOrder, summaryOrder } = useSelector(state => state.dashboard);
-    const [current, setCurrent] = useState(1);
-    const limit = 10;
-    const currentComment = getCommentsForCurrentPage(comment, current, limit);
-    const totalRows = calculateTotalRows(comment);
-    const totalPage = Math.ceil(totalRows / limit);
+
+    useEffect(() => {
+        const page = current < 1 ? 1 : current;
+        const options = {
+            page,
+            limit: COMMENT_LIMIT,
+            offset: (page - 1) * COMMENT_LIMIT,
+        };
+
+        if (selectedStar) {
+            dispatch(
+                actions.filterComment({
+                    query: "star",
+                    value: Number(selectedStar),
+                    options: {
+                        ...options,
+                        timkiem: searchTerm || undefined,
+                    },
+                })
+            );
+            return;
+        }
+
+        dispatch(
+            actions.getComment({
+                search: searchTerm,
+                options,
+            })
+        );
+    }, [dispatch, current, searchTerm, selectedStar]);
 
     const getOrdersThisMonthByStatus = (orders) => {
         const now = new Date();
@@ -126,15 +108,12 @@ const Dashboard = () => {
         {id: 5, text: "5 Sao"},
     ]
     const handleChange = (e) => {
-        const newValue = Number(e.target.value);
-        if(newValue >= 1 && newValue <= 5){
-            dispatch(actions.filterComment({ query: "star", value: newValue }))
-        }else{
-            dispatch(actions.getComment())
-        }
+        setCurrent(1);
+        setSelectedStar(e.target.value);
     }
     const handleSearch = (value) => {
-        dispatch(actions.getComment(value))
+        setCurrent(1);
+        setSearchTerm(value || "");
     }
     const columnToTalOrder = [
         {
@@ -284,7 +263,7 @@ const Dashboard = () => {
                         </thead>
                         <tbody>
                         {comment && comment.length > 0 ? 
-                            currentComment?.flatMap(item => 
+                            comment?.flatMap(item => 
                                 // Kiểm tra nếu product_id là một mảng và có phần tử
                                 Array.isArray(item.product_id) && item.product_id.length > 0 ?
                                     // Map qua từng sản phẩm trong product_id

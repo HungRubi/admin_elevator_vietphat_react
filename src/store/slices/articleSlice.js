@@ -8,22 +8,27 @@ const normalizeList = (res, search) => {
   return {
     article: list || [],
     totalPage: d?.totalPage || 1,
+    page: d?.page || 1,
   };
 };
 
 export const getArticle = createAsyncThunk(
   "article/getArticle",
-  async (search = "", { rejectWithValue }) => {
-    const res = await apis.getArticle(search);
-    if (res.ok) return { res: res.data, search };
+  async (payload = "", { rejectWithValue }) => {
+    const normalizedPayload =
+      typeof payload === "string"
+        ? { search: payload, options: {} }
+        : { search: payload?.search || "", options: payload?.options || {} };
+    const res = await apis.getArticle(normalizedPayload.search, normalizedPayload.options);
+    if (res.ok) return { res: res.data, search: normalizedPayload.search };
     return rejectWithValue(res.message || "Lỗi tải bài viết");
   }
 );
 
 export const filterArticle = createAsyncThunk(
   "article/filterArticle",
-  async ({ query, value, query2, value2 }, { rejectWithValue }) => {
-    const res = await apis.filterArticle(query, value, query2, value2);
+  async ({ query, value, query2, value2, options = {} }, { rejectWithValue }) => {
+    const res = await apis.filterArticle(query, value, query2, value2, options);
     if (res.ok) return res.data;
     return rejectWithValue(res.message || "Lọc bài viết thất bại");
   }
@@ -77,6 +82,7 @@ export const deleteArticle = createAsyncThunk(
 const initialState = {
   article: [],
   totalPage: 1,
+  page: 1,
   detailArticle: {},
   error: null,
 };
@@ -88,18 +94,21 @@ const articleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getArticle.fulfilled, (state, action) => {
-        const { article, totalPage } = normalizeList(action.payload.res, action.payload.search);
+        const { article, totalPage, page } = normalizeList(action.payload.res, action.payload.search);
         state.article = article;
         state.totalPage = totalPage || 1;
+        state.page = page || 1;
       })
       .addCase(getArticle.rejected, (state, action) => {
         state.error = action.payload || null;
         state.article = [];
         state.totalPage = 1;
+        state.page = 1;
       })
       .addCase(filterArticle.fulfilled, (state, action) => {
         state.article = action.payload?.formatArticle || [];
         state.totalPage = action.payload?.totalPage || 1;
+        state.page = action.payload?.page || 1;
       })
       .addCase(getArticleDetail.fulfilled, (state, action) => {
         state.detailArticle = action.payload?.data?.article || {};

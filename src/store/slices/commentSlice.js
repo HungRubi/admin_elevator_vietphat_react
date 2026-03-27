@@ -3,17 +3,22 @@ import * as apis from "../endpoints/comments";
 
 export const getComment = createAsyncThunk(
   "comment/getComment",
-  async (search = "", { rejectWithValue }) => {
-    const res = await apis.getComment(search);
-    if (res.ok) return { data: res.data, search };
+  async (payload = "", { rejectWithValue }) => {
+    const normalizedPayload =
+      typeof payload === "string"
+        ? { search: payload, options: {} }
+        : { search: payload?.search || "", options: payload?.options || {} };
+
+    const res = await apis.getComment(normalizedPayload.search, normalizedPayload.options);
+    if (res.ok) return { data: res.data, search: normalizedPayload.search };
     return rejectWithValue(res.message || "Lỗi tải comment");
   }
 );
 
 export const filterComment = createAsyncThunk(
   "comment/filterComment",
-  async ({ query, value, query2, value2 }, { rejectWithValue }) => {
-    const res = await apis.filterComment(query, value, query2, value2);
+  async ({ query, value, query2, value2, options = {} }, { rejectWithValue }) => {
+    const res = await apis.filterComment(query, value, query2, value2, options);
     if (res.ok) return res.data;
     return rejectWithValue(res.message || "Lọc comment thất bại");
   }

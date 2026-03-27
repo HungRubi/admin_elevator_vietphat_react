@@ -8,34 +8,25 @@ import * as actions from '../../store/actions';
 const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
 
 const Article = () => {
+    const LIMIT = 5;
     const dispatch = useDispatch();
-    const {article} = useSelector(state => state.article);
-    
-    useEffect(() => {
-        dispatch(actions.getArticle())
-    }, [dispatch])
-    const [current, setCurrent] = useState(1);
-    const limit = 5;
-    const lastArticleIndex = current * limit;
-    const firstArticleIndex = lastArticleIndex - limit;
+    const { article, totalPage = 1, page: serverPage = 1 } = useSelector(state => state.article);
 
-    const currentArticle = article?.slice(firstArticleIndex, lastArticleIndex);
+    const [current, setCurrent] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
     const filterArticle = [
         {id: 'public', text: 'Public'},
         {id: 'hidden', text: 'Hidden'}
     ]
     const handleSearch = (value) => {
-        dispatch(actions.getArticle(value))
+        setCurrent(1);
+        setSearchTerm(value || "");
     }
     const handleChange = (e) => {
         const valueFilter = e.target.value;
-        if(valueFilter === "public"){
-            dispatch(actions.filterArticle({ query: "status", value: valueFilter }))
-        }else if(valueFilter === 'hidden'){
-            dispatch(actions.filterArticle({ query: "status", value: valueFilter }))
-        }else{
-            dispatch(actions.getArticle())
-        }
+        setCurrent(1);
+        setStatusFilter(valueFilter);
     }
     const [valueDate, setValueDate] = useState({
         startDate: '',
@@ -48,10 +39,41 @@ const Article = () => {
         })
     }
     useEffect(() => {
-        if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterArticle({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }));
+        const page = current < 1 ? 1 : current;
+        const options = {
+            page,
+            limit: LIMIT,
+            offset: (page - 1) * LIMIT,
+            timkiem: searchTerm || undefined,
+        };
+
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterArticle({
+                query: "startDate",
+                value: valueDate.startDate,
+                query2: "endDate",
+                value2: valueDate.endDate,
+                options: {
+                    ...options,
+                    status: statusFilter || undefined,
+                },
+            }));
+            return;
         }
-    }, [valueDate.startDate, valueDate.endDate, dispatch])
+
+        if (statusFilter) {
+            dispatch(actions.filterArticle({ query: "status", value: statusFilter, options }));
+            return;
+        }
+
+        dispatch(actions.getArticle({ search: searchTerm, options }));
+    }, [dispatch, current, searchTerm, statusFilter, valueDate.startDate, valueDate.endDate]);
+
+    useEffect(() => {
+        if (serverPage !== current) {
+            setCurrent(serverPage);
+        }
+    }, [serverPage, current]);
     const [isModal, setIsModal] = useState(false);
     const [itemId, setItemId] = useState();
     const handleDelete = (id) => {
@@ -156,7 +178,7 @@ const Article = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {article && article.length > 0 ? currentArticle?.map((item) => (
+                            {article && article.length > 0 ? article?.map((item) => (
                                 <tr key={item._id}
                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
                                     <td className="px-2 py-4 w-[15px]">
@@ -216,7 +238,7 @@ const Article = () => {
                             )}
                         </tbody>
                     </table>
-                    <PageBar currentPage={current} totalPage={Math.ceil(article.length / limit)} onPageChange={setCurrent}/>
+                    <PageBar currentPage={current} totalPage={totalPage} onPageChange={setCurrent}/>
                 </div>
             </div>
         </div>

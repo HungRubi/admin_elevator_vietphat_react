@@ -9,18 +9,13 @@ import { useState } from 'react';
 const { PiDotsThreeBold, MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
 
 const Product = () => {
+    const LIMIT = 10;
     const dispatch = useDispatch();
-    const { totalPage, products, categoryProduct } = useSelector(state => state.product);
-    useEffect(() => {
-        dispatch(actions.getProducts());
-    }, [dispatch]);
+    const { totalPage = 1, page: serverPage = 1, products, categoryProduct } = useSelector(state => state.product);
     const format = (money) => money?.toLocaleString('vi-VN');
     const [current, setCurrent] = useState(1);
-    const limit = 10;
-    const lastUserIndex = current * limit;
-    const firstUserIndex = lastUserIndex - limit;
-
-    const currentProduct = products?.slice(firstUserIndex, lastUserIndex);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
     const [isModal, setIsModal] = useState(false);
     const [deleteItem, setDeleteItem] = useState();
     const handleDelete = () => {
@@ -37,21 +32,50 @@ const Product = () => {
         })
     }
     const handleSearch = (value) => {
-        dispatch(actions.getProducts(value))
+        setCurrent(1);
+        setSearchTerm(value || "")
     }
     const handleChange = (e) => {
         const selectedItem = e.target.value;
-        if(selectedItem){
-            dispatch(actions.filterProduct({ query: "category", value: selectedItem }))
-        }else{
-            dispatch(actions.getProducts());
-        }
+        setCurrent(1);
+        setCategoryFilter(selectedItem);
     }
     useEffect(() => {
-        if(valueDate.startDate && valueDate.endDate){
-            dispatch(actions.filterProduct({ query: "startDate", value: valueDate.startDate, query2: "endDate", value2: valueDate.endDate }))
+        const page = current < 1 ? 1 : current;
+        const options = {
+            page,
+            limit: LIMIT,
+            offset: (page - 1) * LIMIT,
+            timkiem: searchTerm || undefined,
+        };
+
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterProduct({
+                query: "startDate",
+                value: valueDate.startDate,
+                query2: "endDate",
+                value2: valueDate.endDate,
+                options: {
+                    ...options,
+                    category: categoryFilter || undefined,
+                },
+            }));
+            return;
         }
-    }, [dispatch, valueDate.startDate, valueDate.endDate])
+
+        if (categoryFilter) {
+            dispatch(actions.filterProduct({ query: "category", value: categoryFilter, options }));
+            return;
+        }
+
+        dispatch(actions.getProducts({ search: searchTerm, options }));
+    }, [dispatch, current, searchTerm, categoryFilter, valueDate.startDate, valueDate.endDate])
+
+    useEffect(() => {
+        if (serverPage !== current) {
+            setCurrent(serverPage);
+        }
+    }, [serverPage, current]);
     return (
         <div className="full pt-5">
             <PageTitle title="Product" />
@@ -156,7 +180,7 @@ const Product = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {products && products.length > 0 ? currentProduct?.map((item) => (
+                            {products && products.length > 0 ? products?.map((item) => (
                                 <tr key={item._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
                                     <td className="px-2 py-4 w-[15px]">
                                         <input type="checkbox" className='scale-120'/>

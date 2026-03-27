@@ -2,11 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as apis from "../endpoints/order";
 import { setMessage } from "./uiSlice";
 
+const unwrap = (res) => (res && typeof res === "object" && "data" in res ? res.data : res) ?? res;
+
 export const getOrder = createAsyncThunk(
   "order/getOrder",
-  async (searchType = "", { rejectWithValue }) => {
-    const res = await apis.getOrder(searchType);
-    if (res.ok) return { data: res.data, searchType };
+  async (payload = "", { rejectWithValue }) => {
+    const normalizedPayload =
+      typeof payload === "string"
+        ? { searchType: payload, options: {} }
+        : { searchType: payload?.searchType || "", options: payload?.options || {} };
+    const res = await apis.getOrder(normalizedPayload.searchType, normalizedPayload.options);
+    if (res.ok) return { data: res.data, searchType: normalizedPayload.searchType };
     return rejectWithValue(res.message || "Lỗi tải đơn hàng");
   }
 );
@@ -55,8 +61,8 @@ export const addOrder = createAsyncThunk(
 
 export const filterOrder = createAsyncThunk(
   "order/filterOrder",
-  async ({ query, value, query2, value2 }, { rejectWithValue }) => {
-    const res = await apis.filterOrder(query, value, query2, value2);
+  async ({ query, value, query2, value2, options = {} }, { rejectWithValue }) => {
+    const res = await apis.filterOrder(query, value, query2, value2, options);
     if (res.ok) return res.data;
     return rejectWithValue(res.message || "Lọc đơn thất bại");
   }
@@ -100,8 +106,10 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getOrder.fulfilled, (state, action) => {
-        const d = action.payload.data;
-        state.order = action.payload.searchType ? d?.searchOrder || [] : d?.orderFormat || [];
+        const d = unwrap(action.payload.data) || {};
+        state.order = action.payload.searchType
+          ? d?.searchOrder || d?.orderFormat || d?.orders || []
+          : d?.orderFormat || d?.orders || d?.searchOrder || [];
         state.searchOrder = d?.searchOrder || [];
         state.total = d?.total || 0;
         state.totalPage = d?.totalPage || 1;
@@ -111,8 +119,8 @@ const orderSlice = createSlice({
         state.searchType = !!action.payload.searchType;
       })
       .addCase(filterOrder.fulfilled, (state, action) => {
-        const d = action.payload;
-        state.order = d?.orders || [];
+        const d = unwrap(action.payload) || {};
+        state.order = d?.orders || d?.orderFormat || d?.searchOrder || [];
         state.total = d?.total || 0;
         state.totalPage = d?.totalPage || 1;
         state.page = d?.page || 1;

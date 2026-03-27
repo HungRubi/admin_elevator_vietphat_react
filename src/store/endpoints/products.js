@@ -56,11 +56,19 @@ export const deleteProduct = async (id) => {
     });
 };
 
-export const filterProduct = async (query, value, query2, value2) => {
+export const filterProduct = async (query, value, query2, value2, options = {}) => {
     return request({
         url: `/products/filter${toQueryString({
             [query]: value,
             ...(query2 ? { [query2]: value2 } : {}),
+            timkiem: options.timkiem,
+            q: options.q,
+            page: options.page,
+            offset: options.offset,
+            limit: options.limit,
+            sort: options.sort,
+            order: options.order,
+            product: options.product,
         })}`,
         method: "GET",
     });

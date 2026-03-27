@@ -7,8 +7,9 @@ import * as actions from '../../store/actions'
 const { MdChevronRight, MdAutoFixHigh, IoMdAdd, RiDeleteBin6Line} = icon;
 
 const Order = () => {
+    const LIMIT = 10;
     const dispatch = useDispatch();
-    const { order, totalPage } = useSelector(state => state.order);
+    const { order, totalPage = 1 } = useSelector(state => state.order);
     const [ valueDate, setValueDate ] = useState({
         startDate: '',
         endDate: ''
@@ -19,18 +20,8 @@ const Order = () => {
             [e.target.name] : e.target.value,
         })
     }
-    useEffect(() => {
-        if (valueDate.startDate && valueDate.endDate) {
-            dispatch(actions.filterOrder({ query: "from_date", value: valueDate.startDate, query2: "to_date", value2: valueDate.endDate }));
-        }else{
-            dispatch(actions.getOrder())
-        }
-    }, [valueDate, dispatch]);
     const [current, setCurrent] = useState(1);
-    const limit = 10;
-    const lastOrderIndex = current * limit;
-    const firstOrderIndex = lastOrderIndex - limit;
-    const currentOrder = order?.slice(firstOrderIndex, lastOrderIndex);
+    const [searchTerm, setSearchTerm] = useState("");
     const filterType = [
         { id: 1, text: "Tất cả" },
         { id: 2, text: "Đang giao hàng" },
@@ -44,28 +35,50 @@ const Order = () => {
     const [selected, setSelected] = useState("");
     const handleChange = (e) => {
         const newValue = e.target.value;
+        setCurrent(1);
         setSelected(newValue);
-        if(newValue === "Đang giao hàng"){
-            dispatch(actions.filterOrder("status", "Đang giao hàng"))
-        }else if(newValue === "Đang xử lý"){
-            dispatch(actions.filterOrder("status", "Đang xử lý"))
-        }else if(newValue === "Thành công"){
-            dispatch(actions.filterOrder("status", "Thành công"))
-        }else if(newValue === "Thất bại"){
-            dispatch(actions.filterOrder("status", "Thất bại"))
-        }else if(newValue === "Thanh toán khi nhận hàng"){
-            dispatch(actions.filterOrder("payment_method", "Thanh toán khi nhận hàng"))
-        }else if(newValue === "Ví điện tử Momo"){
-            dispatch(actions.filterOrder("payment_method", "Ví điện tử Momo"))
-        }else if(newValue === "Atm nội địa"){
-            dispatch(actions.filterOrder("payment_method", "Atm nội địa"))
-        }else{
-            dispatch(actions.getOrder())
-        }
     }
     const handleSearch = (value) => {
-        dispatch(actions.getOrder(value));
+        setCurrent(1);
+        setSearchTerm(value || "");
     };
+
+    useEffect(() => {
+        const page = current < 1 ? 1 : current;
+        const options = {
+            page,
+            limit: LIMIT,
+            offset: (page - 1) * LIMIT,
+        };
+
+        if (valueDate.startDate && valueDate.endDate) {
+            dispatch(actions.filterOrder({
+                query: "from_date",
+                value: valueDate.startDate,
+                query2: "to_date",
+                value2: valueDate.endDate,
+                options: {
+                    ...options,
+                    timkiem: searchTerm || undefined,
+                },
+            }));
+            return;
+        }
+
+        if (selected) {
+            if (["Đang giao hàng", "Đang xử lý", "Thành công", "Thất bại"].includes(selected)) {
+                dispatch(actions.filterOrder({ query: "status", value: selected, options }));
+                return;
+            }
+            if (["Thanh toán khi nhận hàng", "Ví điện tử Momo", "Atm nội địa"].includes(selected)) {
+                dispatch(actions.filterOrder({ query: "payment_method", value: selected, options }));
+                return;
+            }
+        }
+
+        dispatch(actions.getOrder({ searchType: searchTerm, options }));
+    }, [dispatch, current, selected, searchTerm, valueDate.startDate, valueDate.endDate]);
+
     const [isModal, setIsModal] = useState(false);
     const [idDeleted, setIdDeleted] = useState('')
     const handleOnDelete = () => {
@@ -182,7 +195,7 @@ const Order = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentOrder && currentOrder.length > 0 ? currentOrder?.map((item) => (
+                            {order && order.length > 0 ? order?.map((item) => (
                                 <tr key={item._id} 
                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 row-table">
                                     <td className="px-2 py-4 w-[15px]">
